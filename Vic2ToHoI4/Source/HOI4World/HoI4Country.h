@@ -212,6 +212,8 @@ class Country
 		double calculateInfluenceFactor();
 		std::vector<std::string> getGuaranteed() const { return guaranteed; }
 		void addGuaranteed(std::string guaranteedTag) { guaranteed.push_back(guaranteedTag); }
+		std::vector<std::string> getPotentialSpherelings() const { return potentialSpherelings; }
+		void addPotentialSphereling(std::string potentialSphereling) { potentialSpherelings.push_back(potentialSphereling); }
 
 	private:
 		void determineFilename();
@@ -305,6 +307,7 @@ class Country
 		std::map<std::string, int> GPInfluences;
 		std::map<std::string, double> spherelings;
 		std::vector<std::string> guaranteed;
+		std::vector<std::string> potentialSpherelings;
 };
 
 }

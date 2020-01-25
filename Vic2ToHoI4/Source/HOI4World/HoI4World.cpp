@@ -1622,3 +1622,17 @@ void HoI4::World::calculateSpherelingAutonomy()
 	}
 }
 
+void HoI4::World::determinePotentialSpherelings()
+{
+	for (auto& GP: greatPowers)
+	{
+		for (auto relationItr: GP->getRelations())
+		{
+			//Vic2 "Friendly" or "In sphere" (level >= 4) attitude
+			if (relationItr.second.getGuarantee())
+			{
+				GP->addPotentialSphereling(relationItr.first);
+			}
+		}
+	}
+}

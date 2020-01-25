@@ -89,6 +89,7 @@ class World: commonItems::parser
 		void processInfluence();
 		void determineSpherelings();
 		void calculateSpherelingAutonomy();
+		void determinePotentialSpherelings();
 
 	private:
 		World(const World&) = delete;

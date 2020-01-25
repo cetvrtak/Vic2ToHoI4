@@ -119,3 +119,11 @@ category_exile_forces = {
 	}
 }
 
+GP_influence = {
+	icon = autonomy_sphereling_icon
+	allowed = {
+		has_idea = great_power
+		
+		NOT = { has_country_flag = cant_influence }
+	}
+}

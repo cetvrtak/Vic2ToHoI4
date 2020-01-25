@@ -1,0 +1,18 @@
+ideas = {
+	country = {
+
+		gp_influence_overlord = {
+			available = { has_autonomy_state = autonomy_sphereling }
+			cancel = { has_autonomy_state = free }
+
+			modifier = { autonomy_gain = -0.4 }
+		}
+
+		gp_influence = {
+			available = { has_autonomy_state = autonomy_sphereling }
+			cancel = { has_autonomy_state = free }
+
+			modifier = { autonomy_gain = 0.3 }
+		}
+	}
+}
