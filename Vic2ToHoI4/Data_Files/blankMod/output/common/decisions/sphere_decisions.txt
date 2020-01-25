@@ -1,0 +1,350 @@
+GP_influence = {
+
+	decrease_autonomy = {
+		target_trigger = {
+			FROM = {
+				if = {
+					limit = { ROOT = { tag = AUS } }
+					OR = {
+						tag = X06
+						tag = X20
+						tag = X01
+						tag = X02
+						tag = X03
+						tag = GRE
+						tag = ITA
+						tag = BEL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = ENG } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = FIN
+						tag = ROM
+						tag = ARG
+						tag = BOL
+						tag = CHL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = X00 } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = GRE
+						tag = MAN
+						tag = SWE
+					}
+				}
+			}
+		}
+		visible = {
+			FROM = {
+				is_subject_of = ROOT
+				has_autonomy_state = autonomy_sphereling
+			}
+		}
+		cost = 25
+		available = {
+			FROM = {
+				compare_autonomy_progress_ratio > 0.25
+			}
+		}
+		complete_effect = {
+			FROM = {
+				add_timed_idea = {
+					idea = gp_influence_overlord
+					days = 180
+				}
+			}
+		}
+		days_remove = 180
+	}
+
+	add_to_sphere = {
+		target_trigger = {
+			FROM = {
+				if = {
+					limit = { ROOT = { tag = AUS } }
+					OR = {
+						tag = X06
+						tag = X20
+						tag = X01
+						tag = X02
+						tag = X03
+						tag = GRE
+						tag = ITA
+						tag = BEL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = ENG } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = FIN
+						tag = ROM
+						tag = ARG
+						tag = BOL
+						tag = CHL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = X00 } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = GRE
+						tag = MAN
+						tag = SWE
+					}
+				}
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { has_autonomy_state = autonomy_sphereling }
+				is_guaranteed_by = ROOT
+			}
+		}
+		cost = 50
+		available = {
+			FROM = {
+				is_in_faction_with = ROOT
+			}
+		}
+		complete_effect = {
+			set_autonomy = { target = FROM autonomy_state = autonomy_sphereling }
+			# revoke_guarantee = FROM	# no command to revoke guarantees
+		}
+	}
+
+	increase_autonomy = {
+		target_trigger = {
+			FROM = {
+				if = {
+					limit = { ROOT = { tag = AUS } }
+					OR = {
+						tag = X06
+						tag = X20
+						tag = X01
+						tag = X02
+						tag = X03
+						tag = GRE
+						tag = ITA
+						tag = BEL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = ENG } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = FIN
+						tag = ROM
+						tag = ARG
+						tag = BOL
+						tag = CHL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = X00 } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = GRE
+						tag = MAN
+						tag = SWE
+					}
+				}
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_subject_of = ROOT }
+				has_autonomy_state = autonomy_sphereling
+			}
+		}
+		cost = 25
+		available = {
+			FROM = {
+				compare_autonomy_progress_ratio < 1
+			}
+		}
+		complete_effect = {
+			FROM = {
+				add_timed_idea = {
+					idea = gp_influence
+					days = 180
+				}
+			}
+		}
+		days_remove = 180
+	}
+
+	remove_from_sphere = {
+		target_trigger = {
+			FROM = {
+				if = {
+					limit = { ROOT = { tag = AUS } }
+					OR = {
+						tag = X06
+						tag = X20
+						tag = X01
+						tag = X02
+						tag = X03
+						tag = GRE
+						tag = ITA
+						tag = BEL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = ENG } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = FIN
+						tag = ROM
+						tag = ARG
+						tag = BOL
+						tag = CHL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = X00 } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = GRE
+						tag = MAN
+						tag = SWE
+					}
+				}
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_subject_of = ROOT }
+				has_autonomy_state = autonomy_sphereling
+				compare_autonomy_progress_ratio > 0.75
+			}
+		}
+		cost = 300
+		available = {
+			FROM = {
+				OR = {
+					compare_autonomy_progress_ratio > 1
+					NOT = { is_in_faction_with = OVERLORD }
+				}
+			}
+		}
+		complete_effect = {
+			FROM = {
+				if = {
+					limit = { NOT = { guaranteed_by = OVERLORD } }
+					OVERLORD = { give_guarantee = FROM }
+				}
+				if = {
+					limit = {
+						is_in_faction_with = OVERLORD
+						NOT = { is_in_faction_with = ROOT }
+					}
+					leave_faction = yes
+				}
+			}
+			set_autonomy = { target = FROM autonomy_state = autonomy_free }
+		}
+	}
+
+	# no command to revoke guarantees
+	# remove_guarantee = {}
+
+	guarantee = {
+		target_trigger = {
+			FROM = {
+				if = {
+					limit = { ROOT = { tag = AUS } }
+					OR = {
+						tag = X06
+						tag = X20
+						tag = X01
+						tag = X02
+						tag = X03
+						tag = GRE
+						tag = ITA
+						tag = BEL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = ENG } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = FIN
+						tag = ROM
+						tag = ARG
+						tag = BOL
+						tag = CHL
+					}
+				}
+				if = {
+					limit = { ROOT = { tag = X00 } }
+					OR = {
+						tag = ITA
+						tag = BEL
+						tag = MOL
+						tag = POR
+						tag = VEN
+						tag = GRE
+						tag = MAN
+						tag = SWE
+					}
+				}
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_subject_of = ROOT }
+				NOT = { guaranteed_by = ROOT }
+			}
+		}
+		cost = 25
+		available = {
+			FROM = {
+				is_subject = no
+			}
+		}
+		complete_effect = {
+			give_guarantee = FROM
+		}
+	}
+}
