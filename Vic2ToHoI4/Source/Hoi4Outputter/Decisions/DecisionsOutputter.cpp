@@ -58,4 +58,11 @@ void HoI4::outputDecisions(
 		outStream << category;
 	}
 	outStream.close();
+
+	outStream.open("output/" + theConfiguration.getOutputName() + "/common/decisions/sphere_decisions.txt");
+	for (const auto& category: theDecisions.getSphereDecisions())
+	{
+		outStream << category;
+	}
+	outStream.close();
 }

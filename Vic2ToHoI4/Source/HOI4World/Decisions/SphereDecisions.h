@@ -1,21 +1,26 @@
 #ifndef SPHERE_DECISIONS_H
 #define SPHERE_DECISIONS_H
 
+
+
+#include "DecisionsFile.h"
+#include <map>
+#include <set>
+#include <string>
+
+
+
 namespace HoI4
 {
 
-class SphereDecisions:
+class SphereDecisions: public DecisionsFile
 {
 	public:
-		void outputTargetTrigger(
-			std::vector<std::shared_ptr<HoI4::Country>> greatPowers,
-			std::vector<std::string> potentialSpherelings
-		);
-
-	private:
-		std::vector<decisionsCategory> decisions;
+		void updateSphereDecisions();
 };
 
 }
+
+
 
 #endif // SPHERE_DECISIONS_H

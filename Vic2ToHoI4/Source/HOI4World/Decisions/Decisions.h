@@ -11,6 +11,7 @@
 #include "NavalTreatyDecisions.h"
 #include "PoliticalDecisions.h"
 #include "StabilityWarSupportDecisions.h"
+#include "SphereDecisions.h"
 #include "../../Configuration.h"
 #include <map>
 #include <set>
@@ -60,6 +61,10 @@ class decisions: commonItems::parser
 		{
 			return genericDecisions.getDecisions();
 		}
+		[[nodiscard]] const std::vector<decisionsCategory>& getSphereDecisions() const
+		{
+			return sphereDecisions.getDecisions();
+		}
 
 	private:
 		StabilityWarSupportDecisions stabilityDecisions;
@@ -68,6 +73,7 @@ class decisions: commonItems::parser
 		ForeignInfluenceDecisions foreignInfluenceDecisions;
 		NavalTreatyDecisions navalTreatyDecisions;
 		GenericDecisions genericDecisions;
+		SphereDecisions sphereDecisions;
 };
 
 }

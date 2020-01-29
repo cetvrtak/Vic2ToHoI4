@@ -19,6 +19,7 @@ HoI4::decisions::decisions(const Configuration& theConfiguration)
 	foreignInfluenceDecisions.importDecisions("DataFiles/foreignInfluenceDecisions.txt");
 	navalTreatyDecisions.importDecisions(theConfiguration.getHoI4Path() + "/common/decisions/MTG_naval_treaty.txt");
 	genericDecisions.importDecisions(theConfiguration.getHoI4Path() + "/common/decisions/_generic_decisions.txt");
+	sphereDecisions.importDecisions("DataFiles/sphereDecisions.txt");
 }
 
 
@@ -34,4 +35,5 @@ void HoI4::decisions::updateDecisions(
 	foreignInfluenceDecisions.updateDecisions(majorIdeologies);
 	navalTreatyDecisions.updateDecisions(majorIdeologies);
 	genericDecisions.updateDecisions(provinceToStateIdMap, majorIdeologies);
+	sphereDecisions.updateSphereDecisions();
 }
