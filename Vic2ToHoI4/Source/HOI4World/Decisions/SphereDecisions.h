@@ -13,10 +13,12 @@
 namespace HoI4
 {
 
+class Country;
+
 class SphereDecisions: public DecisionsFile
 {
 	public:
-		void updateSphereDecisions();
+		void updateSphereDecisions(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers);
 };
 
 }

@@ -99,7 +99,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	addCountryElectionEvents(majorIdeologies);
 	events->createStabilityEvents(majorIdeologies);
 	theIdeas->updateIdeas(majorIdeologies);
-	decisions->updateDecisions(majorIdeologies, states->getProvinceToStateIDMap(), *events);
+	decisions->updateDecisions(majorIdeologies, states->getProvinceToStateIDMap(), *events, greatPowers);
 	peaces->updateAIPeaces(majorIdeologies);
 	addNeutrality();
 	convertIdeologySupport();
@@ -120,6 +120,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	processInfluence();
 	determineSpherelings();
 	calculateSpherelingAutonomy();
+	determinePotentialSpherelings();
 	scriptedTriggers.importScriptedTriggers(theConfiguration);
 	updateScriptedTriggers(scriptedTriggers, majorIdeologies);
 }

@@ -20,6 +20,8 @@ class decision: commonItems::parser
 		[[nodiscard]] std::string getVisible() const { return visible; }
 		[[nodiscard]] std::string getTimeoutEffect() const { return timeoutEffect; }
 
+		void setName(const std::string& newName) { name = newName; }
+		void setAllowed(const std::string& newAllowed) { allowed = newAllowed; }
 		void setAvailable(const std::string& newAvailable) { available = newAvailable; }
 		void setTargetTrigger(const std::string& newTargetTrigger) { targetTrigger = newTargetTrigger; }
 		void setVisible(const std::string& newVisible) { visible = newVisible; }

@@ -1,6 +1,7 @@
 #include "Decisions.h"
 #include "Decision.h"
 #include "../Events/Events.h"
+#include "../HoI4Country.h"
 #include <sstream>
 #include <regex>
 
@@ -26,7 +27,8 @@ HoI4::decisions::decisions(const Configuration& theConfiguration)
 void HoI4::decisions::updateDecisions(
 	const std::set<std::string>& majorIdeologies,
 	const std::map<int, int>& provinceToStateIdMap,
-	const Events& theEvents
+	const Events& theEvents,
+	const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers
 )
 {
 	stabilityDecisions.updateDecisions(majorIdeologies);
@@ -35,5 +37,5 @@ void HoI4::decisions::updateDecisions(
 	foreignInfluenceDecisions.updateDecisions(majorIdeologies);
 	navalTreatyDecisions.updateDecisions(majorIdeologies);
 	genericDecisions.updateDecisions(provinceToStateIdMap, majorIdeologies);
-	sphereDecisions.updateSphereDecisions();
+	sphereDecisions.updateSphereDecisions(greatPowers);
 }

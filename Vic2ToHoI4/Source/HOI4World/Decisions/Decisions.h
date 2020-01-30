@@ -24,6 +24,7 @@ namespace HoI4
 {
 
 class Events;
+class Country;
 
 
 class decisions: commonItems::parser
@@ -34,7 +35,8 @@ class decisions: commonItems::parser
 		void updateDecisions(
 			const std::set<std::string>& majorIdeologies,
 			const std::map<int, int>& provinceToStateIdMap,
-			const Events& theEvents
+			const Events& theEvents,
+			const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers
 		);
 
 		[[nodiscard]] const std::vector<decisionsCategory>& getStabilityDecisions() const
