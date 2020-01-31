@@ -159,7 +159,8 @@ class World: commonItems::parser
 		void determineGreatPowers();
 
 		void setupNavalTreaty();
-
+		void setupIncreaseAutonomy();
+		
 		double getStrongestCountryStrength() const;
 
 		void createFactions();

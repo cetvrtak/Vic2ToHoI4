@@ -17,6 +17,8 @@ namespace HoI4
 {
 class State;
 class States;
+class Country;
+class World;
 }
 class governmentMapper;
 
@@ -102,6 +104,12 @@ class HoI4Localisation
 			getInstance()->AddPoliticalPartyLocalisation(Vic2Key, HoI4Key);
 		}
 
+		static void increaseAutonomyDecisionLocalisation(
+			const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers
+		) {
+			getInstance()->IncreaseAutonomyDecisionLocalisation(greatPowers);
+		}
+
 		static void addDecisionLocalisation(const std::string& key, const std::optional<std::string>& localisation)
 		{
 			getInstance()->AddDecisionLocalisation(key, localisation);
@@ -128,6 +136,8 @@ class HoI4Localisation
 		{
 			getInstance()->Output();
 		}
+
+		std::string createCustomLocalisationKey(const std::string key, const std::string customString) const;
 
 	private:
 		static HoI4Localisation* instance;
@@ -216,6 +226,7 @@ class HoI4Localisation
 		void AddIdeaLocalisation(const std::string& idea, const std::optional<std::string>& localisation);
 
 		void AddPoliticalPartyLocalisation(const std::string& Vic2Key, const std::string& HoI4Key);
+		void IncreaseAutonomyDecisionLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers);
 		void AddDecisionLocalisation(const std::string& key, const std::optional<std::string>& localisation);
 
 		void GenerateCustomLocalisations(

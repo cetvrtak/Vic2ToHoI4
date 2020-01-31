@@ -86,6 +86,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	determineGreatPowers();
 
 	setupNavalTreaty();
+	setupIncreaseAutonomy();
 
 	importIdeologies();
 	importLeaderTraits();
@@ -864,6 +865,11 @@ void HoI4::World::setupNavalTreaty()
 			"@" + strongestGpNavies->second + " [" + strongestGpNavies->second + ".GetName]"
 		);
 	}
+}
+
+void HoI4::World::setupIncreaseAutonomy()
+{
+	HoI4Localisation::IncreaseAutonomyDecisionLocalisation(greatPowers);
 }
 
 

@@ -2,6 +2,7 @@
 #include "Localisations/AllReplacementRules.h"
 #include "States/HoI4State.h"
 #include "States/HoI4States.h"
+#include "HoI4Country.h"
 #include "../Mappers/GovernmentMapper.h"
 #include "../Mappers/V2Localisations.h"
 #include "../V2World/Country.h"
@@ -1098,6 +1099,35 @@ void HoI4Localisation::outputLocalisations(
 		for (const auto& mapping: languageToLocalisations.second)
 		{
 			localisationFile << " " << mapping.first << ":10 \"" << mapping.second << "\"" << endl;
+		}
+	}
+}
+
+std::string HoI4Localisation::createCustomLocalisationKey(const std::string key, const std::string customString) const
+{
+	std::string customizedKey = key + "_" + customString;
+
+	return customizedKey;
+}
+
+void HoI4Localisation::IncreaseAutonomyDecisionLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers)
+{
+	for (auto& localisationInLanguage: decisionLocalisations)
+	{
+		LOG(LogLevel::Info) << "localisationInLanguage: " << localisationInLanguage.first;
+		for (auto& keyLocalisation : localisationInLanguage.second)
+		{
+			LOG(LogLevel::Info) << "keyLocalisation: " << keyLocalisation.first;
+			if (keyLocalisation.first == "increase_autonomy")
+			{
+				for (const auto& GP: greatPowers)
+				{
+					const std::string customKey = createCustomLocalisationKey(keyLocalisation.first, GP->getTag());
+					decisionLocalisations[localisationInLanguage.first].insert(make_pair(customKey,keyLocalisation.second));
+					const std::string customKeyDesc = customKey + "_desc";
+					decisionLocalisations[localisationInLanguage.first].insert(make_pair(customKeyDesc,keyLocalisation.second));
+				}
+			}
 		}
 	}
 }
