@@ -84,4 +84,11 @@ void HoI4::outputDecisionCategories(std::ostream& out, const std::set<std::strin
 		out << "}\n";
 		out << "\n";
 	}
+
+		out << "sphere_decisions = {\n";
+		out << "\ticon = sphere_decisions\n";
+		out << "\tallowed = {\n";
+		out << "\t\thas_idea = great_power\n";
+		out << "\t}\n";
+		out << "}\n";
 }
