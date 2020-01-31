@@ -869,7 +869,8 @@ void HoI4::World::setupNavalTreaty()
 
 void HoI4::World::setupIncreaseAutonomy()
 {
-	HoI4Localisation::IncreaseAutonomyDecisionLocalisation(greatPowers);
+	HoI4Localisation::increaseAutonomyDecisionLocalisation(greatPowers);
+	HoI4Localisation::gpInfluenceIdeaLocalisation(greatPowers);
 }
 
 

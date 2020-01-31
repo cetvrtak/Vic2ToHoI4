@@ -88,5 +88,6 @@
  form_country_chinese_required_state_tt:0 "Controls all §YChinese§! states." 
  gp_influence_overlord:0 "Sphere leader influence"
  gp_influence_overlord_desc:0 "We are being influenced by our sphere leader"
- gp_influence:0 "[XXX.GetAdjective] influence"
- gp_influence_desc:0 "We are being influenced by [XXX.GetName]"
+ #Refer to converted_ideas_l_english.yml
+ #gp_influence:0 "[XXX.GetAdjective] influence"
+ #gp_influence_desc:0 "We are being influenced by [XXX.GetName]"

@@ -110,6 +110,12 @@ class HoI4Localisation
 			getInstance()->IncreaseAutonomyDecisionLocalisation(greatPowers);
 		}
 
+		static void gpInfluenceIdeaLocalisation(
+			const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers
+		) {
+			getInstance()->GPInfluenceIdeaLocalisation(greatPowers);
+		}
+
 		static void addDecisionLocalisation(const std::string& key, const std::optional<std::string>& localisation)
 		{
 			getInstance()->AddDecisionLocalisation(key, localisation);
@@ -136,8 +142,6 @@ class HoI4Localisation
 		{
 			getInstance()->Output();
 		}
-
-		std::string createCustomLocalisationKey(const std::string key, const std::string customString) const;
 
 	private:
 		static HoI4Localisation* instance;
@@ -227,6 +231,7 @@ class HoI4Localisation
 
 		void AddPoliticalPartyLocalisation(const std::string& Vic2Key, const std::string& HoI4Key);
 		void IncreaseAutonomyDecisionLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers);
+		void GPInfluenceIdeaLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers);
 		void AddDecisionLocalisation(const std::string& key, const std::optional<std::string>& localisation);
 
 		void GenerateCustomLocalisations(

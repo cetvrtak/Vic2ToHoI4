@@ -1103,31 +1103,26 @@ void HoI4Localisation::outputLocalisations(
 	}
 }
 
-std::string HoI4Localisation::createCustomLocalisationKey(const std::string key, const std::string customString) const
-{
-	std::string customizedKey = key + "_" + customString;
-
-	return customizedKey;
-}
-
 void HoI4Localisation::IncreaseAutonomyDecisionLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers)
 {
-	for (auto& localisationInLanguage: decisionLocalisations)
+	for (const auto& GP: greatPowers)
 	{
-		LOG(LogLevel::Info) << "localisationInLanguage: " << localisationInLanguage.first;
-		for (auto& keyLocalisation : localisationInLanguage.second)
-		{
-			LOG(LogLevel::Info) << "keyLocalisation: " << keyLocalisation.first;
-			if (keyLocalisation.first == "increase_autonomy")
-			{
-				for (const auto& GP: greatPowers)
-				{
-					const std::string customKey = createCustomLocalisationKey(keyLocalisation.first, GP->getTag());
-					decisionLocalisations[localisationInLanguage.first].insert(make_pair(customKey,keyLocalisation.second));
-					const std::string customKeyDesc = customKey + "_desc";
-					decisionLocalisations[localisationInLanguage.first].insert(make_pair(customKeyDesc,keyLocalisation.second));
-				}
-			}
-		}
+		AddDecisionLocalisation("increase_autonomy_" + GP->getTag(), "Influence [From.GetName]");
+		AddDecisionLocalisation(
+			"increase_autonomy_" + GP->getTag() + "_desc",
+			"Use our influence with [From.GetLeader] to strengthen our position in [From.GetName]."
+		);
+	}
+}
+
+void HoI4Localisation::GPInfluenceIdeaLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers)
+{
+	for (const auto& GP: greatPowers)
+	{
+		AddIdeaLocalisation("gp_influence_" + GP->getTag(), "[" + GP->getTag() + ".GetAdjective] influence");
+		AddIdeaLocalisation(
+			"gp_influence_" + GP->getTag() + "_desc",
+			"We are being influenced by [" + GP->getTag() + ".GetName]"
+		);
 	}
 }
