@@ -86,8 +86,7 @@
  CHI_union:0 "The Mandate of Heaven"
  CHI_union_desc:0 "For a lot of time, the Middle Kingdom has been divided in feudal fights among the various bureaucrats. But today, a new Empire was born from the ashes of those warring states."
  form_country_chinese_required_state_tt:0 "Controls all §YChinese§! states." 
- gp_influence_overlord:0 "Sphere leader influence"
- gp_influence_overlord_desc:0 "We are being influenced by our sphere leader"
- #Refer to converted_ideas_l_english.yml
- #gp_influence:0 "[XXX.GetAdjective] influence"
- #gp_influence_desc:0 "We are being influenced by [XXX.GetName]"
+ gp_influence:0 "Great Power influence"
+ gp_influence_desc:0 "We are being influenced by [From.GetName]"
+ gp_influence_master:0 "Great Power influence"
+ gp_influence_master_desc:0 "We are being influenced by [From.GetName]"

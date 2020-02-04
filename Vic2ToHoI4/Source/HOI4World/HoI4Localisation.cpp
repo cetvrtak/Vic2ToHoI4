@@ -1102,27 +1102,3 @@ void HoI4Localisation::outputLocalisations(
 		}
 	}
 }
-
-void HoI4Localisation::IncreaseAutonomyDecisionLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers)
-{
-	for (const auto& GP: greatPowers)
-	{
-		AddDecisionLocalisation("increase_autonomy_" + GP->getTag(), "Influence [From.GetName]");
-		AddDecisionLocalisation(
-			"increase_autonomy_" + GP->getTag() + "_desc",
-			"Use our influence with [From.GetLeader] to strengthen our position in [From.GetName]."
-		);
-	}
-}
-
-void HoI4Localisation::GPInfluenceIdeaLocalisation(const std::vector<std::shared_ptr<HoI4::Country>>& greatPowers)
-{
-	for (const auto& GP: greatPowers)
-	{
-		AddIdeaLocalisation("gp_influence_" + GP->getTag(), "[" + GP->getTag() + ".GetAdjective] influence");
-		AddIdeaLocalisation(
-			"gp_influence_" + GP->getTag() + "_desc",
-			"We are being influenced by [" + GP->getTag() + ".GetName]"
-		);
-	}
-}

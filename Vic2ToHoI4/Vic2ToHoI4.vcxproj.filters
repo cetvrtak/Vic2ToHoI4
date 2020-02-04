@@ -17539,4 +17539,9 @@
       <Filter>Data Files</Filter>
     </CopyFileToFolders>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data_Files\sphereDecisions.txt">
+      <Filter>Data Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

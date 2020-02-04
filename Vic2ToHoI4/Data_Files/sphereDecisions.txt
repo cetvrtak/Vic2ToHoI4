@@ -1,0 +1,355 @@
+sphere_decisions = {
+
+	decrease_autonomy = {
+		target_trigger = {
+			FROM = {
+				if = { limit = { ROOT = { tag = AUS } }
+				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
+				if = { limit = { ROOT = { tag = ENG } }
+				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
+				if = { limit = { ROOT = { tag = FRA } }
+				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
+				if = { limit = { ROOT = { tag = HOL } }
+				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
+				if = { limit = { ROOT = { tag = JAP } }
+				OR = { tag=BRU tag=SIA tag=X22} }
+				if = { limit = { ROOT = { tag = SOV } }
+				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
+				if = { limit = { ROOT = { tag = USA } }
+				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
+				if = { limit = { ROOT = { tag = X00 } }
+				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+			}
+		}
+		visible = {
+			FROM = {
+				is_subject_of = ROOT
+				has_autonomy_state = autonomy_sphereling
+			}
+		}
+		cost = 25
+		available = {
+			FROM = {
+				custom_trigger_tooltip = { tooltip = autonomy_at_18_or_influenced_by_another_gp_tt }
+				hidden_trigger = {
+					OR = {
+						compare_autonomy_progress_ratio > 0.18
+						check_variable = { var = daily_autonomy_gain value = 0.3 }
+					}
+				}
+			}
+			NOT = { has_war_with = FROM }
+		}
+		complete_effect = {
+			FROM = {
+				add_dynamic_modifier = {
+					modifier = gp_influence_master
+					scope = ROOT
+					days = 180
+				}
+				subtract_from_variable = { var = daily_autonomy_gain value = 0.4 }
+			}
+		}
+		days_remove = 180
+		remove_effect = {
+			FROM = {
+				remove_dynamic_modifier = {
+					modifier = gp_influence_master
+					scope = ROOT
+				}
+				add_to_variable = { var = daily_autonomy_gain value = 0.4 }
+			}
+		}
+		ai_will_do = {
+			factor = 2
+			modifier = {
+				factor = 0.1
+				FROM = { check_variable = { daily_autonomy_gain < 0.3 } }
+			}
+			modifier = {
+				factor = 2
+				FROM = { check_variable = { var = daily_autonomy_gain value = 0.6 } }
+			}
+		}
+	}
+
+	add_to_sphere = {
+		target_trigger = {
+			FROM = {
+				if = { limit = { ROOT = { tag = AUS } }
+				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
+				if = { limit = { ROOT = { tag=ENG } }
+				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
+				if = { limit = { ROOT = { tag = FRA } }
+				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
+				if = { limit = { ROOT = { tag = HOL } }
+				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
+				if = { limit = { ROOT = { tag = JAP } }
+				OR = { tag=BRU tag=SIA tag=X22} }
+				if = { limit = { ROOT = { tag = SOV } }
+				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
+				if = { limit = { ROOT = { tag = USA } }
+				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
+				if = { limit = { ROOT = { tag = X00 } }
+				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_subject_of = ROOT }
+				OR = {
+					is_subject = no
+					has_autonomy_state = autonomy_sphereling
+				}
+				OR = {
+					is_guaranteed_by = ROOT
+					is_in_faction_with = ROOT
+				}
+			}
+		}
+		cost = 0
+		available = {
+			FROM = {
+				is_subject = no
+				is_in_faction_with = ROOT
+				has_government = ROOT
+			}
+			NOT = { has_war_with = FROM }
+		}
+		complete_effect = {
+			set_autonomy = { target = FROM autonomy_state = autonomy_sphereling }
+			#revoke_guarantee = FROM	# no command to revoke guarantees
+		}
+		ai_will_do = {
+			factor = 3
+		}
+	}
+
+	increase_autonomy = {
+		target_trigger = {
+			FROM = {
+				if = { limit = { ROOT = { tag = AUS } }
+				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
+				if = { limit = { ROOT = { tag=ENG } }
+				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
+				if = { limit = { ROOT = { tag = FRA } }
+				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
+				if = { limit = { ROOT = { tag = HOL } }
+				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
+				if = { limit = { ROOT = { tag = JAP } }
+				OR = { tag=BRU tag=SIA tag=X22} }
+				if = { limit = { ROOT = { tag = SOV } }
+				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
+				if = { limit = { ROOT = { tag = USA } }
+				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
+				if = { limit = { ROOT = { tag = X00 } }
+				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_subject_of = ROOT }
+				has_autonomy_state = autonomy_sphereling
+				compare_autonomy_progress_ratio < 1
+			}
+		}
+		cost = 25
+		available = {
+			FROM = {
+				compare_autonomy_progress_ratio < 1
+			}
+			NOT = { has_war_with = FROM }
+		}
+		complete_effect = {
+			FROM = {
+				add_dynamic_modifier = {
+					modifier = gp_influence
+					scope = ROOT
+					days = 180
+				}
+				add_to_variable = { var = daily_autonomy_gain value = 0.3 }
+			}
+		}
+		days_remove = 180
+		remove_effect = {
+			FROM = {
+				remove_dynamic_modifier = {
+					modifier = gp_influence
+					scope = ROOT
+				}
+				subtract_from_variable = { var = daily_autonomy_gain value = 0.3 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1
+				FROM = {
+					compare_autonomy_progress_ratio > 0.865
+					check_variable = { daily_autonomy_gain > 0 }
+				}
+			}
+		}
+	}
+
+	remove_from_sphere = {
+		target_trigger = {
+			FROM = {
+				if = { limit = { ROOT = { tag = AUS } }
+				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
+				if = { limit = { ROOT = { tag=ENG } }
+				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
+				if = { limit = { ROOT = { tag = FRA } }
+				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
+				if = { limit = { ROOT = { tag = HOL } }
+				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
+				if = { limit = { ROOT = { tag = JAP } }
+				OR = { tag=BRU tag=SIA tag=X22} }
+				if = { limit = { ROOT = { tag = SOV } }
+				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
+				if = { limit = { ROOT = { tag = USA } }
+				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
+				if = { limit = { ROOT = { tag = X00 } }
+				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_subject_of = ROOT }
+				has_autonomy_state = autonomy_sphereling
+				is_in_faction_with = OVERLORD
+				compare_autonomy_progress_ratio > 0.75
+			}
+		}
+		cost = 250
+		available = {
+			FROM = {
+				custom_trigger_tooltip = { tooltip = autonomy_at_100_tt }
+				hidden_trigger = { NOT = { compare_autonomy_progress_ratio < 1 } }
+			}
+			NOT = { has_war_with = FROM }
+		}
+		complete_effect = {
+			FROM = {
+				if = {
+					limit = { NOT = { guaranteed_by = OVERLORD } }
+					OVERLORD = { give_guarantee = FROM }
+				}
+				if = {
+					limit = {
+						is_in_faction_with = OVERLORD
+						NOT = { is_in_faction_with = ROOT }
+					}
+					leave_faction = yes
+				}
+			}
+			set_autonomy = { target = FROM autonomy_state = autonomy_free }
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { has_guaranteed = FROM }
+			}
+		}
+	}
+
+	remove_from_sphere_freebie = {
+		target_trigger = {
+			FROM = {
+				if = { limit = { ROOT = { tag = AUS } }
+				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
+				if = { limit = { ROOT = { tag=ENG } }
+				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
+				if = { limit = { ROOT = { tag = FRA } }
+				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
+				if = { limit = { ROOT = { tag = HOL } }
+				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
+				if = { limit = { ROOT = { tag = JAP } }
+				OR = { tag=BRU tag=SIA tag=X22} }
+				if = { limit = { ROOT = { tag = SOV } }
+				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
+				if = { limit = { ROOT = { tag = USA } }
+				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
+				if = { limit = { ROOT = { tag = X00 } }
+				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_subject_of = ROOT }
+				has_autonomy_state = autonomy_sphereling
+				NOT = { is_in_faction_with = OVERLORD }
+			}
+		}
+		cost = 0
+		available = {
+			FROM = { NOT = { is_in_faction_with = OVERLORD } }
+			NOT = { has_war_with = FROM }
+		}
+		complete_effect = {
+			FROM = {
+				if = {
+					limit = { NOT = { guaranteed_by = OVERLORD } }
+					OVERLORD = { give_guarantee = FROM }
+				}
+			}
+			set_autonomy = { target = FROM autonomy_state = autonomy_free }
+		}
+		ai_will_do = {
+			factor = 10
+		}
+	}
+
+	# no command to revoke guarantees
+	# remove_guarantee = {}
+
+	guarantee = {
+		target_trigger = {
+			FROM = {
+				if = { limit = { ROOT = { tag = AUS } }
+				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
+				if = { limit = { ROOT = { tag=ENG } }
+				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
+				if = { limit = { ROOT = { tag = FRA } }
+				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
+				if = { limit = { ROOT = { tag = HOL } }
+				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
+				if = { limit = { ROOT = { tag = JAP } }
+				OR = { tag=BRU tag=SIA tag=X22} }
+				if = { limit = { ROOT = { tag = SOV } }
+				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
+				if = { limit = { ROOT = { tag = USA } }
+				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
+				if = { limit = { ROOT = { tag = X00 } }
+				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+			}
+		}
+		visible = {
+			FROM = {
+				NOT = { is_guaranteed_by = ROOT }
+				is_subject = no
+			}
+		}
+		cost = 25
+		available = {
+			FROM = { is_subject = no }
+			NOT = { has_war_with = FROM }
+		}
+		complete_effect = {
+			give_guarantee = FROM
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0.1
+				NOT = {
+					has_opinion = {
+						target = FROM
+						value = 0
+					}
+				}
+			}
+		}
+	}
+}

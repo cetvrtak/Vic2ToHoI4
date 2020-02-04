@@ -16949,6 +16949,9 @@
     <CopyFileToFolders Include="Data_Files\foreignInfluenceDecisions.txt">
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\DataFiles</DestinationFolders>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Data_Files\sphereDecisions.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\DataFiles</DestinationFolders>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Data_Files\languageReplacements.txt">

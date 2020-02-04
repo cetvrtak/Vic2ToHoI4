@@ -1,0 +1,12 @@
+spriteTypes = {
+	spriteType = {
+		name = "GFX_idea_gp_influence"
+		texturefile = "gfx/interface/ideas/gp_influence.dds"
+	}
+
+	spriteType = {
+		name = "GFX_idea_gp_influence_master"
+		texturefile = "gfx/interface/ideas/gp_influence_master.dds"
+	}
+
+}

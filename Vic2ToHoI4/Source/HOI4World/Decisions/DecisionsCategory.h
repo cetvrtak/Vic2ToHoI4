@@ -35,6 +35,8 @@ class decisionsCategory: commonItems::parser
 
 		friend std::ostream& operator<<(std::ostream& outStream, const decisionsCategory& outCategory);
 
+		void clear() { theDecisions.clear(); }
+
 	private:
 		std::string name = "";
 		std::vector<decision> theDecisions;
