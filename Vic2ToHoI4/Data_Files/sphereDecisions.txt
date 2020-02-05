@@ -1,33 +1,63 @@
 sphere_decisions = {
 
-	decrease_autonomy = {
+	add_to_sphere = {
 		target_trigger = {
-			FROM = {
-				if = { limit = { ROOT = { tag = AUS } }
-				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
-				if = { limit = { ROOT = { tag = ENG } }
-				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
-				if = { limit = { ROOT = { tag = FRA } }
-				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
-				if = { limit = { ROOT = { tag = HOL } }
-				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
-				if = { limit = { ROOT = { tag = JAP } }
-				OR = { tag=BRU tag=SIA tag=X22} }
-				if = { limit = { ROOT = { tag = SOV } }
-				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
-				if = { limit = { ROOT = { tag = USA } }
-				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
-				if = { limit = { ROOT = { tag = X00 } }
-				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+		}
+		available = {
+			ROOT = {
+				custom_trigger_tooltip = { tooltip = most_influence_tt }
+				hidden_trigger = {
+					FROM = { check_variable = { var = inf_count_@ROOT value = 1 } }		#Disable when 0 influence
+					all_other_country = {												#ROOT influenced them most often
+						has_idea = great_power
+						FROM = { NOT = { is_subject_of = PREV } }						#Excluding their master
+						FROM = { check_variable = { inf_count_@PREV < inf_count_@ROOT } }
+					}
+				}
 			}
+			FROM = { has_government = ROOT }	#otherwise they would automatically switch to master's ideology
+
+			#Free countries
+			if = { limit = { FROM = { is_subject = no } }
+				FROM = { custom_trigger_tooltip = { tooltip = add_to_sphere_free_tt }
+					hidden_trigger = {
+						check_variable = { var = tot_autonomy value = 200 }		#Autonomy points
+					}
+				}
+			}
+
+			#Spherelings
+			if = { limit = { FROM = { NOT = { is_subject_of = ROOT } has_autonomy_state = autonomy_sphereling } }
+				FROM = { custom_trigger_tooltip = { tooltip = add_to_sphere_spherelings_tt }
+					hidden_trigger = {
+						NOT = { compare_autonomy_progress_ratio < 1 }	#100% autonomy or more
+					}
+				}
+			}
+			NOT = { has_war_with = FROM }
 		}
 		visible = {
-			FROM = {
-				is_subject_of = ROOT
-				has_autonomy_state = autonomy_sphereling
+			FROM = { NOT = { is_subject_of = ROOT } }
+			if = { limit = { FROM = { is_subject = no } }
+				FROM = { check_variable = { var = tot_autonomy?0 value = 200 } }
+			}
+			else_if = { limit = { FROM = { has_autonomy_state = autonomy_sphereling } }
+				FROM = { NOT = { compare_autonomy_progress_ratio < 1 } }
 			}
 		}
-		cost = 25
+		cost = 0
+		complete_effect = {
+			set_autonomy = { target = FROM autonomy_state = autonomy_sphereling }
+			FROM = { set_variable = { tot_autonomy = 0 } }
+		}
+		ai_will_do = {
+			factor = 3
+		}
+	}
+
+	decrease_autonomy = {
+		target_trigger = {
+		}
 		available = {
 			FROM = {
 				custom_trigger_tooltip = { tooltip = autonomy_at_18_or_influenced_by_another_gp_tt }
@@ -40,7 +70,15 @@ sphere_decisions = {
 			}
 			NOT = { has_war_with = FROM }
 		}
+		visible = {
+			FROM = {
+				is_subject_of = ROOT
+				has_autonomy_state = autonomy_sphereling
+			}
+		}
+		cost = 25
 		complete_effect = {
+			FROM = { add_to_variable = { var = inf_count_@ROOT value = 1 } }
 			FROM = {
 				add_dynamic_modifier = {
 					modifier = gp_influence_master
@@ -73,94 +111,52 @@ sphere_decisions = {
 		}
 	}
 
-	add_to_sphere = {
-		target_trigger = {
-			FROM = {
-				if = { limit = { ROOT = { tag = AUS } }
-				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
-				if = { limit = { ROOT = { tag=ENG } }
-				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
-				if = { limit = { ROOT = { tag = FRA } }
-				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
-				if = { limit = { ROOT = { tag = HOL } }
-				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
-				if = { limit = { ROOT = { tag = JAP } }
-				OR = { tag=BRU tag=SIA tag=X22} }
-				if = { limit = { ROOT = { tag = SOV } }
-				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
-				if = { limit = { ROOT = { tag = USA } }
-				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
-				if = { limit = { ROOT = { tag = X00 } }
-				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
-			}
-		}
-		visible = {
-			FROM = {
-				NOT = { is_subject_of = ROOT }
-				OR = {
-					is_subject = no
-					has_autonomy_state = autonomy_sphereling
-				}
-				OR = {
-					is_guaranteed_by = ROOT
-					is_in_faction_with = ROOT
-				}
-			}
-		}
-		cost = 0
-		available = {
-			FROM = {
-				is_subject = no
-				is_in_faction_with = ROOT
-				has_government = ROOT
-			}
-			NOT = { has_war_with = FROM }
-		}
-		complete_effect = {
-			set_autonomy = { target = FROM autonomy_state = autonomy_sphereling }
-			#revoke_guarantee = FROM	# no command to revoke guarantees
-		}
-		ai_will_do = {
-			factor = 3
-		}
-	}
-
 	increase_autonomy = {
 		target_trigger = {
-			FROM = {
-				if = { limit = { ROOT = { tag = AUS } }
-				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
-				if = { limit = { ROOT = { tag=ENG } }
-				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
-				if = { limit = { ROOT = { tag = FRA } }
-				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
-				if = { limit = { ROOT = { tag = HOL } }
-				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
-				if = { limit = { ROOT = { tag = JAP } }
-				OR = { tag=BRU tag=SIA tag=X22} }
-				if = { limit = { ROOT = { tag = SOV } }
-				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
-				if = { limit = { ROOT = { tag = USA } }
-				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
-				if = { limit = { ROOT = { tag = X00 } }
-				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
+		}
+		available = {
+			OR = {
+				any_other_country = {
+					has_idea = great_power
+					FROM = { NOT = { is_subject_of = PREV } }
+					FROM = { check_variable = { var = inf_count_@PREV value = inf_count_@ROOT } }
+				}
+				FROM = {
+					if = {
+						limit = { is_subject = no }
+						custom_trigger_tooltip = { tooltip = increase_autonomy_tt }
+						check_variable = { tot_autonomy < 200 }
+					}
+					else = { compare_autonomy_progress_ratio < 1 }
+				}
+				NOT = { has_war_with = FROM }
 			}
 		}
 		visible = {
-			FROM = {
-				NOT = { is_subject_of = ROOT }
-				has_autonomy_state = autonomy_sphereling
-				compare_autonomy_progress_ratio < 1
+			OR = {
+				any_other_country = {
+					has_idea = great_power
+					FROM = { NOT = { is_subject_of = PREV } }
+					FROM = { check_variable = { var = inf_count_@PREV value = inf_count_@ROOT } }
+				}
+				FROM = {
+					OR = {
+						AND = {
+							is_subject = no
+							check_variable = { tot_autonomy < 200 }
+						}
+						AND = {
+							NOT = { is_subject_of = ROOT }
+							has_autonomy_state = autonomy_sphereling
+							compare_autonomy_progress_ratio < 1
+						}
+					}
+				}
 			}
 		}
 		cost = 25
-		available = {
-			FROM = {
-				compare_autonomy_progress_ratio < 1
-			}
-			NOT = { has_war_with = FROM }
-		}
 		complete_effect = {
+			FROM = { add_to_variable = { var = inf_count_@ROOT value = 1 } }
 			FROM = {
 				add_dynamic_modifier = {
 					modifier = gp_influence
@@ -172,6 +168,10 @@ sphere_decisions = {
 		}
 		days_remove = 180
 		remove_effect = {
+			if = {
+				limit = { FROM = { is_subject = no } }
+				FROM = { add_to_variable = { var = tot_autonomy value = 36 } }
+			}
 			FROM = {
 				remove_dynamic_modifier = {
 					modifier = gp_influence
@@ -183,170 +183,46 @@ sphere_decisions = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
-				factor = 0.1
+				factor = 10
 				FROM = {
-					compare_autonomy_progress_ratio > 0.865
-					check_variable = { daily_autonomy_gain > 0 }
-				}
-			}
-		}
-	}
-
-	remove_from_sphere = {
-		target_trigger = {
-			FROM = {
-				if = { limit = { ROOT = { tag = AUS } }
-				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
-				if = { limit = { ROOT = { tag=ENG } }
-				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
-				if = { limit = { ROOT = { tag = FRA } }
-				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
-				if = { limit = { ROOT = { tag = HOL } }
-				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
-				if = { limit = { ROOT = { tag = JAP } }
-				OR = { tag=BRU tag=SIA tag=X22} }
-				if = { limit = { ROOT = { tag = SOV } }
-				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
-				if = { limit = { ROOT = { tag = USA } }
-				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
-				if = { limit = { ROOT = { tag = X00 } }
-				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
-			}
-		}
-		visible = {
-			FROM = {
-				NOT = { is_subject_of = ROOT }
-				has_autonomy_state = autonomy_sphereling
-				is_in_faction_with = OVERLORD
-				compare_autonomy_progress_ratio > 0.75
-			}
-		}
-		cost = 250
-		available = {
-			FROM = {
-				custom_trigger_tooltip = { tooltip = autonomy_at_100_tt }
-				hidden_trigger = { NOT = { compare_autonomy_progress_ratio < 1 } }
-			}
-			NOT = { has_war_with = FROM }
-		}
-		complete_effect = {
-			FROM = {
-				if = {
-					limit = { NOT = { guaranteed_by = OVERLORD } }
-					OVERLORD = { give_guarantee = FROM }
-				}
-				if = {
-					limit = {
-						is_in_faction_with = OVERLORD
-						NOT = { is_in_faction_with = ROOT }
+					NOT = { compare_autonomy_progress_ratio < 1 }
+					all_other_country = {
+						has_idea = great_power
+						FROM = { NOT = { is_subject_of = PREV } }
+						FROM = {
+							check_variable = {
+								var = inf_count_@PREV
+								value = inf_count_@ROOT
+								compare = less_than_or_equal
+							}
+						}
 					}
-					leave_faction = yes
+					any_other_country = {
+						has_idea = great_power
+						FROM = { NOT = { is_subject_of = PREV } }
+						FROM = { check_variable = { inf_count_@PREV = inf_count_@ROOT } }
+					}
 				}
 			}
-			set_autonomy = { target = FROM autonomy_state = autonomy_free }
-		}
-		ai_will_do = {
-			factor = 1
 			modifier = {
-				factor = 0
-				NOT = { has_guaranteed = FROM }
-			}
-		}
-	}
-
-	remove_from_sphere_freebie = {
-		target_trigger = {
-			FROM = {
-				if = { limit = { ROOT = { tag = AUS } }
-				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
-				if = { limit = { ROOT = { tag=ENG } }
-				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
-				if = { limit = { ROOT = { tag = FRA } }
-				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
-				if = { limit = { ROOT = { tag = HOL } }
-				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
-				if = { limit = { ROOT = { tag = JAP } }
-				OR = { tag=BRU tag=SIA tag=X22} }
-				if = { limit = { ROOT = { tag = SOV } }
-				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
-				if = { limit = { ROOT = { tag = USA } }
-				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
-				if = { limit = { ROOT = { tag = X00 } }
-				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
-			}
-		}
-		visible = {
-			FROM = {
-				NOT = { is_subject_of = ROOT }
-				has_autonomy_state = autonomy_sphereling
-				NOT = { is_in_faction_with = OVERLORD }
-			}
-		}
-		cost = 0
-		available = {
-			FROM = { NOT = { is_in_faction_with = OVERLORD } }
-			NOT = { has_war_with = FROM }
-		}
-		complete_effect = {
-			FROM = {
-				if = {
-					limit = { NOT = { guaranteed_by = OVERLORD } }
-					OVERLORD = { give_guarantee = FROM }
-				}
-			}
-			set_autonomy = { target = FROM autonomy_state = autonomy_free }
-		}
-		ai_will_do = {
-			factor = 10
-		}
-	}
-
-	# no command to revoke guarantees
-	# remove_guarantee = {}
-
-	guarantee = {
-		target_trigger = {
-			FROM = {
-				if = { limit = { ROOT = { tag = AUS } }
-				OR = { tag=X17 tag=X18 tag=FIN tag=BEL tag=POR tag=BUL tag=X06 tag=MNT tag=X20 } }
-				if = { limit = { ROOT = { tag=ENG } }
-				OR = { tag=X21 tag=DEN tag=SWE tag=GRE tag=LIB tag=X11 tag=MEX tag=HON tag=BRA tag=COL tag=X08 tag=AST tag=BEL tag=X01 tag=BHU tag=X03 tag=BRU tag=X04 tag=CAN tag=X09 tag=X10 tag=IRE tag=ITA tag=X13 tag=X14 tag=MOL tag=MOR tag=X15 tag=NEP tag=NZL tag=OMA tag=X16 tag=PER tag=SAF tag=UAE} }
-				if = { limit = { ROOT = { tag = FRA } }
-				OR = { tag=X18 tag=X20 tag=SWE tag=X06 tag=GUA tag=MEX tag=BOL tag=COL tag=LUX tag=X17 tag=POR tag=VEN} }
-				if = { limit = { ROOT = { tag = HOL } }
-				OR = { tag=SPC tag=DEN tag=FIN tag=BEL tag=UAE tag=BHU tag=SAU} }
-				if = { limit = { ROOT = { tag = JAP } }
-				OR = { tag=BRU tag=SIA tag=X22} }
-				if = { limit = { ROOT = { tag = SOV } }
-				OR = { tag=MOL tag=X17 tag=X18 tag=DEN tag=NOR tag=X06 tag=LUX tag=GRE tag=ARG tag=VEN tag=FIN tag=MON tag=PRU tag=ROM} }
-				if = { limit = { ROOT = { tag = USA } }
-				OR = { tag=X17 tag=X20 tag=DEN tag=SWE tag=X06 tag=LUX tag=LIB tag=COL tag=ECU tag=PRU tag=VEN tag=ARG tag=BOL tag=CHL tag=COS tag=CUB tag=ELS tag=HON tag=NIC tag=SIA} }
-				if = { limit = { ROOT = { tag = X00 } }
-				OR = { tag=X17 tag=X18 tag=X20 tag=X06 tag=LUX tag=BEL tag=SIA tag=COL tag=X05 tag=ECU tag=MAN tag=GRE tag=GUA tag=NOR tag=XSM tag=SWE tag=SWI} }
-			}
-		}
-		visible = {
-			FROM = {
-				NOT = { is_guaranteed_by = ROOT }
-				is_subject = no
-			}
-		}
-		cost = 25
-		available = {
-			FROM = { is_subject = no }
-			NOT = { has_war_with = FROM }
-		}
-		complete_effect = {
-			give_guarantee = FROM
-		}
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0.1
-				NOT = {
-					has_opinion = {
-						target = FROM
-						value = 0
+				factor = 10
+				FROM = {
+					check_variable = { var = tot_autonomy value = 200 }
+					all_other_country = {
+						has_idea = great_power
+						FROM = { NOT = { is_subject_of = PREV } }
+						FROM = {
+							check_variable = {
+								var = inf_count_@PREV
+								value = inf_count_@ROOT
+								compare = less_than_or_equal
+							}
+						}
+					}
+					any_other_country = {
+						has_idea = great_power
+						FROM = { NOT = { is_subject_of = PREV } }
+						FROM = { check_variable = { inf_count_@PREV = inf_count_@ROOT } }
 					}
 				}
 			}
