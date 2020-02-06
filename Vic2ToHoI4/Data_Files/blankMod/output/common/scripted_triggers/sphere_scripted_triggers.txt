@@ -1,0 +1,80 @@
+#	Example:
+# 
+#	example_trigger = {
+#		tag = GER
+#		is_ai = no
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		exampel_trigger = yes
+#	}
+#
+
+ROOT_has_most_influence_on_FROM = {
+	ROOT = {
+		custom_trigger_tooltip = {
+			tooltip = most_influence_tt
+			FROM = { check_variable = { var = inf_count_@ROOT value = 1 } }		#Disable when 0 influence
+			NOT = {
+				any_other_country = {
+					has_idea = great_power
+					FROM = { NOT = { is_subject_of = PREV } }
+					FROM = { check_variable = { var = inf_count_@PREV value = inf_count_@ROOT } }
+				}
+			}
+		}
+	}
+}
+
+no_one_has_more_influence_on_FROM_than_ROOT = {
+	ROOT = {
+		custom_trigger_tooltip = {
+			tooltip = no_one_has_more_influence_tt
+			NOT = {
+				any_other_country = {
+					has_idea = great_power
+					FROM = { NOT = { is_subject_of = PREV } }
+					FROM = { check_variable = { inf_count_@PREV > inf_count_@ROOT } }
+				}
+			}
+		}
+	}
+}
+
+someone_has_equal_influence_on_FROM_as_ROOT = {
+	ROOT = {
+		custom_trigger_tooltip = {
+			tooltip = someone_has_equal_influence_tt
+			any_other_country = {
+				has_idea = great_power
+				FROM = { NOT = { is_subject_of = PREV } }
+				FROM = { check_variable = { inf_count_@PREV = inf_count_@ROOT } }
+			}
+		}
+	}
+}
+
+FROM_can_become_free = {
+	FROM = {
+		custom_trigger_tooltip = {
+			tooltip = can_become_free_tt
+			#Free countries
+			if = {
+				limit = { is_subject = no }
+				check_variable = { var = tot_autonomy value = 200 }
+			}
+
+			#Spherelings
+			if = {
+				limit = {
+					NOT = { is_subject_of = ROOT }
+					has_autonomy_state = autonomy_sphereling
+				}
+				NOT = { compare_autonomy_progress_ratio < 1 }
+			}
+		}
+	}
+}

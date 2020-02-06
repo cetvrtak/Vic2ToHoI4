@@ -4,46 +4,14 @@ sphere_decisions = {
 		target_trigger = {
 		}
 		available = {
-			ROOT = {
-				custom_trigger_tooltip = { tooltip = most_influence_tt }
-				hidden_trigger = {
-					FROM = { check_variable = { var = inf_count_@ROOT value = 1 } }		#Disable when 0 influence
-					all_other_country = {												#ROOT influenced them most often
-						has_idea = great_power
-						FROM = { NOT = { is_subject_of = PREV } }						#Excluding their master
-						FROM = { check_variable = { inf_count_@PREV < inf_count_@ROOT } }
-					}
-				}
-			}
+			ROOT_has_most_influence_on_FROM = yes
 			FROM = { has_government = ROOT }	#otherwise they would automatically switch to master's ideology
-
-			#Free countries
-			if = { limit = { FROM = { is_subject = no } }
-				FROM = { custom_trigger_tooltip = { tooltip = add_to_sphere_free_tt }
-					hidden_trigger = {
-						check_variable = { var = tot_autonomy value = 200 }		#Autonomy points
-					}
-				}
-			}
-
-			#Spherelings
-			if = { limit = { FROM = { NOT = { is_subject_of = ROOT } has_autonomy_state = autonomy_sphereling } }
-				FROM = { custom_trigger_tooltip = { tooltip = add_to_sphere_spherelings_tt }
-					hidden_trigger = {
-						NOT = { compare_autonomy_progress_ratio < 1 }	#100% autonomy or more
-					}
-				}
-			}
+			FROM_can_become_free = yes
 			NOT = { has_war_with = FROM }
 		}
 		visible = {
 			FROM = { NOT = { is_subject_of = ROOT } }
-			if = { limit = { FROM = { is_subject = no } }
-				FROM = { check_variable = { var = tot_autonomy?0 value = 200 } }
-			}
-			else_if = { limit = { FROM = { has_autonomy_state = autonomy_sphereling } }
-				FROM = { NOT = { compare_autonomy_progress_ratio < 1 } }
-			}
+			FROM_can_become_free = yes
 		}
 		cost = 0
 		complete_effect = {
@@ -116,42 +84,21 @@ sphere_decisions = {
 		}
 		available = {
 			OR = {
-				any_other_country = {
-					has_idea = great_power
-					FROM = { NOT = { is_subject_of = PREV } }
-					FROM = { check_variable = { var = inf_count_@PREV value = inf_count_@ROOT } }
-				}
 				FROM = {
-					if = {
-						limit = { is_subject = no }
-						custom_trigger_tooltip = { tooltip = increase_autonomy_tt }
-						check_variable = { tot_autonomy < 200 }
+					custom_trigger_tooltip = {
+						tooltip = cannot_become_free_tt
+						FROM_can_become_free = no
 					}
-					else = { compare_autonomy_progress_ratio < 1 }
 				}
-				NOT = { has_war_with = FROM }
+				no_one_has_more_influence_on_FROM_than_ROOT = yes
 			}
+			NOT = { has_war_with = FROM }
 		}
 		visible = {
+			FROM = { NOT = { is_subject_of = ROOT } }
 			OR = {
-				any_other_country = {
-					has_idea = great_power
-					FROM = { NOT = { is_subject_of = PREV } }
-					FROM = { check_variable = { var = inf_count_@PREV value = inf_count_@ROOT } }
-				}
-				FROM = {
-					OR = {
-						AND = {
-							is_subject = no
-							check_variable = { tot_autonomy < 200 }
-						}
-						AND = {
-							NOT = { is_subject_of = ROOT }
-							has_autonomy_state = autonomy_sphereling
-							compare_autonomy_progress_ratio < 1
-						}
-					}
-				}
+				FROM_can_become_free = no
+				no_one_has_more_influence_on_FROM_than_ROOT = yes
 			}
 		}
 		cost = 25
@@ -184,47 +131,9 @@ sphere_decisions = {
 			factor = 1
 			modifier = {
 				factor = 10
-				FROM = {
-					NOT = { compare_autonomy_progress_ratio < 1 }
-					all_other_country = {
-						has_idea = great_power
-						FROM = { NOT = { is_subject_of = PREV } }
-						FROM = {
-							check_variable = {
-								var = inf_count_@PREV
-								value = inf_count_@ROOT
-								compare = less_than_or_equal
-							}
-						}
-					}
-					any_other_country = {
-						has_idea = great_power
-						FROM = { NOT = { is_subject_of = PREV } }
-						FROM = { check_variable = { inf_count_@PREV = inf_count_@ROOT } }
-					}
-				}
-			}
-			modifier = {
-				factor = 10
-				FROM = {
-					check_variable = { var = tot_autonomy value = 200 }
-					all_other_country = {
-						has_idea = great_power
-						FROM = { NOT = { is_subject_of = PREV } }
-						FROM = {
-							check_variable = {
-								var = inf_count_@PREV
-								value = inf_count_@ROOT
-								compare = less_than_or_equal
-							}
-						}
-					}
-					any_other_country = {
-						has_idea = great_power
-						FROM = { NOT = { is_subject_of = PREV } }
-						FROM = { check_variable = { inf_count_@PREV = inf_count_@ROOT } }
-					}
-				}
+				FROM_can_become_free = yes
+				no_one_has_more_influence_on_FROM_than_ROOT = yes
+				someone_has_equal_influence_on_FROM_as_ROOT = yes
 			}
 		}
 	}
