@@ -72,9 +72,10 @@ class HoI4FocusTree: commonItems::parser
 		void addFascistAnnexationBranch(std::shared_ptr<HoI4::Country> Home, const std::vector<std::shared_ptr<HoI4::Country>>& annexationTargets, HoI4::Events* events);
 		void addFascistSudetenBranch(std::shared_ptr<HoI4::Country> Home, const std::vector<std::shared_ptr<HoI4::Country>>& sudetenTargets, const std::vector<std::vector<int>>& demandedStates, const HoI4::World* world);
 		void addGPWarBranch(std::shared_ptr<HoI4::Country> Home, const std::vector<std::shared_ptr<HoI4::Country>>& newAllies, const std::vector<std::shared_ptr<HoI4::Country>>& GCTargets, const std::string& ideology, HoI4::Events* events);
+		std::map<std::string, int> addCoresBranch(std::shared_ptr<HoI4::Country> theCountry, int& numWarsWithNeighbors);
 		void addNeighborWarBranch(
 			const std::string& tag,
-			const std::vector<std::shared_ptr<HoI4::Country>>& weakNeighbors,
+			const std::map<std::string, std::shared_ptr<HoI4::Country>>& closeNeighbors,
 			const std::shared_ptr<HoI4::Country>& targetNeighbors,
 			const std::string& targetName,
 			const date& startDate,

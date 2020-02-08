@@ -113,6 +113,7 @@ class Country
 		void convertArmies(const militaryMappings& theMilitaryMappings, const HoI4::States& theStates);
 		void convertTechnology(const mappers::techMapper& theTechMapper);
 		void addState(const State& state);
+		void addCoreState(const State& state) { coreStates.insert(make_pair(state.getID(), state)); }
 		void calculateIndustry(const std::map<int, State>& allStates);
 		void addGenericFocusTree(const std::set<std::string>& majorIdeologies);
 		void adjustResearchFocuses() const;
@@ -148,6 +149,7 @@ class Country
 		[[nodiscard]] const std::set<int>& getStates() const { return states; }
 		[[nodiscard]] std::optional<int> getCapitalState() const { return capitalState; }
 		[[nodiscard]] std::optional<int> getCapitalProvince() const { return capitalProvince; }
+		[[nodiscard]] const std::map<int, HoI4::State>& getCoreStates() const { return coreStates; }
 
 		[[nodiscard]] const std::string& getGovernmentIdeology() const { return governmentIdeology; }
 		[[nodiscard]] const std::string& getLeaderIdeology() const { return leaderIdeology; }
@@ -260,6 +262,7 @@ class Country
 		std::set<int> states;
 		std::optional<int> capitalState;
 		std::optional<int> capitalProvince;
+		std::map<int, HoI4::State> coreStates;
 
 		std::string governmentIdeology = "neutrality";
 		std::string leaderIdeology = "conservatism_neutral";

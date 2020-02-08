@@ -113,6 +113,7 @@ class World: commonItems::parser
 
 		void convertIndustry();
 		void addStatesToCountries();
+		void determineCoreStates();
 		std::map<std::string, double> calculateFactoryWorkerRatios();
 		std::map<std::string, double> getIndustrialWorkersPerCountry();
 		double getTotalWorldWorkers(const std::map<std::string, double>& industrialWorkersPerCountry);

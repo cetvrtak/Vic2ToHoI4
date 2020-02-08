@@ -693,4 +693,9 @@ spriteTypes = {
 		textureFile = "gfx/interface/autonomy/autonomy_clerkdom_icon.dds"
 	}
 	
+	spriteType = {
+		name = "GFX_idea_revanchism"
+		textureFile = "gfx/interface/revanchism_modifier_icon.dds"
+	}
+	
 }

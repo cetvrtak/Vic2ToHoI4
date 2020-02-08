@@ -53,6 +53,7 @@ class HoI4WarCreator
 		vector<shared_ptr<HoI4::Faction>> absolutistWarCreator(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Faction>> neighborWarCreator(shared_ptr<HoI4::Country> country, ofstream& AILog, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Faction>> radicalWarCreator(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
+		void reclaimCoresCreator(std::ofstream & AILog);
 
 		vector<shared_ptr<HoI4::Country>> findEvilCountries() const;
 
@@ -64,6 +65,7 @@ class HoI4WarCreator
 		);
 		vector<shared_ptr<HoI4::Country>> findWeakNeighbors(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		map<string, shared_ptr<HoI4::Country>> findCloseNeighbors(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
+		map<string, shared_ptr<HoI4::Country>> findCountriesWithin(int distancePx, shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Country>> findWeakColonies(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		map<string, shared_ptr<HoI4::Country>> findFarNeighbors(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Country>> getGreatPowerTargets(shared_ptr<HoI4::Country> country);
@@ -76,6 +78,7 @@ class HoI4WarCreator
 		string HowToTakeLand(shared_ptr<HoI4::Country> TargetCountry, shared_ptr<HoI4::Country> AttackingCountry, double time);
 		vector<shared_ptr<HoI4::Country>> GetMorePossibleAllies(const shared_ptr<HoI4::Country>& CountryThatWantsAllies);
 		optional<double> getDistanceBetweenCountries(shared_ptr<HoI4::Country> Country1, shared_ptr<HoI4::Country> Country2);
+		optional<double> getDistanceBetweenCapitals(shared_ptr<HoI4::Country> Country1, shared_ptr<HoI4::Country> Country2);
 		bool bothCountriesHaveCapitals(shared_ptr<HoI4::Country> Country1, shared_ptr<HoI4::Country> Country2) const;
 		pair<int, int> getCapitalPosition(shared_ptr<HoI4::Country> country);
 		pair<int, int> getProvincePosition(int provinceNum);

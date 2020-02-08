@@ -73,6 +73,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	addStatesToCountries();
 	states->addCapitalsToStates(countries);
 	HoI4Localisation::addStateLocalisations(*states);
+	determineCoreStates();
 	convertIndustry();
 	states->convertResources();
 	supplyZones->convertSupplyZones(*states);
@@ -337,6 +338,22 @@ void HoI4::World::addStatesToCountries()
 			states->getProvinceToStateIDMap(),
 			states->getStates()
 		);
+	}
+}
+
+
+void HoI4::World::determineCoreStates()
+{
+	for (auto state: states->getStates())
+	{
+		auto cores = state.second.getCores();
+		for (auto& country: countries)
+		{
+			if (cores.find(country.first) != cores.end())
+			{
+				country.second->addCoreState(state.second);
+			}
+		}
 	}
 }
 
