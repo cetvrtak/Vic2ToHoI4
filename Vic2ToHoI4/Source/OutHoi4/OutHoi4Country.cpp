@@ -1,4 +1,5 @@
-#include "Hoi4CountryOutputter.h"
+#include "OutHoi4Country.h"
+#include "AiStrategy/outAiStrategy.h"
 #include "Leaders/OutAdvisor.h"
 #include "Navies/NaviesOutputter.h"
 #include "Navies/OutLegacyNavyNames.h"
@@ -216,6 +217,7 @@ void HoI4::outputCountry(
 		outputOOB(divisionTemplates, theCountry);
 		outputCommonCountryFile(theCountry);
 		outputAdvisorIdeas(theCountry.getTag(), ideologicalMinisters);
+		outputAIStrategy(theCountry);
 
 		if (auto nationalFocus = theCountry.getNationalFocus(); nationalFocus)
 		{

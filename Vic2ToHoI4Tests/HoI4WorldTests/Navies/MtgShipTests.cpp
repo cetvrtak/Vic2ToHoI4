@@ -1,5 +1,5 @@
 #include "../Vic2ToHoI4/Source/HOI4World/Navies/MtgShip.h"
-#include "../Vic2ToHoI4/Source/Hoi4Outputter/Navies/MtgShipOutputter.h"
+#include "../Vic2ToHoI4/Source/OutHoi4/Navies/MtgShipOutputter.h"
 #include "gtest/gtest.h"
 
 

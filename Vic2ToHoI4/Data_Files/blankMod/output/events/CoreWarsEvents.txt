@@ -1,0 +1,47 @@
+add_namespace = core_wars
+
+country_event = {
+	id = core_wars.1
+	title = core_wars.1.t
+	desc = core_wars.1.d
+
+	hidden = yes
+
+	trigger = {
+		any_other_country = {
+			any_owned_state = { is_core_of = ROOT }
+			has_war = yes
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		every_other_country = {
+			limit = {
+				any_owned_state = { is_core_of = ROOT }
+				has_war = yes
+			}
+			clear_array = ROOT.possible_allies@THIS
+			every_other_country = {
+				limit = {
+					any_state = {
+						is_controlled_by = PREV
+						is_owned_by = PREV.PREV
+						OR = {
+							is_in_home_area = yes
+							PREV.PREV = { is_capitulated = yes }
+						}
+					}
+				}
+				add_to_array = { ROOT.possible_allies@PREV = THIS.id }
+			}
+		}
+	}
+
+	option = {
+		name = core_wars.1.a
+	}
+}

@@ -1151,6 +1151,7 @@ fascist_peace = {
 democratic_peace = {
 	enable = {
 		has_government = democratic
+		threat > 0.5
 	}
 
 	annex_randomness = 0 #100

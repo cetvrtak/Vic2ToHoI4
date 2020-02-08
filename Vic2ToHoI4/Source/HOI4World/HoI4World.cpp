@@ -9,6 +9,7 @@
 #include "../V2World/Party.h"
 #include "HoI4Country.h"
 #include "Decisions/Decisions.h"
+#include "Modifiers/DynamicModifiers.h"
 #include "Events/Events.h"
 #include "Events/GovernmentInExileEvent.h"
 #include "HoI4FocusTree.h"
@@ -31,25 +32,28 @@
 #include "../V2World/Agreement.h"
 #include "../V2World/Country.h"
 #include "../V2World/World.h"
+#include "../V2World/Province.h"
 #include "../Mappers/CountryMapping.h"
 #include "../Mappers/TechMapper.h"
 #include "../Mappers/FlagsToIdeas/FlagsToIdeasMapper.h"
 #include "ParserHelpers.h"
-#include "../Hoi4Outputter/Hoi4CountryOutputter.h"
-#include "../Hoi4Outputter/Decisions/DecisionsOutputter.h"
-#include "../Hoi4Outputter/Diplomacy/OutAiPeaces.h"
-#include "../Hoi4Outputter/GameRules/OutGameRules.h"
-#include "../Hoi4Outputter/Events/EventsOutputter.h"
-#include "../Hoi4Outputter/Ideas/OutIdeas.h"
-#include "../Hoi4Outputter/Map/OutBuildings.h"
-#include "../Hoi4Outputter/Map/OutStrategicRegion.h"
-#include "../Hoi4Outputter/Map/OutSupplyZones.h"
-#include "../Hoi4Outputter/ScriptedLocalisations/ScriptedLocalisationsOutputter.h"
-#include "../Hoi4Outputter/ScriptedTriggers/OutScriptedTriggers.h"
-#include "../Hoi4Outputter/States/HoI4StatesOutputter.h"
+#include "../OutHoi4/OutHoi4Country.h"
+#include "../OutHoi4/Decisions/DecisionsOutputter.h"
+#include "../OutHoi4/Diplomacy/OutAiPeaces.h"
+#include "../OutHoi4/GameRules/OutGameRules.h"
+#include "../OutHoi4/Events/EventsOutputter.h"
+#include "../OutHoi4/Modifiers/OutModifier.h"
+#include "../OutHoi4/Modifiers/outDynamicModifiers.h"
+#include "../OutHoi4/Ideas/OutIdeas.h"
+#include "../OutHoi4/Map/OutBuildings.h"
+#include "../OutHoi4/Map/OutStrategicRegion.h"
+#include "../OutHoi4/Map/OutSupplyZones.h"
+#include "../OutHoi4/ScriptedLocalisations/ScriptedLocalisationsOutputter.h"
+#include "../OutHoi4/ScriptedTriggers/OutScriptedTriggers.h"
+#include "../OutHoi4/States/HoI4StatesOutputter.h"
 #include <fstream>
-#include "../Hoi4Outputter/outDifficultySettings.h"
-#include "../Hoi4Outputter/Ideologies/OutIdeologies.h"
+#include "../OutHoi4/outDifficultySettings.h"
+#include "../OutHoi4/Ideologies/OutIdeologies.h"
 using namespace std;
 
 
@@ -71,6 +75,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	addStatesToCountries();
 	states->addCapitalsToStates(countries);
 	HoI4Localisation::addStateLocalisations(*states);
+	determineCoreStates();
 	convertIndustry();
 	states->convertResources();
 	supplyZones->convertSupplyZones(*states);
@@ -114,6 +119,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 		createFactions();
 	}
 
+	buildConquerStrategies();
 	HoI4WarCreator warCreator(this, theMapData);
 
 	addFocusTrees();
@@ -124,6 +130,8 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	processInfluence();
 	determineSpherelings();
 	calculateSpherelingAutonomy();
+	dynamicModifiers.updateDynamicModifiers(*ideologies);
+	buildConquerStrategies();
 	scriptedTriggers.importScriptedTriggers(theConfiguration);
 	updateScriptedTriggers(scriptedTriggers, ideologies->getMajorIdeologies());
 
@@ -286,6 +294,21 @@ void HoI4::World::addStatesToCountries()
 			states->getProvinceToStateIDMap(),
 			states->getStates()
 		);
+	}
+}
+
+
+void HoI4::World::determineCoreStates()
+{
+	for (const auto& state: states->getStates())
+	{
+		for (const auto& core: state.second.getCores())
+		{
+			if (core != state.second.getOwner())
+			{
+				findCountry(core)->addCoreState(state.first);
+			}
+		}
 	}
 }
 
@@ -1013,6 +1036,7 @@ void HoI4::World::output()
 	outputIdeologies(*ideologies);
 	outputLeaderTraits();
 	outIdeas(*theIdeas, ideologies->getMajorIdeologies(), theConfiguration);
+	outDynamicModifiers(dynamicModifiers, theConfiguration);
 	outputBookmarks();
 	outputScriptedLocalisations(theConfiguration, scriptedLocalisations);
 	outputScriptedTriggers(scriptedTriggers, theConfiguration);
@@ -1499,6 +1523,35 @@ void HoI4::World::calculateSpherelingAutonomy()
 			double spherelingAutonomy = 3.6 * influenceFactor / 400;
 			
 			GP->setSpherelingAutonomy(sphereling.first, spherelingAutonomy);
+		}
+	}
+}
+
+void HoI4::World::buildConquerStrategies()
+{
+	for (auto& country: countries)
+	{
+		for (const auto& strategy: country.second->getAIStrategies())
+		{
+			if (strategy.getType() == "conquer_prov")
+			{
+				if (auto HoI4Tag = countryMap.getHoI4Tag((*sourceWorld->getProvince(std::stoi(strategy.getID())))->getOwner()); HoI4Tag)
+				{
+					const auto& conquerStrategies = country.second->getConquerStrategies();
+
+					if (const auto& conquerTag = conquerStrategies.find(*HoI4Tag); conquerTag == conquerStrategies.end())
+					{
+						HoI4::AIStrategy newStrategy("conquer");
+						newStrategy.setID(*HoI4Tag);
+						newStrategy.increaseValue(strategy.getValue());
+						country.second->addConquerStrategy(newStrategy);
+					}
+					else
+					{
+						country.second->updateConquerStrategy(*HoI4Tag, strategy.getValue());
+					}
+				}
+			}
 		}
 	}
 }

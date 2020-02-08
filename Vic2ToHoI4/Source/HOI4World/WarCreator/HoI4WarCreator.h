@@ -44,6 +44,7 @@ class HoI4WarCreator
 		double calculateWorldStrength(ofstream& AILog) const;
 		void generateMajorWars(ofstream& AILog, set<shared_ptr<HoI4::Faction>>& factionsAtWar, const std::set<std::string>& majorIdeologies, const HoI4::World* world, const HoI4::MapData& theMapData);
 		double calculatePercentOfWorldAtWar(ofstream& AILog, const set<shared_ptr<HoI4::Faction>>& factionsAtWar, double worldStrength) const;
+		void generateConquestWars(std::ofstream & AILog);
 		void generateAdditionalWars(ofstream& AILog, set<shared_ptr<HoI4::Faction>>& factionsAtWar, double worldStrength, const HoI4::MapData& theMapData);
 		bool isImportantCountry(shared_ptr<HoI4::Country> country);
 
@@ -64,6 +65,7 @@ class HoI4WarCreator
 		);
 		vector<shared_ptr<HoI4::Country>> findWeakNeighbors(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		map<string, shared_ptr<HoI4::Country>> findCloseNeighbors(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
+		map<string, shared_ptr<HoI4::Country>> findCountriesWithin(int distancePx, shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Country>> findWeakColonies(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		map<string, shared_ptr<HoI4::Country>> findFarNeighbors(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Country>> getGreatPowerTargets(shared_ptr<HoI4::Country> country);
@@ -76,6 +78,7 @@ class HoI4WarCreator
 		string HowToTakeLand(shared_ptr<HoI4::Country> TargetCountry, shared_ptr<HoI4::Country> AttackingCountry, double time);
 		vector<shared_ptr<HoI4::Country>> GetMorePossibleAllies(const shared_ptr<HoI4::Country>& CountryThatWantsAllies);
 		optional<double> getDistanceBetweenCountries(shared_ptr<HoI4::Country> Country1, shared_ptr<HoI4::Country> Country2);
+		optional<double> getDistanceBetweenCapitals(shared_ptr<HoI4::Country> Country1, shared_ptr<HoI4::Country> Country2);
 		bool bothCountriesHaveCapitals(shared_ptr<HoI4::Country> Country1, shared_ptr<HoI4::Country> Country2) const;
 		pair<int, int> getCapitalPosition(shared_ptr<HoI4::Country> country);
 		pair<int, int> getProvincePosition(int provinceNum);

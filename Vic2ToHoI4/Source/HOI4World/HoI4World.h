@@ -7,6 +7,8 @@
 #include "Diplomacy/AIPeaces.h"
 #include "GameRules/GameRules.h"
 #include "Ideas/Ideas.h"
+#include "Modifiers/Modifier.h"
+#include "Modifiers/DynamicModifiers.h"
 #include "Leaders/Advisor.h"
 #include "Map/CoastalProvinces.h"
 #include "Map/MapData.h"
@@ -90,6 +92,9 @@ class World: commonItems::parser
 		void processInfluence();
 		void determineSpherelings();
 		void calculateSpherelingAutonomy();
+		void buildConquerStrategies();
+
+		void updateDynamicModifiers();
 
 	private:
 		World(const World&) = delete;
@@ -113,6 +118,7 @@ class World: commonItems::parser
 
 		void convertIndustry();
 		void addStatesToCountries();
+		void determineCoreStates();
 		std::map<std::string, double> calculateFactoryWorkerRatios();
 		std::map<std::string, double> getIndustrialWorkersPerCountry();
 		double getTotalWorldWorkers(const std::map<std::string, double>& industrialWorkersPerCountry);
@@ -222,6 +228,7 @@ class World: commonItems::parser
 		ScriptedTriggers scriptedTriggers;
 
 		std::unique_ptr<GameRules> gameRules;
+		DynamicModifiers dynamicModifiers;
 };
 
 }
