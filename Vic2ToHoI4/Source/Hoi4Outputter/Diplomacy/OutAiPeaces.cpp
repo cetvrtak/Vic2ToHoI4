@@ -20,7 +20,7 @@ void HoI4::outAiPeaces(
 				std::ofstream outFile(
 					"output/" + theConfiguration.getOutputName() + "/common/ai_peace/1_communist.txt"
 				);
-				if (majorIdeologies.count("communist") > 0)
+				if (majorIdeologies.count("communism") > 0)
 				{
 					outFile << thePeace;
 				}

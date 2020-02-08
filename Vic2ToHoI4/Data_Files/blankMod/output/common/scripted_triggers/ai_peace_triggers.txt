@@ -1,0 +1,99 @@
+#	Example:
+# 
+#	example_trigger = {
+#		tag = GER
+#		is_ai = no
+#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+#		exampel_trigger = yes
+#	}
+#
+ROOT_has_claim_on_FROM = {
+	FROM = {
+		any_owned_state = { 
+			OR = { 
+				is_claimed_by = ROOT
+				is_core_of = ROOT
+				has_claimed_state_in_peace_conference = ROOT
+			}
+		}
+	}
+}
+
+ROOT_has_claim_or_core_on_FROM = {
+	FROM = { 
+		any_owned_state = {
+			OR = { 
+				is_claimed_by = ROOT
+				is_core_of = ROOT
+			}
+		}
+	}
+}
+
+ROOT_has_claimed_FROM = {
+	FROM = {
+		OR = {
+			is_claimed_by = ROOT
+			is_core_of = ROOT
+		}
+	}
+}
+
+ROOT_owns_or_claimed_in_conference_FROMs_neighbor = {
+	FROM = {
+		any_neighbor_state = {
+			OR = {
+				owner = { tag = ROOT }
+				has_claimed_state_in_peace_conference = ROOT
+			}
+		}
+	}
+}
+
+coastal_FROM_coastal_ROOT = {
+	AND = {
+		FROM = { OR = { is_island_state = yes is_coastal = yes } }
+		any_owned_state = { is_coastal = yes }
+	}
+}
+
+ROOT_or_puppet_borders_FROM_or_claimed_in_conference = {
+	FROM = {
+		OR = {
+			any_neighbor_country = { is_puppet_of = ROOT }
+			any_owned_state = {
+				any_neighbor_state = {
+					OR = {
+						owner = { tag = ROOT }
+						owner = { is_puppet_of = ROOT }
+						has_claimed_state_in_peace_conference = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
+FROM_coastal_country_ROOT_coastal_country = {
+	AND = {
+		FROM = { any_owned_state = { OR = { is_coastal = yes is_island_state = yes } } }
+		any_owned_state = { OR = { is_coastal = yes is_island_state = yes } }
+	}
+}
+
+ROOT_has_claims_still_unclaimed_in_conference = {
+	FROM = {
+		any_owned_state = { 
+			OR = {
+				is_claimed_by = ROOT
+				is_core_of = ROOT
+			}
+			NOT = { has_claimed_state_in_peace_conference = ROOT }
+		}
+	}
+}
