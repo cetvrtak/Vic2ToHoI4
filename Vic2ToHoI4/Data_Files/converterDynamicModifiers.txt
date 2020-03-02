@@ -1,0 +1,11 @@
+revanchism = {
+	icon = GFX_idea_revanchism
+	enable = {
+		always = yes
+	}
+	remove_trigger = {
+		NOT = { check_variable = { revanchism_stab < 0 } }
+	}
+
+	stability_factor = var:revanchism_stab
+}

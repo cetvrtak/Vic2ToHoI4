@@ -91,6 +91,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 
 	importIdeologies();
 	importLeaderTraits();
+	importDynamicModifiers();
 	convertGovernments();
 	identifyMajorIdeologies();
 	importIdeologicalMinisters();
@@ -122,6 +123,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	processInfluence();
 	determineSpherelings();
 	calculateSpherelingAutonomy();
+	updateDynamicModifiers();
 	scriptedTriggers.importScriptedTriggers(theConfiguration);
 	updateScriptedTriggers(scriptedTriggers, majorIdeologies);
 }
@@ -217,6 +219,17 @@ void HoI4::World::importLeaderTraits()
 		ideologicalLeaderTraits.insert(make_pair(ideologyName, traits.getStrings()));
 	});
 	parseFile("converterLeaderTraits.txt");
+}
+
+
+void HoI4::World::importDynamicModifiers()
+{
+	clearRegisteredKeywords();
+	registerRegex("[a-zA-Z0-9_]+", [this](const std::string& modifierName, std::istream& theStream){
+		HoI4Modifier modifier(theStream);
+		dynamicModifiers.insert(make_pair(modifierName, modifier));
+	});
+	parseFile("converterDynamicModifiers.txt");
 }
 
 
@@ -1081,6 +1094,7 @@ void HoI4::World::output()
 	outputIdeologies();
 	outputLeaderTraits();
 	outputIdeas();
+	outputDynamicModifiers();
 	outputBookmarks();
 	outputScriptedLocalisations(theConfiguration, scriptedLocalisations);
 	outputScriptedTriggers(scriptedTriggers, theConfiguration);
@@ -1412,6 +1426,31 @@ void HoI4::World::outputIdeas() const
 }
 
 
+void HoI4::World::outputDynamicModifiers() const
+{
+	if (!Utils::TryCreateFolder("output/" + theConfiguration.getOutputName() + "/common/dynamic_modifiers"))
+	{
+		Log(LogLevel::Error) << "Could not create output/" + theConfiguration.getOutputName() + "/common/dynamic_modifiers/";
+		exit(-1);
+	}
+
+	ofstream out("output/" + theConfiguration.getOutputName() + "/common/dynamic_modifiers/01_converter_modifiers.txt");
+	if (!out.is_open())
+	{
+		LOG(LogLevel::Error) << "Could not create 01_converter_modifiers.txt.";
+		exit(-1);
+	}
+
+	for (auto& modifier: dynamicModifiers)
+	{
+		out << modifier.first << " = {\n" << modifier.second << "}\n";
+		out << "\n";
+	}
+
+	out.close();
+}
+
+
 void HoI4::World::outputBookmarks() const
 {
 	ofstream bookmarkFile("output/" + theConfiguration.getOutputName() + "/common/bookmarks/the_gathering_storm.txt");
@@ -1594,5 +1633,24 @@ void HoI4::World::calculateSpherelingAutonomy()
 			
 			GP->setSpherelingAutonomy(sphereling.first, spherelingAutonomy);
 		}
+	}
+}
+
+void HoI4::World::updateDynamicModifiers()
+{
+	auto& revanchismModifier = (dynamicModifiers.find("revanchism"))->second;
+	if (majorIdeologies.count("fascism"))
+	{
+		std::string newString;
+
+		newString = "= {\n";
+		newString += "\t\tOR = {\n";
+		newString += "\t\t\tNOT = { check_variable = { revanchism > 0 } }\n";
+		newString += "\t\t\tNOT = { check_variable = { revanchism_stab < 0 } }\n";
+		newString += "\t\t}\n";
+		newString += "\t}\n";
+		revanchismModifier.updateRemoveTrigger(newString);
+
+		revanchismModifier.addEffect("fascism_drift","var:revanchism");
 	}
 }

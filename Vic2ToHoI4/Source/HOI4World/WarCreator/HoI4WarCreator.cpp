@@ -1286,7 +1286,7 @@ void HoI4WarCreator::reclaimCoresCreator(std::ofstream & AILog)
 		}
 		int numWarsWithNeighbors = 0;
 		auto focusTree = genericFocusTree->makeCustomizedCopy(*country.second);
-		auto coreHolders = focusTree->addCoresBranch(country.second, numWarsWithNeighbors);
+		auto coreHolders = focusTree->addCoresBranch(country.second, numWarsWithNeighbors, theWorld->getMajorIdeologies());
 		if (coreHolders.size())
 		{
 			country.second->giveNationalFocus(focusTree);
@@ -1330,7 +1330,7 @@ std::vector<std::shared_ptr<HoI4::Faction>> HoI4WarCreator::neighborWarCreator(
 
 	int numWarsWithNeighbors = 0;
 	auto focusTree = genericFocusTree->makeCustomizedCopy(*country);
-	auto coreHolders = focusTree->addCoresBranch(country, numWarsWithNeighbors);
+	auto coreHolders = focusTree->addCoresBranch(country, numWarsWithNeighbors, theWorld->getMajorIdeologies());
 
 
 	for (auto target: closeNeighbors)
@@ -1377,7 +1377,8 @@ std::vector<std::shared_ptr<HoI4::Faction>> HoI4WarCreator::neighborWarCreator(
 				target.second,
 				targetName,
 				startDate,
-				numWarsWithNeighbors
+				numWarsWithNeighbors,
+				theWorld->getMajorIdeologies()
 			);
 
 			numWarsWithNeighbors++;

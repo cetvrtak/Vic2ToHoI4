@@ -299,6 +299,26 @@ void HoI4FocusTree::addGenericFocusTree(const set<string>& majorIdeologies)
 	if (const auto& originalFocus = loadedFocuses.find("border_disputes"); originalFocus != loadedFocuses.end())
 	{
 		auto newFocus = make_shared<HoI4Focus>(originalFocus->second);
+		if (!majorIdeologies.count("communism"))
+		{
+			std::string comm = "";
+			comm += "\n\t\t\t\t\tif = {\n";
+			comm += "\t\t\t\t\t\tlimit = { ROOT = { has_government = communism } }\n";
+			comm += "\t\t\t\t\t\tpotential_communist_puppet_target = yes\n";
+			comm += "\t\t\t\t\t}";
+			newFocus->updateFocusElement(newFocus->available, comm, "");
+			newFocus->updateFocusElement(newFocus->selectEffect, "\n\t\t\t\t\t\tpotential_communist_puppet_target = yes", "");
+		}
+		if (!majorIdeologies.count("fascism"))
+		{
+			std::string fasc = "";
+			fasc += "\n\t\t\t\t\tif = {\n";
+			fasc += "\t\t\t\t\t\tlimit = { ROOT = { has_government = fascism } }\n";
+			fasc += "\t\t\t\t\t\tpotential_fascist_annex_target = yes\n";
+			fasc += "\t\t\t\t\t}";
+			newFocus->updateFocusElement(newFocus->available, fasc, "");
+			newFocus->updateFocusElement(newFocus->selectEffect, "\n\t\t\t\t\t\tpotential_fascist_annex_target = yes", "");
+		}
 		sharedFocuses.push_back(newFocus);
 	}
 	else
@@ -319,6 +339,32 @@ void HoI4FocusTree::addGenericFocusTree(const set<string>& majorIdeologies)
 	if (const auto& originalFocus = loadedFocuses.find("neighbor_war"); originalFocus != loadedFocuses.end())
 	{
 		auto newFocus = make_shared<HoI4Focus>(originalFocus->second);
+		if (!majorIdeologies.count("communism"))
+		{
+			std::string comm = "";
+			comm += "\n\t\t\telse_if = {\n";
+			comm += "\t\t\t\tlimit = { var:neighbor_war_defender = { potential_communist_puppet_target = yes } }\n";
+			comm += "\t\t\t\tdeclare_war_on = {\n";
+			comm += "\t\t\t\t\ttarget = var:neighbor_war_defender\n";
+			comm += "\t\t\t\t\ttype = puppet_wargoal_focus\n";
+			comm += "\t\t\t\t}\n";
+			comm += "\t\t\t\tadd_named_threat = { threat = 3 name = neighbor_war_NF_threat }\n";
+			comm += "\t\t\t}";
+			newFocus->updateFocusElement(newFocus->completionReward, comm, "");
+		}
+		if (!majorIdeologies.count("fascism"))
+		{
+			std::string fasc = "";
+			fasc += "\n\t\t\telse_if = {\n";
+			fasc += "\t\t\t\tlimit = { var:neighbor_war_defender = { potential_fascist_annex_target = yes } }\n";
+			fasc += "\t\t\t\tdeclare_war_on = {\n";
+			fasc += "\t\t\t\t\ttarget = var:neighbor_war_defender\n";
+			fasc += "\t\t\t\t\ttype = annex_everything\n";
+			fasc += "\t\t\t\t}\n";
+			fasc += "\t\t\t\tadd_named_threat = { threat = 3 name = neighbor_war_NF_threat }\n";
+			fasc += "\t\t\t}";
+			newFocus->updateFocusElement(newFocus->completionReward, fasc, "");
+		}
 		sharedFocuses.push_back(newFocus);
 	}
 	else
@@ -1942,8 +1988,11 @@ void HoI4FocusTree::addGPWarBranch(shared_ptr<HoI4::Country> Home, const vector<
 }
 
 
-std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::Country> theCountry, int& numWarsWithNeighbors)
-{
+std::map<std::string, int> HoI4FocusTree::addCoresBranch(
+	std::shared_ptr<HoI4::Country> theCountry,
+	int& numWarsWithNeighbors,
+	const std::set<std::string>& majorIdeologies
+){
 	std::map<std::string, int> coreHolders;
 	int sumUnownedCores = 0;
 
@@ -1977,6 +2026,12 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 
 	if (!coreHolders.empty())
 	{
+		std::string fascistGovernmentCheck = "";
+		fascistGovernmentCheck += "\n\t\t\tmodifier = {\n";
+		fascistGovernmentCheck += "\t\t\t\tfactor = 5\n";
+		fascistGovernmentCheck += "\t\t\t\thas_government = fascism\n";
+		fascistGovernmentCheck += "\t\t\t}";
+
 		if (const auto& originalFocus = loadedFocuses.find("reclaim_cores"); originalFocus != loadedFocuses.end())
 		{
 			shared_ptr<HoI4Focus> newFocus = originalFocus->second.makeCustomizedCopy(theCountry->getTag());
@@ -1986,11 +2041,8 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 				newFocus->selectEffect += "\t\t\tset_variable = { unowned_cores_@" + country.first + " = " + std::to_string(country.second) + " }\n";
 			}
 			newFocus->selectEffect += "\t\t\tset_variable = { revanchism = " + std::to_string(0.0001*sumUnownedCores) + " }\n";
-			newFocus->selectEffect += "\t\t\tif = {\n";
-			newFocus->selectEffect += "\t\t\t\tlimit = { NOT = { has_government = fascism } }\n";
-			newFocus->selectEffect += "\t\t\t\tadd_dynamic_modifier = { modifier = revanchism }\n";
-			newFocus->selectEffect += "\t\t\t}\n";
-			newFocus->selectEffect += "\t\t\tadd_stability = " + std::to_string(-0.00001*sumUnownedCores) + "\n";
+			newFocus->selectEffect += "\t\t\tset_variable = { revanchism_stab = " + std::to_string(-0.00001*sumUnownedCores) + " }\n";
+			newFocus->selectEffect += "\t\t\tadd_dynamic_modifier = { modifier = revanchism }\n";
 			newFocus->selectEffect += "\t\t}\n";
 			newFocus->xPos = nextFreeColumn + coreHolders.size() - 1;
 			focuses.push_back(newFocus);
@@ -2005,8 +2057,23 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 			if (const auto& originalFocus = loadedFocuses.find("raise_matter"); originalFocus != loadedFocuses.end())
 			{
 				shared_ptr<HoI4Focus> newFocus = originalFocus->second.makeTargetedCopy(theCountry->getTag(), country.first);
-				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->xPos = nextFreeColumn;
+				if (!majorIdeologies.count("fascism"))
+				{
+					newFocus->completionReward = "= {\n";
+					newFocus->completionReward += "\t\t\tadd_popularity = { ideology = ROOT popularity = $POPULARITY }\n";
+					newFocus->completionReward += "\t\t}";
+
+					std::string fascismPopularityCheck = "";
+					fascismPopularityCheck += "\n\t\t\tmodifier = {\n";
+					fascismPopularityCheck += "\t\t\t\tfactor = 0\n";
+					fascismPopularityCheck += "\t\t\t\tNOT = { has_government = fascism }\n";
+					fascismPopularityCheck += "\t\t\t\tNOT = { fascism > 0.35 }\n";
+					fascismPopularityCheck += "\t\t\t}";
+					newFocus->updateFocusElement(newFocus->aiWillDo, fascismPopularityCheck, "");
+					newFocus->updateFocusElement(newFocus->aiWillDo, fascistGovernmentCheck, "");
+				}
+				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$POPULARITY", std::to_string(0.00001*country.second));
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
@@ -2024,6 +2091,22 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 				newFocus->prerequisites.clear();
 				newFocus->prerequisites.push_back("= { focus = raise_matter" + theCountry->getTag() + country.first + " }");
 				newFocus->relativePositionId += country.first;
+				if (!majorIdeologies.count("fascism"))
+				{
+					newFocus->completionReward = " = {\n";
+					newFocus->completionReward += "\t\t\tadd_popularity = { ideology = ROOT popularity = $POPULARITY }\n";
+					newFocus->completionReward += "\t\t\tadd_war_support = $WARSUPPORT\n";
+					newFocus->completionReward += "\t\t}";
+
+					std::string fascismPopularityCheck = "";
+					fascismPopularityCheck += "\n\t\t\tmodifier = {\n";
+					fascismPopularityCheck += "\t\t\t\tfactor = 0\n";
+					fascismPopularityCheck += "\t\t\t\tNOT = { has_government = fascism }\n";
+					fascismPopularityCheck += "\t\t\t\tNOT = { fascism > 0.4 }\n";
+					fascismPopularityCheck += "\t\t\t}";
+					newFocus->updateFocusElement(newFocus->aiWillDo, fascismPopularityCheck, "");
+					newFocus->updateFocusElement(newFocus->aiWillDo, fascistGovernmentCheck, "");
+				}
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$POPULARITY", std::to_string(0.00001*country.second));
 				newFocus->updateFocusElement(newFocus->completionReward, "$WARSUPPORT", std::to_string(0.0001*country.second));
@@ -2042,6 +2125,10 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 				newFocus->prerequisites.clear();
 				newFocus->prerequisites.push_back("= { focus = build_public_support" + theCountry->getTag() + country.first + " }");
 				newFocus->relativePositionId += country.first;
+				if (!majorIdeologies.count("fascism"))
+				{
+					newFocus->updateFocusElement(newFocus->aiWillDo, fascistGovernmentCheck, "");
+				}
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
@@ -2059,6 +2146,10 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 				newFocus->prerequisites.clear();
 				newFocus->prerequisites.push_back("= { focus = territory_or_war" + theCountry->getTag() + country.first + " }");
 				newFocus->relativePositionId += country.first;
+				if (!majorIdeologies.count("fascism"))
+				{
+					newFocus->updateFocusElement(newFocus->aiWillDo, fascistGovernmentCheck, "");
+				}
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
@@ -2076,6 +2167,10 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 				newFocus->prerequisites.clear();
 				newFocus->prerequisites.push_back("= { focus = war_plan" + theCountry->getTag() + country.first + " }");
 				newFocus->relativePositionId += country.first;
+				if (!majorIdeologies.count("fascism"))
+				{
+					newFocus->updateFocusElement(newFocus->aiWillDo, fascistGovernmentCheck, "");
+				}
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
@@ -2096,7 +2191,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(std::shared_ptr<HoI4::C
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$REVANCHISM", std::to_string(0.00005*country.second));
-				newFocus->updateFocusElement(newFocus->completionReward, "$STABILITY", std::to_string(0.00001*country.second));
+				newFocus->updateFocusElement(newFocus->completionReward, "$STABILITY", std::to_string(0.000005*country.second));
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2116,7 +2211,8 @@ void HoI4FocusTree::addNeighborWarBranch(
 	const shared_ptr<HoI4::Country>& targetNeighbors,
 	const string& targetName,
 	const date& startDate,
-	int numWarsWithNeighbors
+	int numWarsWithNeighbors,
+	const std::set<std::string>& majorIdeologies
 )
 {
 	if (const auto& originalFocus = loadedFocuses.find("border_disputes"); originalFocus != loadedFocuses.end())
@@ -2130,14 +2226,20 @@ void HoI4FocusTree::addNeighborWarBranch(
 		newFocus->available += "\t\t\t\tnot_allies_or_subjects = yes\n";
 		newFocus->available += "\t\t\t\tOR = {\n";
 		newFocus->available += "\t\t\t\t\tpotential_take_core_target = yes\n";
-		newFocus->available += "\t\t\t\t\tif = {\n";
-		newFocus->available += "\t\t\t\t\t\tlimit = { ROOT = { has_government = communism } }\n";
-		newFocus->available += "\t\t\t\t\t\tpotential_communist_puppet_target = yes\n";
-		newFocus->available += "\t\t\t\t\t}\n";
-		newFocus->available += "\t\t\t\t\tif = {\n";
-		newFocus->available += "\t\t\t\t\t\tlimit = { ROOT = { has_government = fascism } }\n";
-		newFocus->available += "\t\t\t\t\t\tpotential_fascist_annex_target = yes\n";
-		newFocus->available += "\t\t\t\t\t}\n";
+		if (majorIdeologies.count("communism"))
+		{
+			newFocus->available += "\t\t\t\t\tif = {\n";
+			newFocus->available += "\t\t\t\t\t\tlimit = { ROOT = { has_government = communism } }\n";
+			newFocus->available += "\t\t\t\t\t\tpotential_communist_puppet_target = yes\n";
+			newFocus->available += "\t\t\t\t\t}\n";
+		}
+		if (majorIdeologies.count("fascism"))
+		{
+			newFocus->available += "\t\t\t\t\tif = {\n";
+			newFocus->available += "\t\t\t\t\t\tlimit = { ROOT = { has_government = fascism } }\n";
+			newFocus->available += "\t\t\t\t\t\tpotential_fascist_annex_target = yes\n";
+			newFocus->available += "\t\t\t\t\t}\n";
+		}
 		newFocus->available += "\t\t\t\t\tpotential_take_state_target = yes\n";
 		newFocus->available += "\t\t\t\t\tpotential_border_war_target = yes\n";
 		newFocus->available += "\t\t\t\t}\n";
@@ -2189,8 +2291,9 @@ void HoI4FocusTree::addNeighborWarBranch(
 		newFocus->available += "\t\t\t\tnot_in_border_conflict = yes\n";
 		newFocus->available += "\t\t\t}\n";
 		newFocus->available += "\t\t}";
-		newFocus->updateFocusElement(newFocus->selectEffect, "var:neighbor_war_defender", targetNeighbors->getTag());
 		newFocus->updateFocusElement(newFocus->selectEffect, "var:ROOT.neighbor_war_defender", targetNeighbors->getTag());
+		newFocus->updateFocusElement(newFocus->completionReward, "var:neighbor_war_defender", targetNeighbors->getTag());
+		newFocus->updateFocusElement(newFocus->bypass, "var:neighbor_war_defender", targetNeighbors->getTag());
 		focuses.push_back(newFocus);
 	}
 	else
@@ -2206,6 +2309,32 @@ void HoI4FocusTree::addNeighborWarBranch(
 		newFocus->relativePositionId += targetNeighbors->getTag();
 		newFocus->updateFocusElement(newFocus->available, "var:neighbor_war_defender", targetNeighbors->getTag());
 		newFocus->updateFocusElement(newFocus->available, "var:ROOT.neighbor_war_defender", targetNeighbors->getTag());
+		if (!majorIdeologies.count("communism"))
+		{
+			std::string comm = "";
+			comm += "\n\t\t\telse_if = {\n";
+			comm += "\t\t\t\tlimit = { var:neighbor_war_defender = { potential_communist_puppet_target = yes } }\n";
+			comm += "\t\t\t\tdeclare_war_on = {\n";
+			comm += "\t\t\t\t\ttarget = var:neighbor_war_defender\n";
+			comm += "\t\t\t\t\ttype = puppet_wargoal_focus\n";
+			comm += "\t\t\t\t}\n";
+			comm += "\t\t\t\tadd_named_threat = { threat = 3 name = neighbor_war_NF_threat }\n";
+			comm += "\t\t\t}";
+			newFocus->updateFocusElement(newFocus->completionReward, comm, "");
+		}
+		if (!majorIdeologies.count("fascism"))
+		{
+			std::string fasc = "";
+			fasc += "\n\t\t\telse_if = {\n";
+			fasc += "\t\t\t\tlimit = { var:neighbor_war_defender = { potential_fascist_annex_target = yes } }\n";
+			fasc += "\t\t\t\tdeclare_war_on = {\n";
+			fasc += "\t\t\t\t\ttarget = var:neighbor_war_defender\n";
+			fasc += "\t\t\t\t\ttype = annex_everything\n";
+			fasc += "\t\t\t\t}\n";
+			fasc += "\t\t\t\tadd_named_threat = { threat = 3 name = neighbor_war_NF_threat }\n";
+			fasc += "\t\t\t}";
+			newFocus->updateFocusElement(newFocus->completionReward, fasc, "");
+		}
 		newFocus->updateFocusElement(newFocus->completionReward, "var:neighbor_war_defender", targetNeighbors->getTag());
 		newFocus->updateFocusElement(newFocus->completionReward, "var:ROOT.neighbor_war_defender", targetNeighbors->getTag());
 		newFocus->updateFocusElement(newFocus->bypass, "var:neighbor_war_defender", targetNeighbors->getTag());

@@ -2313,10 +2313,8 @@ focus = {
 		completion_reward = {
 			custom_effect_tooltip = revanchism_reduction
 			divide_variable = { revanchism = 2 }
+			divide_variable = { revanchism_stab = 2 }
 			add_political_power = 150
-		}
-		bypass = {
-			has_government = fascism
 		}
 		ai_will_do = {
 			factor = 10
@@ -2354,7 +2352,7 @@ focus = {
 			modifier = {
 				factor = 0
 				NOT = { has_government = fascism }
-				fascism < 0.35
+				NOT = { fascism > 0.35 }
 			}
 			modifier = {
 				factor = 0
@@ -2422,7 +2420,7 @@ focus = {
 			modifier = {
 				factor = 0
 				NOT = { has_government = fascism }
-				fascism < 0.4
+				NOT = { fascism > 0.4 }
 			}
 			modifier = {
 				factor = 0
@@ -2674,12 +2672,9 @@ focus = {
 		completion_reward = {
 			add_ai_strategy = { type = prepare_for_war id = $TARGET value = -1000 }
 			$TARGET = { add_ai_strategy = { type = prepare_for_war id = ROOT value = -1000 } }
-			if = {
-				limit = { NOT = { government = fascism } }
-				custom_effect_tooltip = decrease_revanchism
-				subtract_from_variable = { revanchism = $REVANCHISM }
-			}
-			add_stability = $STABILITY
+			custom_effect_tooltip = decrease_revanchism
+			subtract_from_variable = { revanchism = $REVANCHISM }
+			add_to_variable = { revanchism_stab = $STABILITY }
 		}
 		ai_will_do = {
 			factor = 10
@@ -2748,6 +2743,10 @@ focus = {
 		ai_will_do = {
 			factor = 1
 			modifier = {
+				factor = 0
+				date < 1937.1.1
+			}
+			modifier = {
 				factor = 0.1
 				threat > 0.25
 			}
@@ -2774,10 +2773,6 @@ focus = {
 		}
 		continue_if_invalid = yes
 		select_effect = {
-			var:neighbor_war_defender = {
-				add_ai_strategy = { type = prepare_for_war id = ROOT value = 1000 }
-				ROOT = { add_ai_strategy = { type = prepare_for_war id = PREV value = 1000 } }
-			}
 			random_owned_controlled_state = {
 				limit = { any_neighbor_state = { is_fully_controlled_by = var:ROOT.neighbor_war_defender } }
 				set_variable = { ROOT.attacker_state = THIS.id }
@@ -2800,7 +2795,14 @@ focus = {
 			}
 		}
 		completion_reward = {
+			var:neighbor_war_defender = {
+				add_ai_strategy = { type = prepare_for_war id = ROOT value = 1000 }
+				ROOT = { add_ai_strategy = { type = prepare_for_war id = PREV value = 1000 } }
+			}
 			add_manpower = 10000
+		}
+		bypass = {
+			has_war_with = var:neighbor_war_defender
 		}
 		ai_will_do = {
 			factor = 10

@@ -6,6 +6,7 @@
 #include "Decisions/Decisions.h"
 #include "Diplomacy/AIPeaces.h"
 #include "Ideas.h"
+#include "HoI4Modifier.h"
 #include "Leaders/Advisor.h"
 #include "Map/CoastalProvinces.h"
 #include "Map/MapData.h"
@@ -89,6 +90,8 @@ class World: commonItems::parser
 		void determineSpherelings();
 		void calculateSpherelingAutonomy();
 
+		void updateDynamicModifiers();
+
 	private:
 		World(const World&) = delete;
 		World& operator=(const World&) = delete;
@@ -101,6 +104,7 @@ class World: commonItems::parser
 
 		void importIdeologies();
 		void importLeaderTraits();
+		void importDynamicModifiers();
 		void importIdeologicalMinisters();
 
 		void convertGovernments();
@@ -182,6 +186,7 @@ class World: commonItems::parser
 		void outputIdeologies() const;
 		void outputLeaderTraits() const;
 		void outputIdeas() const;
+		void outputDynamicModifiers () const;
 		void outputBookmarks() const;
 
 		std::optional<std::pair<std::string, std::string>> getStrongestNavyGps();
@@ -210,6 +215,7 @@ class World: commonItems::parser
 		std::map<std::string, std::vector<std::string>> ideologicalLeaderTraits;
 		std::map<std::string, HoI4::Advisor> ideologicalAdvisors;
 		std::unique_ptr<HoI4::Ideas> theIdeas;
+		std::map<std::string, HoI4Modifier> dynamicModifiers;
 		
 		std::vector<std::shared_ptr<Faction>> factions;
 		std::unique_ptr<HoI4::decisions> decisions;
