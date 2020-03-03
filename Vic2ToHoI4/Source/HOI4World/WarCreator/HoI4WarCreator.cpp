@@ -299,6 +299,10 @@ std::vector<std::shared_ptr<HoI4::Country>> HoI4WarCreator::findEvilCountries() 
 		{
 			evilness -= 1;
 		}
+		else if (warPolicy == "pacifism")
+		{
+			evilness -= 3;
+		}
 	
 		if (evilness > 2)
 		{

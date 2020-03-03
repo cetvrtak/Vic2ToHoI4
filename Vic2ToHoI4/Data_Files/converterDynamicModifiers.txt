@@ -4,7 +4,19 @@ revanchism = {
 		always = yes
 	}
 	remove_trigger = {
-		NOT = { check_variable = { revanchism_stab < 0 } }
+		NOT = { check_variable = { revanchism > 0 } }
+	}
+
+	stability_factor = var:revanchism_stab
+}
+
+revanchism_fasc = {
+	icon = GFX_idea_revanchism
+	enable = {
+		has_government = fascism
+	}
+	remove_trigger = {
+		NOT = { check_variable = { revanchism > 0 } }
 	}
 
 	stability_factor = var:revanchism_stab

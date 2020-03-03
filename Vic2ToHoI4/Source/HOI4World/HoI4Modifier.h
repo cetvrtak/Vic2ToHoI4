@@ -18,6 +18,7 @@ class HoI4Modifier: commonItems::parser
 
 		friend std::ostream& operator << (std::ostream& output, const HoI4Modifier& modifier);
 
+		void updateEnable(std::string newEnable) { enable = newEnable; }
 		void updateRemoveTrigger(std::string newTrigger) { removeTrigger = newTrigger; }
 		void addEffect(std::string modifier, std::string value) { effects.insert(make_pair(modifier, value)); }
 

@@ -1644,13 +1644,14 @@ void HoI4::World::updateDynamicModifiers()
 		std::string newString;
 
 		newString = "= {\n";
-		newString += "\t\tOR = {\n";
-		newString += "\t\t\tNOT = { check_variable = { revanchism > 0 } }\n";
-		newString += "\t\t\tNOT = { check_variable = { revanchism_stab < 0 } }\n";
-		newString += "\t\t}\n";
+		newString += "\t\tNOT = { has_government = fascism }\n";
 		newString += "\t}\n";
-		revanchismModifier.updateRemoveTrigger(newString);
+		revanchismModifier.updateEnable(newString);
 
 		revanchismModifier.addEffect("fascism_drift","var:revanchism");
+	}
+	if (!majorIdeologies.count("fascism"))
+	{
+		dynamicModifiers.erase("revanchism_fasc");
 	}
 }

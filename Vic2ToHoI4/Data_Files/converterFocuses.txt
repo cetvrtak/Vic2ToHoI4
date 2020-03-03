@@ -2543,7 +2543,7 @@ focus = {
 			add_ai_strategy = { type = prepare_for_war id = $TARGET value = 1000 }
 			$TARGET = { add_ai_strategy = { type = prepare_for_war id = ROOT value = 1000 } }
 			random_list = {
-			    25 = { add_stability = 0.25 }
+			    25 = { add_command_power = 25 }
 			    25 = { add_manpower = 10000 }
 			    25 = { add_war_support = 0.25 }
 			    25 = { army_experience = 10 }
@@ -2744,11 +2744,15 @@ focus = {
 			factor = 1
 			modifier = {
 				factor = 0
-				date < 1937.1.1
+				threat > 0.6
+			}
+			modifier = {
+				factor = 0.5
+				threat > 0.25
 			}
 			modifier = {
 				factor = 0.1
-				threat > 0.25
+				threat > 0.5
 			}
 		}
 	}
@@ -2806,6 +2810,18 @@ focus = {
 		}
 		ai_will_do = {
 			factor = 10
+			modifier = {
+				factor = 0
+				threat > 0.6
+			}
+			modifier = {
+				factor = 0.5
+				threat > 0.25
+			}
+			modifier = {
+				factor = 0.1
+				threat > 0.5
+			}
 		}
 	}
 

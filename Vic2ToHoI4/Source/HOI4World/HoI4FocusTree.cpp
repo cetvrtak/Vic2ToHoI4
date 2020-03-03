@@ -2009,14 +2009,15 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 			auto puppetMaster = theCountry->getPuppetMaster();
 			if (allies.find(owner) == allies.end() && puppets.find(owner) == puppets.end() && owner != puppetMaster)
 			{
-				sumUnownedCores++;
+				int numProvinces = std::min(static_cast<int>(coreState.second.getProvinces().size()), 10);
+				sumUnownedCores += numProvinces;
 				if (auto itr = coreHolders.find(owner); itr == coreHolders.end())
 				{
-					coreHolders.insert(make_pair(owner, 1));
+					coreHolders.insert(make_pair(owner, numProvinces));
 				}
 				else
 				{
-					itr->second++;
+					itr->second += numProvinces;
 				}
 			}
 		}
@@ -2040,9 +2041,13 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 			{
 				newFocus->selectEffect += "\t\t\tset_variable = { unowned_cores_@" + country.first + " = " + std::to_string(country.second) + " }\n";
 			}
-			newFocus->selectEffect += "\t\t\tset_variable = { revanchism = " + std::to_string(0.0001*sumUnownedCores) + " }\n";
-			newFocus->selectEffect += "\t\t\tset_variable = { revanchism_stab = " + std::to_string(-0.00001*sumUnownedCores) + " }\n";
+			newFocus->selectEffect += "\t\t\tset_variable = { revanchism = " + std::to_string(0.00001*sumUnownedCores) + " }\n";
+			newFocus->selectEffect += "\t\t\tset_variable = { revanchism_stab = " + std::to_string(-0.000001*sumUnownedCores) + " }\n";
 			newFocus->selectEffect += "\t\t\tadd_dynamic_modifier = { modifier = revanchism }\n";
+			if (majorIdeologies.count("fascism"))
+			{
+				newFocus->selectEffect += "\t\t\tadd_dynamic_modifier = { modifier = revanchism_fasc }\n";
+			}
 			newFocus->selectEffect += "\t\t}\n";
 			newFocus->xPos = nextFreeColumn + coreHolders.size() - 1;
 			focuses.push_back(newFocus);
@@ -2061,7 +2066,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				if (!majorIdeologies.count("fascism"))
 				{
 					newFocus->completionReward = "= {\n";
-					newFocus->completionReward += "\t\t\tadd_popularity = { ideology = ROOT popularity = $POPULARITY }\n";
+					newFocus->completionReward += "\t\t\tadd_stability = 0.0001\n";
 					newFocus->completionReward += "\t\t}";
 
 					std::string fascismPopularityCheck = "";
@@ -2074,7 +2079,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 					newFocus->updateFocusElement(newFocus->aiWillDo, fascistGovernmentCheck, "");
 				}
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
-				newFocus->updateFocusElement(newFocus->completionReward, "$POPULARITY", std::to_string(0.00001*country.second));
+				newFocus->updateFocusElement(newFocus->completionReward, "$POPULARITY", std::to_string(0.000001*country.second));
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
 				focuses.push_back(newFocus);
@@ -2094,7 +2099,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				if (!majorIdeologies.count("fascism"))
 				{
 					newFocus->completionReward = " = {\n";
-					newFocus->completionReward += "\t\t\tadd_popularity = { ideology = ROOT popularity = $POPULARITY }\n";
+					newFocus->completionReward += "\t\t\tadd_stability = 0.0001\n";
 					newFocus->completionReward += "\t\t\tadd_war_support = $WARSUPPORT\n";
 					newFocus->completionReward += "\t\t}";
 
@@ -2108,8 +2113,8 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 					newFocus->updateFocusElement(newFocus->aiWillDo, fascistGovernmentCheck, "");
 				}
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
-				newFocus->updateFocusElement(newFocus->completionReward, "$POPULARITY", std::to_string(0.00001*country.second));
-				newFocus->updateFocusElement(newFocus->completionReward, "$WARSUPPORT", std::to_string(0.0001*country.second));
+				newFocus->updateFocusElement(newFocus->completionReward, "$POPULARITY", std::to_string(0.000001*country.second));
+				newFocus->updateFocusElement(newFocus->completionReward, "$WARSUPPORT", std::to_string(0.00001*country.second));
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
 				focuses.push_back(newFocus);
@@ -2190,8 +2195,8 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->relativePositionId += country.first;
 				newFocus->updateFocusElement(newFocus->available, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
-				newFocus->updateFocusElement(newFocus->completionReward, "$REVANCHISM", std::to_string(0.00005*country.second));
-				newFocus->updateFocusElement(newFocus->completionReward, "$STABILITY", std::to_string(0.000005*country.second));
+				newFocus->updateFocusElement(newFocus->completionReward, "$REVANCHISM", std::to_string(0.000005*country.second));
+				newFocus->updateFocusElement(newFocus->completionReward, "$STABILITY", std::to_string(0.0000005*country.second));
 				focuses.push_back(newFocus);
 			}
 			else
