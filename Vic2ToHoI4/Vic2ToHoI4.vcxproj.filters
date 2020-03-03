@@ -699,6 +699,15 @@
     <ClCompile Include="Source\Hoi4Outputter\Version\outVersion.cpp">
       <Filter>Hoi4Outputter\Version</Filter>
     </ClCompile>
+    <ClCompile Include="Source\V2World\AIStrategy.cpp">
+      <Filter>Vic2World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Vic2AI.cpp">
+      <Filter>Vic2World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HOI4World\Diplomacy\HoI4AIStrategy.cpp">
+      <Filter>HoI4World\Diplomacy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_items\Date.h">
@@ -1314,6 +1323,15 @@
     </ClInclude>
     <ClInclude Include="Source\Hoi4Outputter\Version\outVersion.h">
       <Filter>Hoi4Outputter\Version</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\AIStrategy.h">
+      <Filter>Vic2World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HOI4World\Diplomacy\HoI4AIStrategy.h">
+      <Filter>HoI4World\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Vic2AI.h">
+      <Filter>Vic2World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

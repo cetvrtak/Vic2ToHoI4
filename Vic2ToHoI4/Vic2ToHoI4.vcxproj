@@ -255,6 +255,7 @@
     <ClCompile Include="Source\HOI4World\Diplomacy\AIPeace.cpp" />
     <ClCompile Include="Source\HOI4World\Diplomacy\AIPeaces.cpp" />
     <ClCompile Include="Source\HOI4World\Diplomacy\AiPeacesUpdater.cpp" />
+    <ClCompile Include="Source\HOI4World\Diplomacy\HoI4AIStrategy.cpp" />
     <ClCompile Include="Source\HOI4World\Diplomacy\HoI4War.cpp" />
     <ClCompile Include="Source\HOI4World\Events\Event.cpp" />
     <ClCompile Include="Source\HOI4World\Events\EventHelpers.cpp" />
@@ -355,6 +356,7 @@
     <ClCompile Include="Source\targa.cpp" />
     <ClCompile Include="Source\V2toHOI4Converter.cpp" />
     <ClCompile Include="Source\V2World\Agreement.cpp" />
+    <ClCompile Include="Source\V2World\AIStrategy.cpp" />
     <ClCompile Include="Source\V2World\Army.cpp" />
     <ClCompile Include="Source\V2World\Building.cpp" />
     <ClCompile Include="Source\V2World\CommonCountryData.cpp" />
@@ -370,6 +372,7 @@
     <ClCompile Include="Source\V2World\Relations.cpp" />
     <ClCompile Include="Source\V2World\State.cpp" />
     <ClCompile Include="Source\V2World\StateDefinitions.cpp" />
+    <ClCompile Include="Source\V2World\Vic2AI.cpp" />
     <ClCompile Include="Source\V2World\Wars\War.cpp" />
     <ClCompile Include="Source\V2World\Wars\WarGoal.cpp" />
     <ClCompile Include="Source\V2World\World.cpp" />
@@ -450,6 +453,7 @@
     <ClInclude Include="Source\HOI4World\Diplomacy\AIPeaces.h" />
     <ClInclude Include="Source\HOI4World\Diplomacy\AiPeacesUpdater.h" />
     <ClInclude Include="Source\HOI4World\Diplomacy\Faction.h" />
+    <ClInclude Include="Source\HOI4World\Diplomacy\HoI4AIStrategy.h" />
     <ClInclude Include="Source\HOI4World\Diplomacy\HoI4Relations.h" />
     <ClInclude Include="Source\HOI4World\Diplomacy\HoI4War.h" />
     <ClInclude Include="Source\HOI4World\Events\Event.h" />
@@ -564,6 +568,7 @@
     <ClInclude Include="Source\Mappers\VersionParser\VersionParser.h" />
     <ClInclude Include="Source\targa.h" />
     <ClInclude Include="Source\V2World\Agreement.h" />
+    <ClInclude Include="Source\V2World\AIStrategy.h" />
     <ClInclude Include="Source\V2World\Army.h" />
     <ClInclude Include="Source\V2World\Building.h" />
     <ClInclude Include="Source\V2World\CommonCountryData.h" />
@@ -579,6 +584,7 @@
     <ClInclude Include="Source\V2World\Relations.h" />
     <ClInclude Include="Source\V2World\State.h" />
     <ClInclude Include="Source\V2World\StateDefinitions.h" />
+    <ClInclude Include="Source\V2World\Vic2AI.h" />
     <ClInclude Include="Source\V2World\Wars\War.h" />
     <ClInclude Include="Source\V2World\Wars\WarGoal.h" />
     <ClInclude Include="Source\V2World\World.h" />
