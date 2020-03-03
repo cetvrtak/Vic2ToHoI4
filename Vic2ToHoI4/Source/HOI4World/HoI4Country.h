@@ -5,6 +5,7 @@
 
 #include "Diplomacy/Faction.h"
 #include "Diplomacy/HoI4Relations.h"
+#include "Diplomacy/HoI4AIStrategy.h"
 #include "Diplomacy/HoI4War.h"
 #include "HoI4Airforce.h"
 #include "HoI4Army.h"
@@ -195,6 +196,8 @@ class Country
 		[[nodiscard]] const std::vector<Admiral>& getAdmirals() const { return admirals; }
 
 		[[nodiscard]] const std::map<std::string, HoI4::Relations>& getRelations() const { return relations; }
+		[[nodiscard]] const std::vector<HoI4::AIStrategy>& getAIStrategies() const { return aiStrategies; }
+		[[nodiscard]] const std::map<std::string, HoI4::AIStrategy>& getConquerStrategies() const { return conquerStrategies; }
 		[[nodiscard]] const std::vector<War>& getWars() const { return wars; }
 		[[nodiscard]] double getThreat() const { return threat; }
 		[[nodiscard]] bool isInFaction() const { return faction.operator bool(); }
@@ -214,6 +217,9 @@ class Country
 		double calculateInfluenceFactor();
 		std::vector<std::string> getGuaranteed() const { return guaranteed; }
 		void addGuaranteed(std::string guaranteedTag) { guaranteed.push_back(guaranteedTag); }
+		void addConquerStrategy(HoI4::AIStrategy newStrategy)
+			{ conquerStrategies.insert(make_pair(newStrategy.getID(), newStrategy)); }
+		void updateConquerStrategy(std::string HoI4Tag, int valueToAdd);
 
 	private:
 		void determineFilename();
@@ -221,6 +227,7 @@ class Country
 		void convertLaws();
 		void convertLeaders(const graphicsMapper& theGraphics);
 		void convertRelations(const CountryMapper& countryMap);
+		void convertStrategies(const CountryMapper& countryMap);
 		void convertWars(const Vic2::Country& sourceCountry, const CountryMapper& countryMap);
 
 		bool attemptToPutCapitalInPreferredNonWastelandOwned(
@@ -295,6 +302,8 @@ class Country
 		std::vector<Admiral> admirals;
 
 		std::map<std::string, HoI4::Relations> relations;
+		std::vector<HoI4::AIStrategy> aiStrategies;
+		std::map<std::string, HoI4::AIStrategy> conquerStrategies;
 		std::vector<War> wars;
 		double threat = 0.0;
 		std::shared_ptr<const Faction> faction;

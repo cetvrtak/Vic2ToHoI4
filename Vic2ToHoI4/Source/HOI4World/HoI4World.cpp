@@ -30,6 +30,7 @@
 #include "../V2World/Agreement.h"
 #include "../V2World/Country.h"
 #include "../V2World/World.h"
+#include "../V2World/Province.h"
 #include "../Mappers/CountryMapping.h"
 #include "../Mappers/TechMapper.h"
 #include "../Mappers/FlagsToIdeas/FlagsToIdeasMapper.h"
@@ -123,6 +124,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	processInfluence();
 	determineSpherelings();
 	calculateSpherelingAutonomy();
+	buildConquerStrategies();
 	updateDynamicModifiers();
 	scriptedTriggers.importScriptedTriggers(theConfiguration);
 	updateScriptedTriggers(scriptedTriggers, majorIdeologies);
@@ -1632,6 +1634,42 @@ void HoI4::World::calculateSpherelingAutonomy()
 			double spherelingAutonomy = 3.6 * influenceFactor / 400;
 			
 			GP->setSpherelingAutonomy(sphereling.first, spherelingAutonomy);
+		}
+	}
+}
+
+void HoI4::World::buildConquerStrategies()
+{
+	for (auto& country: countries)
+	{
+		for (auto& strategy: country.second->getAIStrategies())
+		{
+			if (strategy.getType() == "conquer_prov")
+			{
+				std::string id = strategy.getID();
+				int idNumber = std::stoi(id);
+				const auto& province = sourceWorld->getProvince(idNumber);
+				const auto& owner = (*province)->getOwner();
+				auto HoI4Tag = countryMap.getHoI4Tag(owner);
+
+				if (HoI4Tag)
+				{
+					auto& conquerStrategies = country.second->getConquerStrategies();
+					auto itr = conquerStrategies.find(*HoI4Tag);
+
+					if (itr == conquerStrategies.end())
+					{
+						HoI4::AIStrategy newStrategy("conquer");
+						newStrategy.setID(*HoI4Tag);
+						newStrategy.increaseValue(strategy.getValue());
+						country.second->addConquerStrategy(newStrategy);
+					}
+					else
+					{
+						country.second->updateConquerStrategy(*HoI4Tag, strategy.getValue());
+					}
+				}
+			}
 		}
 	}
 }

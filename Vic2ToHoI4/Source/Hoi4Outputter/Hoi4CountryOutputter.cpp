@@ -202,6 +202,7 @@ void outputAdvisorIdeas(
 	const std::string& tag,
 	const std::set<HoI4::Advisor>& ideologicalAdvisors
 );
+void outputAIStrategy(const HoI4::Country& theCountry);
 
 void HoI4::outputCountry(
 	const std::set<Advisor>& ideologicalMinisters,
@@ -216,6 +217,7 @@ void HoI4::outputCountry(
 		outputOOB(divisionTemplates, theCountry);
 		outputCommonCountryFile(theCountry);
 		outputAdvisorIdeas(theCountry.getTag(), ideologicalMinisters);
+		outputAIStrategy(theCountry);
 
 		if (auto nationalFocus = theCountry.getNationalFocus(); nationalFocus)
 		{
@@ -1204,4 +1206,52 @@ void HoI4::reportIndustry(std::ostream& out, const Country& theCountry)
 		out << theCountry.getDockyards() << ',';
 		out << theCountry.getMilitaryFactories() + theCountry.getCivilianFactories() + theCountry.getDockyards() << '\n';
 	}
+}
+
+void outputAIStrategy(const HoI4::Country& theCountry)
+{
+	std::ofstream output(
+		"output/" + theConfiguration.getOutputName() +
+		"/common/ai_strategy/converted_" + theCountry.getTag() + ".txt"
+	);
+	if (!output.is_open())
+	{
+		throw std::runtime_error(
+			"Could not open output/" + theConfiguration.getOutputName() + "/common/ai_strategy/converted_"
+			+ theCountry.getTag() + ".txt"
+		);
+	}
+	output << "\xEF\xBB\xBF"; // add the BOM to make HoI4 happy
+
+	output << "converted_ai_strategies_" << theCountry.getTag() << " = {\n";
+	output << "\tenable = {\n";
+	output << "\t\ttag = " + theCountry.getTag() + "\n";
+	output << "\t}\n";
+	output << "\tabort = {\n";
+	output << "\t\talways = no\n";
+	output << "\t}\n";
+	output << "\t\n";
+
+	for (auto& conquerStr: theCountry.getConquerStrategies())
+	{
+		output << "\tai_strategy = {\n";
+		output << "\t\ttype = " << conquerStr.second.getType() << "\n";
+		output << "\t\tid = \"" << conquerStr.second.getID() << "\"\n";
+		output << "\t\tvalue = " << conquerStr.second.getValue() << "\n";
+		output << "\t}\n";
+	}
+	for (auto& strategy: theCountry.getAIStrategies())
+	{
+		auto strategyType = strategy.getType();
+		if (strategyType != "conquer_prov")
+		{
+			output << "\tai_strategy = {\n";
+			output << "\t\ttype = " << strategy.getType() << "\n";
+			output << "\t\tid = \"" << strategy.getID() << "\"\n";
+			output << "\t\tvalue = " << strategy.getValue() << "\n";
+			output << "\t}\n";
+		}
+	}
+
+	output << "}\n";
 }

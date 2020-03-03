@@ -50,6 +50,7 @@ class inventions;
 class Leader;
 class Province;
 class Relations;
+class Vic2AI;
 class State;
 
 
@@ -76,6 +77,7 @@ class Country: commonItems::parser
 		void handleMissingCulture(const cultureGroups& theCultureGroups);
 
 		std::map<std::string, const Relations*> getRelations() const { return relations; }
+		const Vic2AI* getAI() const { return vic2ai; }
 		std::vector<State*> getStates() const { return states; }
 		virtual std::string getTag() const { return tag; }
                 std::string getIdentifier() const;
@@ -139,6 +141,7 @@ class Country: commonItems::parser
 		std::set<std::string> discoveredInventions;
 
 		std::map<std::string, const Relations*> relations;
+		const Vic2AI* vic2ai;
 		bool civilized = false;
 
 		std::vector<const Army*> armies;

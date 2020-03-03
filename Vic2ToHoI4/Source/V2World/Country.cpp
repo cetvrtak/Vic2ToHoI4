@@ -32,6 +32,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "Pop.h"
 #include "Province.h"
 #include "Relations.h"
+#include "Vic2AI.h"
 #include "State.h"
 #include "ParserHelpers.h"
 #include <functional>
@@ -169,6 +170,10 @@ Vic2::Country::Country(const std::string& theTag, std::istream& theStream, const
 	{
 		Relations* rel = new Relations(countryTag, theStream);
 		relations.insert(make_pair(rel->getTag(), rel));
+	});
+	registerKeyword("ai", [this](const std::string& unused, std::istream& theStream)
+	{
+		vic2ai = new Vic2AI(theStream);
 	});
 	registerKeyword(std::regex("army"), [this](const std::string& type, std::istream& theStream)
 	{

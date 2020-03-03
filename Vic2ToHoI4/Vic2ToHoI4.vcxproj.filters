@@ -612,6 +612,15 @@
     <ClCompile Include="Source\Hoi4Outputter\outDifficultySettings.cpp">
       <Filter>Hoi4Outputter</Filter>
     </ClCompile>
+    <ClCompile Include="Source\V2World\AIStrategy.cpp">
+      <Filter>Vic2World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Vic2AI.cpp">
+      <Filter>Vic2World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HOI4World\Diplomacy\HoI4AIStrategy.cpp">
+      <Filter>HoI4World\Diplomacy</Filter>
+    </ClCompile>
     <ClCompile Include="Source\HOI4World\HoI4Modifier.cpp">
       <Filter>HoI4World</Filter>
     </ClCompile>
@@ -1161,6 +1170,15 @@
     </ClInclude>
     <ClInclude Include="Source\Hoi4Outputter\outDifficultySettings.h">
       <Filter>Hoi4Outputter</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\AIStrategy.h">
+      <Filter>Vic2World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HOI4World\Diplomacy\HoI4AIStrategy.h">
+      <Filter>HoI4World\Diplomacy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Vic2AI.h">
+      <Filter>Vic2World</Filter>
     </ClInclude>
     <ClInclude Include="Source\HOI4World\HoI4Modifier.h">
       <Filter>HoI4World</Filter>
