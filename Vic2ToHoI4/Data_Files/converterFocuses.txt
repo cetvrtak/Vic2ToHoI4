@@ -2332,8 +2332,7 @@ focus = {
 		available = {
 			NOT = { is_in_faction_with = $TARGET }
 			NOT = { has_war_with = $TARGET }
-			$TARGET = { is_not_protected = yes }
-			strength_ratio = { tag = $TARGET ratio > 0.75 }
+			$TARGET = { in_weak_faction = yes }
 		}
 		completion_reward = {
 			if = {
@@ -2362,11 +2361,7 @@ focus = {
 			}
 			modifier = {
 				factor = 0
-				$TARGET = { is_not_protected = no }
-			}
-			modifier = {
-				factor = 0
-				strength_ratio = { tag = $TARGET ratio < 0.75 }
+				$TARGET = { in_weak_faction = no }
 			}
 			modifier = {
 				factor = 0
@@ -2383,14 +2378,6 @@ focus = {
 			modifier = {
 				factor = 2
 				has_opinion = { target = $TARGET value < -50 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1.25 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1 }
 			}
 		}
 	}
@@ -2432,11 +2419,7 @@ focus = {
 			}
 			modifier = {
 				factor = 0
-				$TARGET = { is_not_protected = no }
-			}
-			modifier = {
-				factor = 0
-				strength_ratio = { tag = $TARGET ratio < 0.75 }
+				$TARGET = { in_weak_faction = no }
 			}
 			modifier = {
 				factor = 0
@@ -2457,14 +2440,6 @@ focus = {
 			modifier = {
 				factor = 2
 				has_opinion = { target = $TARGET value < -50 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1.25 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1 }
 			}
 		}
 	}
@@ -2508,11 +2483,7 @@ focus = {
 			factor = 1
 			modifier = {
 				factor = 0
-				$TARGET = { is_not_protected = no }
-			}
-			modifier = {
-				factor = 0
-				strength_ratio = { tag = $TARGET ratio < 0.75 }
+				$TARGET = { in_weak_faction = no }
 			}
 			modifier = {
 				factor = 0
@@ -2533,14 +2504,6 @@ focus = {
 			modifier = {
 				factor = 2
 				has_opinion = { target = $TARGET value < -50 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1.25 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1 }
 			}
 		}
 	}
@@ -2578,11 +2541,7 @@ focus = {
 			factor = 1
 			modifier = {
 				factor = 0
-				$TARGET = { is_not_protected = no }
-			}
-			modifier = {
-				factor = 0
-				strength_ratio = { tag = $TARGET ratio < 0.75 }
+				$TARGET = { in_weak_faction = no }
 			}
 			modifier = {
 				factor = 0
@@ -2603,14 +2562,6 @@ focus = {
 			modifier = {
 				factor = 2
 				has_opinion = { target = $TARGET value < -50 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1.25 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1 }
 			}
 		}
 	}
@@ -2644,11 +2595,7 @@ focus = {
 			factor = 10
 			modifier = {
 				factor = 0
-				$TARGET = { is_not_protected = no }
-			}
-			modifier = {
-				factor = 0
-				strength_ratio = { tag = $TARGET ratio < 0.75 }
+				$TARGET = { in_weak_faction = no }
 			}
 			modifier = {
 				factor = 0
@@ -2669,14 +2616,6 @@ focus = {
 			modifier = {
 				factor = 2
 				has_opinion = { target = $TARGET value < -50 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1.25 }
-			}
-			modifier = {
-				factor = 0.75
-				strength_ratio = { tag = $TARGET ratio < 1 }
 			}
 		}
 	}
@@ -2721,7 +2660,6 @@ focus = {
 			not_in_border_conflict = yes
 			any_neighbor_country = {
 				not_allies_or_subjects = yes
-				strength_ratio = { tag = ROOT ratio < 1 }
 				OR = {
 					potential_take_core_target = yes
 					if = {
@@ -2736,7 +2674,7 @@ focus = {
 					potential_border_war_target = yes
 				}
 				OR = {
-					is_not_protected = yes
+					in_weak_faction = yes
 					potential_border_war_target = yes
 				}
 			}
@@ -2745,7 +2683,6 @@ focus = {
 			random_neighbor_country = {
 				limit = {
 					not_allies_or_subjects = yes
-					strength_ratio = { tag = ROOT ratio < 1 }
 					OR = {
 						potential_take_core_target = yes
 						potential_communist_puppet_target = yes
@@ -2754,7 +2691,7 @@ focus = {
 						potential_border_war_target = yes
 					}
 					OR = {
-						is_not_protected = yes
+						in_weak_faction = yes
 						potential_border_war_target = yes
 					}
 				}

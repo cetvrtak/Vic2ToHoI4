@@ -1,3 +1,4 @@
+
 /*Copyright (c) 2018 The Paradox Game Converters Project
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -2327,20 +2328,12 @@ std::set<std::string> HoI4FocusTree::addConquerBranch(
 				newFocus->aiWillDo += "\t\t\t\thas_opinion = { target = " + target.first + " value > 0 }\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
-				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
-				newFocus->aiWillDo += "\t\t\t\tstrength_ratio = { tag = " + target.first + " ratio < 0.75 }\n";
-				newFocus->aiWillDo += "\t\t\t}\n";
-				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
 				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
 				newFocus->aiWillDo += "\t\t\t\tthreat > 0.25\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
-				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
-				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_not_protected = no }\n";
-				newFocus->aiWillDo += "\t\t\t}\n";
-				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
-				newFocus->aiWillDo += "\t\t\t\tfactor = 0.5\n";
-				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_beatable = no }\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { in_weak_faction = no }\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
 				newFocus->aiWillDo += "\t\t\t\tfactor = 2\n";
@@ -2376,20 +2369,12 @@ std::set<std::string> HoI4FocusTree::addConquerBranch(
 				newFocus->aiWillDo += "\t\t\t\thas_opinion = { target = " + target.first + " value > 0 }\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
-				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
-				newFocus->aiWillDo += "\t\t\t\tstrength_ratio = { tag = " + target.first + " ratio < 0.75 }\n";
-				newFocus->aiWillDo += "\t\t\t}\n";
-				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
 				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
 				newFocus->aiWillDo += "\t\t\t\tthreat > 0.25\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
-				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
-				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_not_protected = no }\n";
-				newFocus->aiWillDo += "\t\t\t}\n";
-				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
-				newFocus->aiWillDo += "\t\t\t\tfactor = 0.5\n";
-				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_beatable = no }\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { in_weak_faction = no }\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
 				newFocus->aiWillDo += "\t\t\t\tfactor = 2\n";
