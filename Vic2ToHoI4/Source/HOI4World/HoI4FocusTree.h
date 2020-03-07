@@ -77,6 +77,12 @@ class HoI4FocusTree: commonItems::parser
 			int& numWarsWithNeighbors,
 			const std::set<std::string>& majorIdeologies
 		);
+		std::set<std::string> addConquerBranch(
+			std::shared_ptr<HoI4::Country> theCountry,
+			int& numWarsWithNeighbors,
+			const std::set<std::string>& majorIdeologies,
+			std::map<std::string, int> coreHolders
+		);
 		void addNeighborWarBranch(
 			const std::string& tag,
 			const std::map<std::string, std::shared_ptr<HoI4::Country>>& closeNeighbors,

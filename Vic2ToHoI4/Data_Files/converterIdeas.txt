@@ -753,6 +753,23 @@
 				}
 			}
 		}
+
+		reclaim_cores_focus = {			
+			
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+			
+			removal_cost = -1
+			
+			modifier = {
+				ai_focus_aggressive_factor = 0.5
+			}
+		}
 	}
 
 	# Special ones that can be applied on other countries through focus system.
@@ -1279,6 +1296,100 @@
 				army_attack_factor = -0.75
 				experience_gain_army = -0.3
 				army_org_factor = -0.5
+			}
+		}
+
+		limited_interventionism = {
+			
+			
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+
+			picture = generic_volunteer_expedition_bonus
+			
+			modifier = {
+				send_volunteers_tension = -0.20
+				send_volunteer_divisions_required = -0.25
+			}
+		}
+
+		raise_matter_focus = {
+			allowed = {
+				always = no
+			}
+			allowed_civil_war = {
+				always = yes
+			}
+			removal_cost = -1
+			picture = eng_guided_by_britain
+			modifier = {
+				economy_cost_factor = -0.25
+			}
+		}
+
+		CHI_rapid_mobilization = {
+			allowed = { always = no }
+
+			picture = ast_volunteer_defence_corps 
+
+			removal_cost = -1
+
+			modifier = {
+				training_time_factor = -0.3
+			}
+		}
+
+		territory_or_war_focus = {
+			allowed = {
+				always = no
+			}
+			allowed_civil_war = {
+				always = yes
+			}
+			removal_cost = -1
+			picture = warrior_traditions_idea
+			modifier = {
+				mobilization_laws_cost_factor = -0.25
+			}
+		}
+
+		CHI_war_of_national_liberation = {
+
+			picture = chi_war_of_resistance3			
+
+			allowed = {
+				always = no
+			}
+
+			allowed_civil_war = {
+				always = yes
+			}
+
+			removal_cost = -1
+			
+			modifier = {
+				army_core_attack_factor = 0.1
+			}
+		}
+
+		cleanup_revanchism_focus = {
+			allowed = {
+				always = no
+			}
+			allowed_civil_war = {
+				always = yes
+			}
+			removal_cost = -1
+			picture = generic_disjointed_gov
+			modifier = {
+				conscription_factor = 0.2
 			}
 		}
 

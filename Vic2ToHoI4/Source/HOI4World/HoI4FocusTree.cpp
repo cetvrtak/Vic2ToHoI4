@@ -2004,6 +2004,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 			if (auto faction = theCountry->getFaction(); faction)
 			{
 				allies = faction->getLeader()->getAllies();
+				allies.insert(faction->getLeader()->getTag());
 			}
 			auto puppets = theCountry->getPuppets();
 			auto puppetMaster = theCountry->getPuppetMaster();
@@ -2067,6 +2068,8 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				{
 					newFocus->completionReward = "= {\n";
 					newFocus->completionReward += "\t\t\tadd_stability = 0.0001\n";
+					newFocus->completionReward += "\t\t\tadd_political_power = 150\n";
+					newFocus->completionReward += "\t\t\tadd_timed_idea = { idea = raise_matter_focus days = 180 }\n";
 					newFocus->completionReward += "\t\t}";
 
 					std::string fascismPopularityCheck = "";
@@ -2101,6 +2104,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 					newFocus->completionReward = " = {\n";
 					newFocus->completionReward += "\t\t\tadd_stability = 0.0001\n";
 					newFocus->completionReward += "\t\t\tadd_war_support = $WARSUPPORT\n";
+					newFocus->completionReward += "\t\t\tadd_timed_idea = { idea = CHI_rapid_mobilization days = 180 }\n";
 					newFocus->completionReward += "\t\t}";
 
 					std::string fascismPopularityCheck = "";
@@ -2117,6 +2121,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->completionReward, "$WARSUPPORT", std::to_string(0.00001*country.second));
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2159,6 +2164,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2180,6 +2186,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2210,6 +2217,246 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 }
 
 
+std::set<std::string> HoI4FocusTree::addConquerBranch(
+	std::shared_ptr<HoI4::Country> theCountry,
+	int& numWarsWithNeighbors,
+	const std::set<std::string>& majorIdeologies,
+	std::map<std::string, int> coreHolders
+)
+{
+	std::string tag = theCountry->getTag();
+	std::vector<std::pair<std::string, int>> conquerQue;
+	std::set<std::string> conquerTags;
+
+	int maxConquerValue = 0;
+	for (auto strategy: theCountry->getConquerStrategies())
+	{
+		if (strategy.second.getValue() > maxConquerValue)
+		{
+			maxConquerValue = strategy.second.getValue();
+		}
+	}
+	std::vector<std::pair<std::string, int>> sortedConquerStrategies;
+	for (int i = maxConquerValue; i > 0; i--)
+	{
+		for (auto strategy: theCountry->getConquerStrategies())
+		{
+			if (strategy.second.getValue() == i)
+			{
+				sortedConquerStrategies.push_back(make_pair(strategy.first, strategy.second.getValue()));
+			}
+		}
+	}
+
+	for (auto target: sortedConquerStrategies)
+	{
+		if (coreHolders.find(target.first) != coreHolders.end())
+		{
+			continue;
+		}
+
+		std::set<std::string> allies;
+		if (auto faction = theCountry->getFaction(); faction)
+		{
+			allies = faction->getLeader()->getAllies();
+			allies.insert(faction->getLeader()->getTag());
+		}
+		auto puppets = theCountry->getPuppets();
+		auto puppetMaster = theCountry->getPuppetMaster();
+		if (allies.find(target.first) == allies.end() && puppets.find(target.first) == puppets.end() && target.first != puppetMaster)
+		{
+			conquerQue.push_back(make_pair(target.first, target.second));
+		}
+	}
+
+	if (!conquerQue.empty())
+	{
+		for (auto target: conquerQue)
+		{
+			int aiChance = 10 * target.second / maxConquerValue;
+			if (numWarsWithNeighbors >= 5 || !aiChance)
+			{
+				break;
+			}
+
+			conquerTags.insert(target.first);
+			numWarsWithNeighbors++;
+			auto relations = theCountry->getRelations(target.first);
+			date startDate = date("1936.01.01");
+			startDate.increaseByMonths(std::max(0, relations->getRelations() / -4 + 12));
+
+			if (const auto& originalFocus = loadedFocuses.find("border_disputes"); originalFocus != loadedFocuses.end())
+			{
+				shared_ptr<HoI4Focus> newFocus = originalFocus->second.makeTargetedCopy(tag, target.first);
+				newFocus->relativePositionId = "";
+				newFocus->available = "= {\n";
+				newFocus->available += "\t\t\thas_war = no\n";
+				newFocus->available += "\t\t\tnot_in_border_conflict = yes\n";
+				newFocus->available += "\t\t\tany_neighbor_country = {\n";
+				newFocus->available += "\t\t\t\texists = yes\n";
+				newFocus->available += "\t\t\t\tnot_allies_or_subjects = yes\n";
+				newFocus->available += "\t\t\t\tOR = {\n";
+				newFocus->available += "\t\t\t\t\tpotential_take_core_target = yes\n";
+				if (majorIdeologies.count("communism"))
+				{
+					newFocus->available += "\t\t\t\t\tif = {\n";
+					newFocus->available += "\t\t\t\t\t\tlimit = { ROOT = { has_government = communism } }\n";
+					newFocus->available += "\t\t\t\t\t\tpotential_communist_puppet_target = yes\n";
+					newFocus->available += "\t\t\t\t\t}\n";
+				}
+				if (majorIdeologies.count("fascism"))
+				{
+					newFocus->available += "\t\t\t\t\tif = {\n";
+					newFocus->available += "\t\t\t\t\t\tlimit = { ROOT = { has_government = fascism } }\n";
+					newFocus->available += "\t\t\t\t\t\tpotential_fascist_annex_target = yes\n";
+					newFocus->available += "\t\t\t\t\t}\n";
+				}
+				newFocus->available += "\t\t\t\t\tpotential_take_state_target = yes\n";
+				newFocus->available += "\t\t\t\t\tpotential_border_war_target = yes\n";
+				newFocus->available += "\t\t\t\t}\n";
+				newFocus->available += "\t\t\t}\n";
+				newFocus->available += "\t\t}\n";
+				newFocus->updateFocusElement(newFocus->available, "any_neighbor_country", target.first);
+				newFocus->selectEffect  = "";
+				newFocus->xPos = nextFreeColumn;
+				newFocus->yPos = 0;
+				newFocus->aiWillDo = "= {\n";
+				newFocus->aiWillDo += "\t\t\tfactor = " + to_string(aiChance) + "\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
+				newFocus->aiWillDo += "\t\t\t\thas_opinion = { target = " + target.first + " value > 0 }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
+				newFocus->aiWillDo += "\t\t\t\tstrength_ratio = { tag = " + target.first + " ratio < 0.75 }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
+				newFocus->aiWillDo += "\t\t\t\tthreat > 0.25\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_not_protected = no }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0.5\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_beatable = no }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 2\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { surrender_progress > 0.2 }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t}";
+				focuses.push_back(newFocus);
+			}
+			else
+			{
+				throw std::runtime_error("Could not load focus border_disputes");
+			}
+
+			if (const auto& originalFocus = loadedFocuses.find("prepare_for_war"); originalFocus != loadedFocuses.end())
+			{
+				shared_ptr<HoI4Focus> newFocus = originalFocus->second.makeTargetedCopy(tag, target.first);
+				newFocus->prerequisites.clear();
+				newFocus->prerequisites.push_back("= { focus = border_disputes" + tag + target.first + " }");
+				newFocus->relativePositionId += target.first;
+				newFocus->available = "= {\n";
+				newFocus->available += "\t\t\tdate > " + startDate.toString() + "\n";
+				newFocus->available += "\t\t\thas_war = no\n";
+				newFocus->available += "\t\t\tnot_in_border_conflict = yes\n";
+				newFocus->available += "\t\t\t" + target.first + " = {\n";
+				newFocus->available += "\t\t\t\texists = yes\n";
+				newFocus->available += "\t\t\t\tnot_in_border_conflict = yes\n";
+				newFocus->available += "\t\t\t}\n";
+				newFocus->available += "\t\t}";
+				newFocus->aiWillDo = "= {\n";
+				newFocus->aiWillDo += "\t\t\tfactor = 10\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
+				newFocus->aiWillDo += "\t\t\t\thas_opinion = { target = " + target.first + " value > 0 }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
+				newFocus->aiWillDo += "\t\t\t\tstrength_ratio = { tag = " + target.first + " ratio < 0.75 }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
+				newFocus->aiWillDo += "\t\t\t\tthreat > 0.25\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_not_protected = no }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0.5\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { is_beatable = no }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 2\n";
+				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { surrender_progress > 0.2 }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t}";
+				newFocus->updateFocusElement(newFocus->selectEffect, "var:ROOT.neighbor_war_defender", target.first);
+				newFocus->updateFocusElement(newFocus->completionReward, "var:neighbor_war_defender", target.first);
+				newFocus->updateFocusElement(newFocus->bypass, "var:neighbor_war_defender", target.first);
+				focuses.push_back(newFocus);
+			}
+			else
+			{
+				throw std::runtime_error("Could not load focus prepare_for_war");
+			}
+
+			if (const auto& originalFocus = loadedFocuses.find("neighbor_war"); originalFocus != loadedFocuses.end())
+			{
+				shared_ptr<HoI4Focus> newFocus = originalFocus->second.makeTargetedCopy(tag, target.first);
+				newFocus->prerequisites.clear();
+				newFocus->prerequisites.push_back("= { focus = prepare_for_war" + tag + target.first + " }");
+				newFocus->relativePositionId += target.first;
+				newFocus->updateFocusElement(newFocus->available, "var:neighbor_war_defender", target.first);
+				newFocus->updateFocusElement(newFocus->available, "var:ROOT.neighbor_war_defender", target.first);
+				if (!majorIdeologies.count("communism"))
+				{
+					std::string comm = "";
+					comm += "\n\t\t\telse_if = {\n";
+					comm += "\t\t\t\tlimit = { var:neighbor_war_defender = { potential_communist_puppet_target = yes } }\n";
+					comm += "\t\t\t\tdeclare_war_on = {\n";
+					comm += "\t\t\t\t\ttarget = var:neighbor_war_defender\n";
+					comm += "\t\t\t\t\ttype = puppet_wargoal_focus\n";
+					comm += "\t\t\t\t}\n";
+					comm += "\t\t\t\tadd_named_threat = { threat = 3 name = neighbor_war_NF_threat }\n";
+					comm += "\t\t\t}";
+					newFocus->updateFocusElement(newFocus->completionReward, comm, "");
+				}
+				if (!majorIdeologies.count("fascism"))
+				{
+					std::string fasc = "";
+					fasc += "\n\t\t\telse_if = {\n";
+					fasc += "\t\t\t\tlimit = { var:neighbor_war_defender = { potential_fascist_annex_target = yes } }\n";
+					fasc += "\t\t\t\tdeclare_war_on = {\n";
+					fasc += "\t\t\t\t\ttarget = var:neighbor_war_defender\n";
+					fasc += "\t\t\t\t\ttype = annex_everything\n";
+					fasc += "\t\t\t\t}\n";
+					fasc += "\t\t\t\tadd_named_threat = { threat = 3 name = neighbor_war_NF_threat }\n";
+					fasc += "\t\t\t}";
+					newFocus->updateFocusElement(newFocus->completionReward, fasc, "");
+				}
+				newFocus->updateFocusElement(newFocus->completionReward, "var:neighbor_war_defender", target.first);
+				newFocus->updateFocusElement(newFocus->completionReward, "var:ROOT.neighbor_war_defender", target.first);
+				newFocus->updateFocusElement(newFocus->bypass, "var:neighbor_war_defender", target.first);
+				focuses.push_back(newFocus);
+			}
+			else
+			{
+				throw std::runtime_error("Could not load focus neighbor_war");
+			}
+
+			nextFreeColumn += 2;
+		}
+	}
+
+	return conquerTags;
+}
+
 void HoI4FocusTree::addNeighborWarBranch(
 	const string& tag,
 	const map<string, shared_ptr<HoI4::Country>>& closeNeighbors,
@@ -2224,10 +2471,12 @@ void HoI4FocusTree::addNeighborWarBranch(
 	{
 		shared_ptr<HoI4Focus> newFocus = originalFocus->second.makeTargetedCopy(tag, targetNeighbors->getTag());
 		newFocus->relativePositionId = "";
-		newFocus->available = "{\n";
+		newFocus->available = "= {\n";
 		newFocus->available += "\t\t\thas_war = no\n";
 		newFocus->available += "\t\t\tnot_in_border_conflict = yes\n";
+		newFocus->available += "\t\t\thas_opinion = { target = " + targetNeighbors->getTag() + " value < 0 }\n";
 		newFocus->available += "\t\t\tany_neighbor_country = {\n";
+		newFocus->available += "\t\t\t\texists = yes\n";
 		newFocus->available += "\t\t\t\tnot_allies_or_subjects = yes\n";
 		newFocus->available += "\t\t\t\tOR = {\n";
 		newFocus->available += "\t\t\t\t\tpotential_take_core_target = yes\n";
@@ -2254,25 +2503,6 @@ void HoI4FocusTree::addNeighborWarBranch(
 		newFocus->selectEffect  = "";
 		newFocus->xPos = nextFreeColumn;
 		newFocus->yPos = 0;
-		newFocus->aiWillDo = "= {\n";
-		newFocus->aiWillDo += "			factor = " + to_string(10 - numWarsWithNeighbors * 2) + "\n";
-		newFocus->aiWillDo += "			modifier = {\n";
-		newFocus->aiWillDo += "				factor = 0.1\n";
-		newFocus->aiWillDo += "				threat > 0.25\n";
-		newFocus->aiWillDo += "			}\n";
-		newFocus->aiWillDo += "			modifier = {\n";
-		newFocus->aiWillDo += "				factor = 0.1\n";
-		newFocus->aiWillDo += "				" + targetNeighbors->getTag() + " = { is_not_protected = no }\n";
-		newFocus->aiWillDo += "			}\n";
-		newFocus->aiWillDo += "			modifier = {\n";
-		newFocus->aiWillDo += "				factor = 0.5\n";
-		newFocus->aiWillDo += "				" + targetNeighbors->getTag() + " = { is_beatable = no }\n";
-		newFocus->aiWillDo += "			}\n";
-		newFocus->aiWillDo += "			modifier = {\n";
-		newFocus->aiWillDo += "				factor = 2\n";
-		newFocus->aiWillDo += "				" + targetNeighbors->getTag() + " = { surrender_progress > 0.2 }\n";
-		newFocus->aiWillDo += "			}\n";
-		newFocus->aiWillDo += "		}";
 		focuses.push_back(newFocus);
 	}
 	else
@@ -2286,8 +2516,7 @@ void HoI4FocusTree::addNeighborWarBranch(
 		newFocus->prerequisites.clear();
 		newFocus->prerequisites.push_back("= { focus = border_disputes" + tag + targetNeighbors->getTag() + " }");
 		newFocus->relativePositionId += targetNeighbors->getTag();
-		newFocus->available = "{\n";
-		newFocus->available += "\t\t\tdate > " + startDate.toString() + "\n";
+		newFocus->available = "= {\n";
 		newFocus->available += "\t\t\thas_war = no\n";
 		newFocus->available += "\t\t\tnot_in_border_conflict = yes\n";
 		newFocus->available += "\t\t\thas_opinion = { target = " + targetNeighbors->getTag() + " value < 0 }\n";

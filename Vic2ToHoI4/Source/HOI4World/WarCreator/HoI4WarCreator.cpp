@@ -36,8 +36,8 @@ HoI4WarCreator::HoI4WarCreator(const HoI4::World* world, const HoI4::MapData& th
 	set<shared_ptr<HoI4::Faction>> factionsAtWar;
 	LOG(LogLevel::Info) << "Generating major wars";
 	generateMajorWars(AILog, factionsAtWar, world->getMajorIdeologies(), world, theMapData);
-	LOG(LogLevel::Info) << "Generating core wars";
-	reclaimCoresCreator(AILog);
+	LOG(LogLevel::Info) << "Generating conquest wars";
+	generateConquestWars(AILog);
 	LOG(LogLevel::Info) << "Generating additional wars";
 	generateAdditionalWars(AILog, factionsAtWar, worldStrength, theMapData);
 
@@ -1275,11 +1275,11 @@ vector<shared_ptr<HoI4::Faction>> HoI4WarCreator::absolutistWarCreator(shared_pt
 }
 
 
-void HoI4WarCreator::reclaimCoresCreator(std::ofstream & AILog)
+void HoI4WarCreator::generateConquestWars(std::ofstream & AILog)
 {
 	if (theConfiguration.getDebug())
 	{
-		AILog << "Creating core wars\n";
+		AILog << "Creating Conquest wars\n";
 	}
 
 	for (auto& country: theWorld->getCountries())
@@ -1335,6 +1335,7 @@ std::vector<std::shared_ptr<HoI4::Faction>> HoI4WarCreator::neighborWarCreator(
 	int numWarsWithNeighbors = 0;
 	auto focusTree = genericFocusTree->makeCustomizedCopy(*country);
 	auto coreHolders = focusTree->addCoresBranch(country, numWarsWithNeighbors, theWorld->getMajorIdeologies());
+	auto conquerTags = focusTree->addConquerBranch(country, numWarsWithNeighbors, theWorld->getMajorIdeologies(), coreHolders);
 
 
 	for (auto target: closeNeighbors)
@@ -1344,7 +1345,7 @@ std::vector<std::shared_ptr<HoI4::Faction>> HoI4WarCreator::neighborWarCreator(
 			break;
 		}
 
-		if (coreHolders.find(target.first) != coreHolders.end())
+		if ((coreHolders.find(target.first) != coreHolders.end()) || (conquerTags.find(target.first) != conquerTags.end()))
 		{
 			continue;
 		}

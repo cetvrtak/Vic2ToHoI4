@@ -44,6 +44,7 @@ class HoI4WarCreator
 		double calculateWorldStrength(ofstream& AILog) const;
 		void generateMajorWars(ofstream& AILog, set<shared_ptr<HoI4::Faction>>& factionsAtWar, const std::set<std::string>& majorIdeologies, const HoI4::World* world, const HoI4::MapData& theMapData);
 		double calculatePercentOfWorldAtWar(ofstream& AILog, const set<shared_ptr<HoI4::Faction>>& factionsAtWar, double worldStrength) const;
+		void generateConquestWars(std::ofstream & AILog);
 		void generateAdditionalWars(ofstream& AILog, set<shared_ptr<HoI4::Faction>>& factionsAtWar, double worldStrength, const HoI4::MapData& theMapData);
 		bool isImportantCountry(shared_ptr<HoI4::Country> country);
 
@@ -53,7 +54,6 @@ class HoI4WarCreator
 		vector<shared_ptr<HoI4::Faction>> absolutistWarCreator(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Faction>> neighborWarCreator(shared_ptr<HoI4::Country> country, ofstream& AILog, const HoI4::MapData& theMapData);
 		vector<shared_ptr<HoI4::Faction>> radicalWarCreator(shared_ptr<HoI4::Country> country, const HoI4::MapData& theMapData);
-		void reclaimCoresCreator(std::ofstream & AILog);
 
 		vector<shared_ptr<HoI4::Country>> findEvilCountries() const;
 

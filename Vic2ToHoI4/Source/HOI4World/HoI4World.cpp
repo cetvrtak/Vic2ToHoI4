@@ -114,6 +114,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 		createFactions();
 	}
 
+	buildConquerStrategies();
 	HoI4WarCreator warCreator(this, theMapData);
 
 	addFocusTrees();
@@ -124,7 +125,6 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	processInfluence();
 	determineSpherelings();
 	calculateSpherelingAutonomy();
-	buildConquerStrategies();
 	updateDynamicModifiers();
 	scriptedTriggers.importScriptedTriggers(theConfiguration);
 	updateScriptedTriggers(scriptedTriggers, majorIdeologies);
