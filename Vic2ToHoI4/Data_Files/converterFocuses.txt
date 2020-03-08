@@ -2347,7 +2347,7 @@ focus = {
 		}
 		bypass = {
 			OR = {
-				NOT = { country_exists = $TARGET }
+				has_war_with = $TARGET
 				is_in_faction_with = $TARGET
 				NOT = { $TARGET = { any_owned_state = { is_core_of = ROOT } } }
 			}
@@ -2406,6 +2406,7 @@ focus = {
 		}
 		bypass = {
 			OR = {
+				has_war_with = $TARGET
 				is_in_faction_with = $TARGET
 				NOT = { $TARGET = { any_owned_state = { is_core_of = ROOT } } }
 			}
@@ -2474,6 +2475,7 @@ focus = {
 		}
 		bypass = {
 			OR = {
+				has_war_with = $TARGET
 				is_in_faction_with = $TARGET
 				NOT = { $TARGET = { any_owned_state = { is_core_of = ROOT } } }
 				NOT = { $TARGET = { any_owned_state = { is_capital = no } } }
@@ -2533,6 +2535,7 @@ focus = {
 		}
 		bypass = {
 			OR = {
+				has_war_with = $TARGET
 				is_in_faction_with = $TARGET
 				NOT = { $TARGET = { any_owned_state = { is_core_of = ROOT } } }
 			}
@@ -2587,6 +2590,7 @@ focus = {
 		}
 		bypass = {
 			OR = {
+				has_war_with = $TARGET
 				is_in_faction_with = $TARGET
 				NOT = { $TARGET = { any_owned_state = { is_core_of = ROOT } } }
 			}

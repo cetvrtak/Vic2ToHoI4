@@ -41,23 +41,32 @@ in_weak_faction = {
 			if = {
 				limit = { is_in_faction = yes NOT = { in_faction_with = PREV } }
 				all_allied_country = {
-				    add_to_temp_variable = { their_faction = var:num_divisions }
+					add_to_temp_variable = { their_faction = var:num_divisions }
+				}
+			}
+			if = {
+				limit = {
+					any_other_country = {
+						is_major = yes
+						has_guaranteed = PREV
+						add_to_temp_variable = { their_faction = var:num_divisions }
+						all_allied_country = {
+							add_to_temp_variable = { their_faction = var:num_divisions }
+						}
+					}
 				}
 			}
 			set_temp_variable = { var = their_enemies value = var:ROOT.num_divisions }
+			all_of_scopes = {
+				array = ROOT.possible_allies@THIS
+				add_to_temp_variable = { their_enemies = var:num_divisions }
+			}
 			if = {
 				limit = { ROOT = { is_in_faction = yes NOT = { in_faction_with = PREV } } }
 				ROOT = {
 					all_allied_country = {
 						add_to_temp_variable = { PREV.their_enemies = var:num_divisions }
 					}
-				}
-			}
-			if = {
-				limit = { has_war = yes }
-				all_enemy_country = {
-					limit = { PREV = { any_owned_state = { is_controlled_by = PREV } } }
-				    add_to_temp_variable = { their_enemies = var:num_divisions }
 				}
 			}
 			check_variable = { their_faction < their_enemies }

@@ -2144,6 +2144,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->completionReward, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2296,6 +2297,7 @@ std::set<std::string> HoI4FocusTree::addConquerBranch(
 				newFocus->available += "\t\t\tany_neighbor_country = {\n";
 				newFocus->available += "\t\t\t\texists = yes\n";
 				newFocus->available += "\t\t\t\tnot_allies_or_subjects = yes\n";
+				newFocus->available += "\t\t\t\tin_weak_faction = yes\n";
 				newFocus->available += "\t\t\t\tOR = {\n";
 				newFocus->available += "\t\t\t\t\tpotential_take_core_target = yes\n";
 				if (majorIdeologies.count("communism"))
@@ -2328,12 +2330,12 @@ std::set<std::string> HoI4FocusTree::addConquerBranch(
 				newFocus->aiWillDo += "\t\t\t\thas_opinion = { target = " + target.first + " value > 0 }\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
-				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
-				newFocus->aiWillDo += "\t\t\t\tthreat > 0.25\n";
-				newFocus->aiWillDo += "\t\t\t}\n";
-				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
 				newFocus->aiWillDo += "\t\t\t\tfactor = 0\n";
 				newFocus->aiWillDo += "\t\t\t\t" + target.first + " = { in_weak_faction = no }\n";
+				newFocus->aiWillDo += "\t\t\t}\n";
+				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
+				newFocus->aiWillDo += "\t\t\t\tfactor = 0.1\n";
+				newFocus->aiWillDo += "\t\t\t\tthreat > 0.25\n";
 				newFocus->aiWillDo += "\t\t\t}\n";
 				newFocus->aiWillDo += "\t\t\tmodifier = {\n";
 				newFocus->aiWillDo += "\t\t\t\tfactor = 2\n";
