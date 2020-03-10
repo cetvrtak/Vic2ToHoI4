@@ -523,5 +523,5 @@
  neighbor_war.6.d:0 "Apparently the [From.GetAdjective] government would like to take their chances against us on the battlefield."
  neighbor_war.6.a:0 "So be it"
  core_wars.1.t:0 "Find relevant enemies"
- core_wars.1.d:0 "Number of relevant enemies: [?var:possible_allies@ENG^num]\n\n[?var:possible_allies@ENG^0.GetName]\n[?var:possible_allies@ENG^1.GetName]\n[?var:possible_allies@ENG^2.GetName]\n"
+ core_wars.1.d:0 "Finds possible allies to add their strength towards our strength count"
  core_wars.1.a:0 "Ok"

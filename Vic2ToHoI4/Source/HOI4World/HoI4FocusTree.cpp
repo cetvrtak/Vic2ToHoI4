@@ -2070,7 +2070,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 					newFocus->completionReward = "= {\n";
 					newFocus->completionReward += "\t\t\tadd_stability = 0.0001\n";
 					newFocus->completionReward += "\t\t\tadd_political_power = 150\n";
-					newFocus->completionReward += "\t\t\tadd_timed_idea = { idea = raise_matter_focus days = 180 }\n";
+					newFocus->completionReward += "\t\t\tadd_timed_idea = { idea = generic_military_industry days = 180 }\n";
 					newFocus->completionReward += "\t\t}";
 
 					std::string fascismPopularityCheck = "";
@@ -2086,6 +2086,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->completionReward, "$POPULARITY", std::to_string(0.000001*country.second));
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$REVANCHISM", std::to_string(std::max(static_cast<int>(0.1*country.second), 1)));
 				focuses.push_back(newFocus);
 				nextFreeColumn += 2;
 			}
@@ -2105,7 +2106,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 					newFocus->completionReward = " = {\n";
 					newFocus->completionReward += "\t\t\tadd_stability = 0.0001\n";
 					newFocus->completionReward += "\t\t\tadd_war_support = $WARSUPPORT\n";
-					newFocus->completionReward += "\t\t\tadd_timed_idea = { idea = CHI_rapid_mobilization days = 180 }\n";
+					newFocus->completionReward += "\t\t\tadd_timed_idea = { idea = generic_rapid_mobilization days = 180 }\n";
 					newFocus->completionReward += "\t\t}";
 
 					std::string fascismPopularityCheck = "";
@@ -2123,6 +2124,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$REVANCHISM", std::to_string(std::max(static_cast<int>(0.1*country.second), 1)));
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2145,6 +2147,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$REVANCHISM", std::to_string(std::max(static_cast<int>(0.1*country.second), 1)));
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2167,6 +2170,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$REVANCHISM", std::to_string(std::max(static_cast<int>(0.1*country.second), 1)));
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2189,6 +2193,7 @@ std::map<std::string, int> HoI4FocusTree::addCoresBranch(
 				newFocus->updateFocusElement(newFocus->bypass, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TARGET", country.first);
 				newFocus->updateFocusElement(newFocus->aiWillDo, "$TAG", theCountry->getTag());
+				newFocus->updateFocusElement(newFocus->aiWillDo, "$REVANCHISM", std::to_string(std::max(static_cast<int>(country.second), 1)));
 				focuses.push_back(newFocus);
 			}
 			else
@@ -2465,6 +2470,7 @@ void HoI4FocusTree::addNeighborWarBranch(
 		newFocus->available += "\t\t\tany_neighbor_country = {\n";
 		newFocus->available += "\t\t\t\texists = yes\n";
 		newFocus->available += "\t\t\t\tnot_allies_or_subjects = yes\n";
+		newFocus->available += "\t\t\t\tin_weak_faction = yes\n";
 		newFocus->available += "\t\t\t\tOR = {\n";
 		newFocus->available += "\t\t\t\t\tpotential_take_core_target = yes\n";
 		if (majorIdeologies.count("communism"))
