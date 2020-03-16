@@ -665,6 +665,17 @@
     <ClCompile Include="HoI4WorldTests\ScriptedTriggers\ScriptedTriggerTests.cpp">
       <Filter>HoI4WorldTests\ScriptedTriggers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\HoI4Modifier.cpp">
+      <Filter>Vic2ToHoI4 files\HoI4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Diplomacy\HoI4AIStrategy.cpp">
+      <Filter>Vic2ToHoI4 files\HoI4\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Vic2ToHoI4\Source\V2World\AIStrategy.cpp">
+      <Filter>Vic2ToHoI4 files\Vic2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Vic2AI.cpp">
+      <Filter>Vic2ToHoI4 files\Vic2</Filter>
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Ideas\Idea.cpp">
       <Filter>Vic2ToHoI4 files\HoI4\Ideas</Filter>
     </ClCompile>

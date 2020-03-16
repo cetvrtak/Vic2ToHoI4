@@ -43,6 +43,7 @@ class HoI4Focus: commonItems::parser
 
 		std::shared_ptr<HoI4Focus> makeCustomizedCopy(const std::string& country) const;
 		std::shared_ptr<HoI4Focus> makeTargetedCopy(const std::string& country, const std::string& target) const;
+		void updateFocusElement(std::string& element, std::string oldText, std::string newText);
 
 		std::string id;
 		std::string icon;
@@ -58,6 +59,7 @@ class HoI4Focus: commonItems::parser
 		std::string available;
 		std::string cancelIfInvalid;
 		std::string continueIfInvalid;
+		std::string selectEffect;
 		std::string completeTooltip;
 		std::string completionReward;
 		std::string aiWillDo;

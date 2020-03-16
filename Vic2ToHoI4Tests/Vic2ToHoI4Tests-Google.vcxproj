@@ -119,6 +119,7 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Diplomacy\AIPeace.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Diplomacy\AIPeaces.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Diplomacy\AiPeacesUpdater.cpp" />
+    <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Diplomacy\HoI4AIStrategy.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Diplomacy\HoI4War.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Events\Event.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Events\EventHelpers.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\HoI4Focus.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\HoI4FocusTree.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\HoI4Localisation.cpp" />
+    <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\HoI4Modifier.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\HOI4Version.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\HoI4World.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Ideas\Idea.cpp" />
@@ -217,6 +219,7 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\targa.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2toHOI4Converter.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Agreement.cpp" />
+    <ClCompile Include="..\Vic2ToHoI4\Source\V2World\AIStrategy.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Army.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Building.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\CommonCountryData.cpp" />
@@ -232,6 +235,7 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Relations.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\State.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\StateDefinitions.cpp" />
+    <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Vic2AI.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Wars\War.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Wars\WarGoal.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\World.cpp" />

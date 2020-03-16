@@ -1172,15 +1172,11 @@ void outputAIStrategy(const HoI4::Country& theCountry)
 	}
 	output << "\xEF\xBB\xBF"; // add the BOM to make HoI4 happy
 
-	output << "converted_ai_strategies_" << theCountry.getTag() << " = {\n";
+	output << "converted_war_strategies_" << theCountry.getTag() << " = {\n";
 	output << "\tenable = {\n";
-	output << "\t\ttag = " + theCountry.getTag() + "\n";
-	output << "\t}\n";
-	output << "\tabort = {\n";
 	output << "\t\talways = no\n";
 	output << "\t}\n";
 	output << "\t\n";
-
 	for (auto& conquerStr: theCountry.getConquerStrategies())
 	{
 		output << "\tai_strategy = {\n";
@@ -1189,6 +1185,17 @@ void outputAIStrategy(const HoI4::Country& theCountry)
 		output << "\t\tvalue = " << conquerStr.second.getValue() << "\n";
 		output << "\t}\n";
 	}
+	output << "}\n";
+	output << "\n";
+
+	output << "converted_diplo_strategies_" << theCountry.getTag() << " = {\n";
+	output << "\tenable = {\n";
+	output << "\t\ttag = " + theCountry.getTag() + "\n";
+	output << "\t}\n";
+	output << "\tabort = {\n";
+	output << "\t\talways = no\n";
+	output << "\t}\n";
+	output << "\t\n";
 	for (auto& strategy: theCountry.getAIStrategies())
 	{
 		auto strategyType = strategy.getType();

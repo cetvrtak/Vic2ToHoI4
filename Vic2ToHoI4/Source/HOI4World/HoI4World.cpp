@@ -71,6 +71,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	addStatesToCountries();
 	states->addCapitalsToStates(countries);
 	HoI4Localisation::addStateLocalisations(*states);
+	determineCoreStates();
 	convertIndustry();
 	states->convertResources();
 	supplyZones->convertSupplyZones(*states);
@@ -87,6 +88,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	setupNavalTreaty();
 
 	importLeaderTraits();
+	importDynamicModifiers();
 	convertGovernments();
 	ideologies = std::make_unique<Ideologies>(theConfiguration);
 	ideologies->identifyMajorIdeologies(greatPowers, countries);
@@ -114,6 +116,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 		createFactions();
 	}
 
+	buildConquerStrategies();
 	HoI4WarCreator warCreator(this, theMapData);
 
 	addFocusTrees();
@@ -124,6 +127,7 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 	processInfluence();
 	determineSpherelings();
 	calculateSpherelingAutonomy();
+	updateDynamicModifiers();
 	buildConquerStrategies();
 	scriptedTriggers.importScriptedTriggers(theConfiguration);
 	updateScriptedTriggers(scriptedTriggers, ideologies->getMajorIdeologies());
@@ -200,6 +204,17 @@ void HoI4::World::importLeaderTraits()
 		ideologicalLeaderTraits.insert(make_pair(ideologyName, traits.getStrings()));
 	});
 	parseFile("converterLeaderTraits.txt");
+}
+
+
+void HoI4::World::importDynamicModifiers()
+{
+	clearRegisteredKeywords();
+	registerRegex("[a-zA-Z0-9_]+", [this](const std::string& modifierName, std::istream& theStream){
+		HoI4Modifier modifier(theStream);
+		dynamicModifiers.insert(make_pair(modifierName, modifier));
+	});
+	parseFile("converterDynamicModifiers.txt");
 }
 
 
@@ -284,6 +299,22 @@ void HoI4::World::addStatesToCountries()
 			states->getProvinceToStateIDMap(),
 			states->getStates()
 		);
+	}
+}
+
+
+void HoI4::World::determineCoreStates()
+{
+	for (auto state: states->getStates())
+	{
+		auto cores = state.second.getCores();
+		for (auto& country: countries)
+		{
+			if (cores.find(country.first) != cores.end())
+			{
+				country.second->addCoreState(state.second);
+			}
+		}
 	}
 }
 
@@ -1011,6 +1042,7 @@ void HoI4::World::output()
 	outputIdeologies(*ideologies);
 	outputLeaderTraits();
 	outIdeas(*theIdeas, ideologies->getMajorIdeologies(), theConfiguration);
+	outputDynamicModifiers();
 	outputBookmarks();
 	outputScriptedLocalisations(theConfiguration, scriptedLocalisations);
 	outputScriptedTriggers(scriptedTriggers, theConfiguration);
@@ -1314,6 +1346,31 @@ void HoI4::World::outputLeaderTraits() const
 }
 
 
+void HoI4::World::outputDynamicModifiers() const
+{
+	if (!Utils::TryCreateFolder("output/" + theConfiguration.getOutputName() + "/common/dynamic_modifiers"))
+	{
+		Log(LogLevel::Error) << "Could not create output/" + theConfiguration.getOutputName() + "/common/dynamic_modifiers/";
+		exit(-1);
+	}
+
+	ofstream out("output/" + theConfiguration.getOutputName() + "/common/dynamic_modifiers/01_converter_modifiers.txt");
+	if (!out.is_open())
+	{
+		LOG(LogLevel::Error) << "Could not create 01_converter_modifiers.txt.";
+		exit(-1);
+	}
+
+	for (auto& modifier: dynamicModifiers)
+	{
+		out << modifier.first << " = {\n" << modifier.second << "}\n";
+		out << "\n";
+	}
+
+	out.close();
+}
+
+
 void HoI4::World::outputBookmarks() const
 {
 	ofstream bookmarkFile("output/" + theConfiguration.getOutputName() + "/common/bookmarks/the_gathering_storm.txt");
@@ -1532,5 +1589,25 @@ void HoI4::World::buildConquerStrategies()
 				}
 			}
 		}
+	}
+}
+
+void HoI4::World::updateDynamicModifiers()
+{
+	auto& revanchismModifier = (dynamicModifiers.find("revanchism"))->second;
+	if (majorIdeologies.count("fascism"))
+	{
+		std::string newString;
+
+		newString = "= {\n";
+		newString += "\t\tNOT = { has_government = fascism }\n";
+		newString += "\t}\n";
+		revanchismModifier.updateEnable(newString);
+
+		revanchismModifier.addEffect("fascism_drift","var:revanchism");
+	}
+	if (!majorIdeologies.count("fascism"))
+	{
+		dynamicModifiers.erase("revanchism_fasc");
 	}
 }
