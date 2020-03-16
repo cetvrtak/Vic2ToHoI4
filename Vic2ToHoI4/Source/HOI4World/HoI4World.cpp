@@ -10,11 +10,12 @@
 #include "HoI4Country.h"
 #include "Decisions/Decisions.h"
 #include "Events/Events.h"
+#include "Events/GovernmentInExileEvent.h"
 #include "HoI4FocusTree.h"
-#include "HOI4Ideology.h"
+#include "Ideologies/Ideology.h"
 #include "HoI4Localisation.h"
-#include "Ideas.h"
-#include "IdeologyFile.h"
+#include "Ideas/Ideas.h"
+#include "Ideologies/IdeologyFile.h"
 #include "Leaders/Advisor.h"
 #include "Leaders/IdeologicalAdvisors.h"
 #include "Names.h"
@@ -39,6 +40,7 @@
 #include "../Hoi4Outputter/Decisions/DecisionsOutputter.h"
 #include "../Hoi4Outputter/Diplomacy/OutAiPeaces.h"
 #include "../Hoi4Outputter/Events/EventsOutputter.h"
+#include "../Hoi4Outputter/Ideas/OutIdeas.h"
 #include "../Hoi4Outputter/Map/OutBuildings.h"
 #include "../Hoi4Outputter/Map/OutStrategicRegion.h"
 #include "../Hoi4Outputter/Map/OutSupplyZones.h"
@@ -47,27 +49,22 @@
 #include "../Hoi4Outputter/States/HoI4StatesOutputter.h"
 #include <fstream>
 #include "../Hoi4Outputter/outDifficultySettings.h"
+#include "../Hoi4Outputter/Ideologies/OutIdeologies.h"
 using namespace std;
 
 
 
-
 HoI4::World::World(const Vic2::World* _sourceWorld):
-	sourceWorld(_sourceWorld),
-	countryMap(_sourceWorld),
-	theIdeas(std::make_unique<HoI4::Ideas>()),
-	decisions(make_unique<HoI4::decisions>(theConfiguration)),
-	peaces(make_unique<HoI4::AiPeaces>()),
-	events(new HoI4::Events),
-	onActions(make_unique<HoI4::OnActions>())
+	 sourceWorld(_sourceWorld), countryMap(_sourceWorld), theIdeas(std::make_unique<HoI4::Ideas>()),
+	 decisions(make_unique<HoI4::decisions>(theConfiguration)), peaces(make_unique<HoI4::AiPeaces>()),
+	 events(new HoI4::Events), onActions(make_unique<HoI4::OnActions>())
 {
 	LOG(LogLevel::Info) << "Parsing HoI4 data";
 
 	theCoastalProvinces.init(theMapData);
 	states = std::make_unique<States>(sourceWorld, countryMap, theCoastalProvinces);
 	supplyZones = new HoI4::SupplyZones(states->getDefaultStates());
-	buildings = new Buildings(*states, theCoastalProvinces, theMapData),
-	theNames.init();
+	buildings = new Buildings(*states, theCoastalProvinces, theMapData), theNames.init();
 	theGraphics.init();
 	governmentMap.init();
 	convertCountries();
@@ -90,21 +87,26 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 
 	setupNavalTreaty();
 
-	importIdeologies();
 	importLeaderTraits();
 	importDynamicModifiers();
 	convertGovernments();
-	identifyMajorIdeologies();
+	ideologies = std::make_unique<Ideologies>(theConfiguration);
+	ideologies->identifyMajorIdeologies(greatPowers, countries);
 	importIdeologicalMinisters();
 	convertParties();
-	events->createPoliticalEvents(majorIdeologies);
-	events->createWarJustificationEvents(majorIdeologies);
-	events->importElectionEvents(majorIdeologies, *onActions);
-	addCountryElectionEvents(majorIdeologies);
-	events->createStabilityEvents(majorIdeologies);
-	theIdeas->updateIdeas(majorIdeologies);
-	decisions->updateDecisions(majorIdeologies, states->getProvinceToStateIDMap(), states->getDefaultStates(), *events);
-	updateAiPeaces(*peaces, majorIdeologies);
+	events->createPoliticalEvents(ideologies->getMajorIdeologies());
+	events->createWarJustificationEvents(ideologies->getMajorIdeologies());
+	events->importElectionEvents(ideologies->getMajorIdeologies(), *onActions);
+	addCountryElectionEvents(ideologies->getMajorIdeologies());
+	events->createStabilityEvents(ideologies->getMajorIdeologies());
+	events->generateGenericEvents(theConfiguration, ideologies->getMajorIdeologies());
+	events->giveGovernmentInExileEvent(createGovernmentInExileEvent(ideologies->getMajorIdeologies()));
+	theIdeas->updateIdeas(ideologies->getMajorIdeologies());
+	decisions->updateDecisions(ideologies->getMajorIdeologies(),
+		 states->getProvinceToStateIDMap(),
+		 states->getDefaultStates(),
+		 *events);
+	updateAiPeaces(*peaces, ideologies->getMajorIdeologies());
 	addNeutrality();
 	convertIdeologySupport();
 	states->convertCapitalVPs(countries, greatPowers, getStrongestCountryStrength());
@@ -119,15 +121,16 @@ HoI4::World::World(const Vic2::World* _sourceWorld):
 
 	addFocusTrees();
 	adjustResearchFocuses();
-	HoI4Localisation::generateCustomLocalisations(scriptedLocalisations, majorIdeologies);
-    
+	HoI4Localisation::generateCustomLocalisations(scriptedLocalisations, ideologies->getMajorIdeologies());
+
 	setSphereLeaders();
 	processInfluence();
 	determineSpherelings();
 	calculateSpherelingAutonomy();
 	updateDynamicModifiers();
+	buildConquerStrategies();
 	scriptedTriggers.importScriptedTriggers(theConfiguration);
-	updateScriptedTriggers(scriptedTriggers, majorIdeologies);
+	updateScriptedTriggers(scriptedTriggers, ideologies->getMajorIdeologies());
 }
 
 
@@ -193,26 +196,6 @@ void HoI4::World::convertCountry(
 }
 
 
-void HoI4::World::importIdeologies()
-{
-	clearRegisteredKeywords();
-	registerKeyword(std::regex("ideologies"), [this](const std::string& unused, std::istream& theStream)
-	{
-		IdeologyFile theFile(theStream);
-		for (auto ideology: theFile.getIdeologies())
-		{
-			ideologies.insert(ideology);
-		}
-	});
-
-	if (theConfiguration.getIdeologiesOptions() != ideologyOptions::keep_default)
-	{
-		parseFile("converterIdeologies.txt");
-	}
-	parseFile(theConfiguration.getHoI4Path() + "/common/ideologies/00_ideologies.txt");
-}
-
-
 void HoI4::World::importLeaderTraits()
 {
 	clearRegisteredKeywords();
@@ -256,44 +239,7 @@ void HoI4::World::convertParties()
 {
 	for (auto country: countries)
 	{
-		country.second->convertParties(majorIdeologies, governmentMap);
-	}
-}
-
-
-void HoI4::World::identifyMajorIdeologies()
-{
-	if (theConfiguration.getIdeologiesOptions() == ideologyOptions::keep_major)
-	{
-		for (auto greatPower: greatPowers)
-		{
-			majorIdeologies.insert(greatPower->getGovernmentIdeology());
-		}
-
-		for (auto country: countries)
-		{
-			if (country.second->isHuman())
-			{
-				majorIdeologies.insert(country.second->getGovernmentIdeology());
-			}
-		}
-		majorIdeologies.insert("neutrality");
-	}
-	else if (theConfiguration.getIdeologiesOptions() == ideologyOptions::specified)
-	{
-		for (auto ideology: theConfiguration.getSpecifiedIdeologies())
-		{
-			majorIdeologies.insert(ideology);
-		}
-	}
-	// keep default is accomplished by only importing the default ideologies, so we can include
-	//		all ideologies the converter knows for both keep_default and keep_all
-	else
-	{
-		for (auto ideology: ideologies)
-		{
-			majorIdeologies.insert(ideology.first);
-		}
+		country.second->convertParties(ideologies->getMajorIdeologies(), governmentMap);
 	}
 }
 
@@ -302,9 +248,9 @@ void HoI4::World::addNeutrality()
 {
 	for (auto country: countries)
 	{
-		if (majorIdeologies.count(country.second->getGovernmentIdeology()) == 0)
+		if (ideologies->getMajorIdeologies().count(country.second->getGovernmentIdeology()) == 0)
 		{
-			country.second->setGovernmentToExistingIdeology(majorIdeologies, ideologies, governmentMap);
+			country.second->setGovernmentToExistingIdeology(ideologies->getMajorIdeologies(), *ideologies, governmentMap);
 		}
 	}
 }
@@ -314,7 +260,7 @@ void HoI4::World::convertIdeologySupport()
 {
 	for (auto country: countries)
 	{
-		country.second->convertIdeologySupport(majorIdeologies, governmentMap);
+		country.second->convertIdeologySupport(ideologies->getMajorIdeologies(), governmentMap);
 	}
 }
 
@@ -787,18 +733,18 @@ void HoI4::World::convertNavies(
 {
 	LOG(LogLevel::Info) << "Converting navies";
 
-	ifstream variantsFile("shipTypes.txt");
+	ifstream variantsFile("DataFiles/shipTypes.txt");
 	if (!variantsFile.is_open())
 	{
-		std::runtime_error e("Could not open shipTypes.txt. Double-check your converter installation");
+		std::runtime_error e("Could not open DataFiles/shipTypes.txt. Double-check your converter installation");
 		throw e;
 	}
-	possibleShipVariants possibleVariants(variantsFile);
+	PossibleShipVariants possibleVariants(variantsFile);
 	variantsFile.close();
 
 	for (auto country : countries)
 	{
-		country.second->determineShipVariants(possibleVariants.getPossibleVariants());
+		country.second->determineShipVariants(possibleVariants);
 		country.second->convertNavies(
 			unitMap,
 			mtgUnitMap,
@@ -1043,7 +989,7 @@ void HoI4::World::addFocusTrees()
 	{
 		if (country.second->isGreatPower() || (country.second->getStrengthOverTime(3) > 4500))
 		{
-			country.second->addGenericFocusTree(majorIdeologies);
+			country.second->addGenericFocusTree(ideologies->getMajorIdeologies());
 		}
 	}
 }
@@ -1089,13 +1035,13 @@ void HoI4::World::output()
 	outputGenericFocusTree();
 	outputCountries();
 	outputBuildings(*buildings, theConfiguration);
-	outputDecisions(*decisions, majorIdeologies, theConfiguration);
+	outputDecisions(*decisions, ideologies->getMajorIdeologies(), theConfiguration);
 	outputEvents(*events, theConfiguration);
-	onActions->output(majorIdeologies);
-	outAiPeaces(*peaces, majorIdeologies, theConfiguration);
-	outputIdeologies();
+	onActions->output(ideologies->getMajorIdeologies());
+	outAiPeaces(*peaces, ideologies->getMajorIdeologies(), theConfiguration);
+	outputIdeologies(*ideologies);
 	outputLeaderTraits();
-	outputIdeas();
+	outIdeas(*theIdeas, ideologies->getMajorIdeologies(), theConfiguration);
 	outputDynamicModifiers();
 	outputBookmarks();
 	outputScriptedLocalisations(theConfiguration, scriptedLocalisations);
@@ -1245,7 +1191,7 @@ void HoI4::World::outputGenericFocusTree() const
 	}
 
 	HoI4FocusTree genericFocusTree;
-	genericFocusTree.addGenericFocusTree(majorIdeologies);
+	genericFocusTree.addGenericFocusTree(ideologies->getMajorIdeologies());
 	genericFocusTree.generateSharedFocuses("output/" + theConfiguration.getOutputName() + "/common/national_focus/shared_focuses.txt");
 }
 
@@ -1313,9 +1259,9 @@ void HoI4::World::outputCountries()
 std::set<HoI4::Advisor> HoI4::World::getActiveIdeologicalAdvisors() const
 {
 	std::set<HoI4::Advisor> theAdvisors;
-	for (auto ideology: majorIdeologies)
+	for (const auto& majorIdeology : ideologies->getMajorIdeologies())
 	{
-		auto ideologicalAdvisor = ideologicalAdvisors.find(ideology);
+		auto ideologicalAdvisor = ideologicalAdvisors.find(majorIdeology);
 		if (ideologicalAdvisor != ideologicalAdvisors.end())
 		{
 			theAdvisors.insert(ideologicalAdvisor->second);
@@ -1379,33 +1325,11 @@ void HoI4::World::outputRelations() const
 }
 
 
-void HoI4::World::outputIdeologies() const
-{
-	if (!Utils::TryCreateFolder("output/" + theConfiguration.getOutputName() + "/common/ideologies/"))
-	{
-		Log(LogLevel::Error) << "Could not create output/" + theConfiguration.getOutputName() + "/common/ideologies/";
-	}
-	ofstream ideologyFile("output/" + theConfiguration.getOutputName() + "/common/ideologies/00_ideologies.txt");
-	ideologyFile << "ideologies = {\n";
-	ideologyFile << "\t\n";
-	for (auto ideologyName: majorIdeologies)
-	{
-		auto ideology = ideologies.find(ideologyName);
-		if (ideology != ideologies.end())
-		{
-			ideology->second->output(ideologyFile);
-		}
-	}
-	ideologyFile << "}";
-	ideologyFile.close();
-}
-
-
 void HoI4::World::outputLeaderTraits() const
 {
 	ofstream traitsFile("output/" + theConfiguration.getOutputName() + "/common/country_leader/converterTraits.txt");
 	traitsFile << "leader_traits = {\n";
-	for (auto majorIdeology: majorIdeologies)
+	for (const auto& majorIdeology: ideologies->getMajorIdeologies())
 	{
 		auto ideologyTraits = ideologicalLeaderTraits.find(majorIdeology);
 		if (ideologyTraits != ideologicalLeaderTraits.end())
@@ -1419,12 +1343,6 @@ void HoI4::World::outputLeaderTraits() const
 	}
 	traitsFile << "}";
 	traitsFile.close();
-}
-
-
-void HoI4::World::outputIdeas() const
-{
-	theIdeas->output(majorIdeologies);
 }
 
 

@@ -31,6 +31,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include "Party.h"
 #include "Wars/War.h"
 #include "newParser.h"
+#include "Army.h"
 #include <functional>
 #include <map>
 #include <memory>
@@ -92,7 +93,7 @@ class Country: commonItems::parser
 		virtual int getCapital() const { return capital; }
 		virtual std::set<std::string> getTechs() const { return techs; }
 		virtual const ConverterColor::Color& getColor() const { return color; }
-		std::vector<const Army*> getArmies() const { return armies; }
+		auto getArmies() const { return armies; }
 		std::vector<const Leader*> getLeaders() const { return leaders; }
 		virtual double getRevanchism() const { return revanchism; }
 		virtual double getWarExhaustion() const { return warExhaustion; }
@@ -144,7 +145,7 @@ class Country: commonItems::parser
 		const Vic2AI* vic2ai;
 		bool civilized = false;
 
-		std::vector<const Army*> armies;
+		std::vector<Army> armies;
 		std::vector<const Leader*> leaders;
 
 		double revanchism = 0.0;

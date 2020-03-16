@@ -5,13 +5,15 @@
 
 #include "Decisions/Decisions.h"
 #include "Diplomacy/AIPeaces.h"
-#include "Ideas.h"
+#include "Ideas/Ideas.h"
 #include "HoI4Modifier.h"
+#include "Ideas/Ideas.h"
 #include "Leaders/Advisor.h"
 #include "Map/CoastalProvinces.h"
 #include "Map/MapData.h"
 #include "MilitaryMappings/AllMilitaryMappings.h"
 #include "MilitaryMappings/UnitMappings.h"
+#include "Ideologies/Ideologies.h"
 #include "Names.h"
 #include "OnActions.h"
 #include "ScriptedLocalisations/ScriptedLocalisations.h"
@@ -81,7 +83,7 @@ class World: commonItems::parser
 		const std::map<int, int>& getProvinceToStateIDMap() const { return states->getProvinceToStateIDMap(); }
 		std::vector<std::shared_ptr<Faction>> getFactions() const { return factions; }
 		HoI4::Events* getEvents() const { return events; }
-		std::set<std::string> getMajorIdeologies() const { return majorIdeologies; }
+		const auto& getMajorIdeologies() const { return ideologies->getMajorIdeologies(); }
 
 		std::shared_ptr<HoI4::Country> findCountry(const std::string& countryTag);
 
@@ -103,7 +105,6 @@ class World: commonItems::parser
 			const mappers::FlagsToIdeasMapper& flagsToIdeasMapper
 		);
 
-		void importIdeologies();
 		void importLeaderTraits();
 		void importDynamicModifiers();
 		void importIdeologicalMinisters();
@@ -112,7 +113,6 @@ class World: commonItems::parser
 
 		void convertParties();
 
-		void identifyMajorIdeologies();
 		void addNeutrality();
 		void convertIdeologySupport();
 
@@ -184,7 +184,6 @@ class World: commonItems::parser
 		void outputCountries();
 		std::set<HoI4::Advisor> getActiveIdeologicalAdvisors() const;
 		void outputRelations() const;
-		void outputIdeologies() const;
 		void outputLeaderTraits() const;
 		void outputIdeas() const;
 		void outputDynamicModifiers () const;
@@ -211,8 +210,7 @@ class World: commonItems::parser
 		std::map<std::string, std::shared_ptr<HoI4::Country>> landedCountries;
 		std::vector<std::shared_ptr<HoI4::Country>> greatPowers;
 
-		std::map<std::string, HoI4Ideology*> ideologies;
-		std::set<std::string> majorIdeologies;
+		std::unique_ptr<Ideologies> ideologies;
 		std::map<std::string, std::vector<std::string>> ideologicalLeaderTraits;
 		std::map<std::string, HoI4::Advisor> ideologicalAdvisors;
 		std::unique_ptr<HoI4::Ideas> theIdeas;

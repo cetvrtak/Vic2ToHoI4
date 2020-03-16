@@ -3,23 +3,23 @@
 
 
 
+#include "../Color.h"
+#include "../V2World/Party.h"
+#include "Date.h"
 #include "Diplomacy/Faction.h"
 #include "Diplomacy/HoI4Relations.h"
 #include "Diplomacy/HoI4AIStrategy.h"
 #include "Diplomacy/HoI4War.h"
-#include "HoI4Airforce.h"
-#include "HoI4Army.h"
 #include "HoI4FocusTree.h"
-#include "HOI4Ideology.h"
+#include "Ideologies/Ideology.h"
 #include "Leaders/Admiral.h"
 #include "Leaders/General.h"
+#include "Military/Airplane.h"
+#include "Military/HoI4Army.h"
 #include "Navies/Navies.h"
 #include "Navies/NavyNames.h"
 #include "ShipTypes/ShipVariants.h"
 #include "Technologies.h"
-#include "../Color.h"
-#include "Date.h"
-#include "../V2World/Party.h"
 #include <functional>
 #include <map>
 #include <memory>
@@ -37,18 +37,16 @@ class World;
 }
 
 
-class HoI4Ideology;
-
-
 namespace HoI4
 {
+class Ideologies;
 class CoastalProvinces;
 class MtgUnitMappings;
 class namesMapper;
 class ShipVariant;
 class State;
 class UnitMappings;
-}
+} // namespace HoI4
 
 
 namespace mappers
@@ -94,15 +92,13 @@ class Country
 			const std::map<int, int>& provinceToStateIDMap,
 			const std::map<int, State>& allStates
 		);
-		void setGovernmentToExistingIdeology(
-			const std::set<std::string>& majorIdeologies,
-			const std::map<std::string, HoI4Ideology*>& ideologies,
-			const governmentMapper& governmentMap
-		);
+		void setGovernmentToExistingIdeology(const std::set<std::string>& majorIdeologies,
+			 const Ideologies& ideologies,
+			 const governmentMapper& governmentMap);
 		void convertGovernment(const Vic2::World& sourceWorld, const governmentMapper& governmentMap);
 		void convertParties(const std::set<std::string>& majorIdeologies, const governmentMapper& governmentMap);
 		void convertIdeologySupport(const std::set<std::string>& majorIdeologies, const governmentMapper& governmentMap);
-		void determineShipVariants(const std::vector<shipVariant>& possibleVariants);
+		void determineShipVariants(const PossibleShipVariants& possibleVariants);
 		void convertNavies(
 			const UnitMappings& unitMap,
 			const MtgUnitMappings& mtgUnitMap,
@@ -183,11 +179,11 @@ class Country
 		[[nodiscard]] double getDockyards() const { return dockyards; }
 
 		[[nodiscard]] const Army& getArmy() const { return theArmy; }
-		[[nodiscard]] const shipVariants& getTheShipVariants() const { return *theShipVariants; }
+		[[nodiscard]] const ShipVariants& getTheShipVariants() const { return *theShipVariants; }
 		[[nodiscard]] const Navies& getNavies() const { return *theNavies; }
 		[[nodiscard]] const auto& getNavyNames() const { return navyNames; }
 		[[nodiscard]] int getConvoys() const { return convoys; }
-		[[nodiscard]] const std::vector<HoI4Airplane>& getPlanes() const { return planes; }
+		[[nodiscard]] const std::vector<Airplane>& getPlanes() const { return planes; }
 		[[nodiscard]] const std::map<std::string, unsigned int>& getEquipmentStockpile() const
 		{
 			return equipmentStockpile;
@@ -232,28 +228,28 @@ class Country
 
 		bool attemptToPutCapitalInPreferredNonWastelandOwned(
 			const provinceMapper& theProvinceMapper,
-			const map<int, int>& provinceToStateIDMap,
-			const map<int, State>& allStates
+			const std::map<int, int>& provinceToStateIDMap,
+			const std::map<int, State>& allStates
 		);
-		bool attemptToPutCapitalInNonWastelandOwned(const map<int, State>& allStates);
+		bool attemptToPutCapitalInNonWastelandOwned(const std::map<int, State>& allStates);
 		bool attemptToPutCapitalInPreferredWastelandOwned(
 			const provinceMapper& theProvinceMapper,
 			const std::map<int, int>& provinceToStateIDMap,
-			const map<int, State>& allStates
+			const std::map<int, State>& allStates
 		);
-		bool attemptToPutCapitalInAnyOwned(const map<int, State>& allStates);
+		bool attemptToPutCapitalInAnyOwned(const std::map<int, State>& allStates);
 		bool attemptToPutCapitalInPreferredNonWastelandCored(
 			const provinceMapper& theProvinceMapper,
 			const std::map<int, int>& provinceToStateIDMap,
-			const map<int, State>& allStates
+			const std::map<int, State>& allStates
 		);
-		bool attemptToPutCapitalInAnyNonWastelandCored(const map<int, State>& allStates);
+		bool attemptToPutCapitalInAnyNonWastelandCored(const std::map<int, State>& allStates);
 		bool attemptToPutCapitalInPreferredWastelandCored(
 			const provinceMapper& theProvinceMapper,
 			const std::map<int, int>& provinceToStateIDMap,
-			const map<int, State>& allStates
+			const std::map<int, State>& allStates
 		);
-		bool attemptToPutCapitalInAnyCored(const map<int, State>& allStates);
+		bool attemptToPutCapitalInAnyCored(const std::map<int, State>& allStates);
 
 		std::string tag;
 		const Vic2::Country& sourceCountry;
@@ -292,11 +288,11 @@ class Country
 		double dockyards = 0.0;
 
 		Army theArmy;
-		std::unique_ptr<shipVariants> theShipVariants;
+		std::unique_ptr<ShipVariants> theShipVariants;
 		std::unique_ptr<Navies> theNavies;
 		NavyNames navyNames;
 		int convoys = 0;
-		std::vector<HoI4Airplane> planes;
+		std::vector<Airplane> planes;
 		std::map<std::string, unsigned int> equipmentStockpile;
 		std::vector<General> generals;
 		std::vector<Admiral> admirals;

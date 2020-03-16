@@ -5,22 +5,21 @@
 
 
 
-HoI4::Navies::Navies(
-	const std::vector<const Vic2::Army*>& srcArmies,
-	int backupNavalLocation,
-	const UnitMappings& unitMap,
-	const MtgUnitMappings& mtgUnitMap,
-	const shipVariants& theShipVariants,
-	const std::map<int, int>& provinceToStateIDMap,
-	std::map<int, State> states,
-	const std::string& tag)
+HoI4::Navies::Navies(const std::vector<Vic2::Army>& srcArmies,
+	 int backupNavalLocation,
+	 const UnitMappings& unitMap,
+	 const MtgUnitMappings& mtgUnitMap,
+	 const ShipVariants& theShipVariants,
+	 const std::map<int, int>& provinceToStateIDMap,
+	 std::map<int, State> states,
+	 const std::string& tag)
 {
 	for (auto army: srcArmies)
 	{
 		auto navalLocation = backupNavalLocation;
 		auto base = backupNavalLocation;
 
-		if (auto mapping = theProvinceMapper.getVic2ToHoI4ProvinceMapping(army->getLocation()); mapping)
+		if (auto mapping = theProvinceMapper.getVic2ToHoI4ProvinceMapping(army.getLocation()); mapping)
 		{
 			for (auto possibleProvince: *mapping)
 			{
@@ -44,18 +43,21 @@ HoI4::Navies::Navies(
 			}
 		}
 
-		LegacyNavy newLegacyNavy(army->getName(), navalLocation, base);
-		MtgNavy newMtgNavy(army->getName(), navalLocation, base);
+		LegacyNavy newLegacyNavy(army.getName(), navalLocation, base);
+		MtgNavy newMtgNavy(army.getName(), navalLocation, base);
 
-		for (auto regiment: army->getRegiments())
+		for (const auto& regiment: army.getRegiments())
 		{
 			auto type = regiment->getType();
 			if (unitMap.hasMatchingType(type))
 			{
-				if (auto unitInfo = unitMap.getMatchingUnitInfo(type); unitInfo && unitInfo->getCategory() == "naval")
+				for (const auto& unitInfo: unitMap.getMatchingUnitInfo(type))
 				{
-					LegacyShip newLegacyShip(regiment->getName(), unitInfo->getType(), unitInfo->getEquipment(), tag);
-					newLegacyNavy.addShip(newLegacyShip);
+					if (unitInfo.getCategory() == "naval" && theShipVariants.hasLegacyVariant(unitInfo.getVersion()))
+					{
+						LegacyShip newLegacyShip(regiment->getName(), unitInfo.getType(), unitInfo.getEquipment(), tag);
+						newLegacyNavy.addShip(newLegacyShip);
+					}
 				}
 			}
 			else
@@ -64,20 +66,17 @@ HoI4::Navies::Navies(
 			}
 			if (mtgUnitMap.hasMatchingType(type))
 			{
-				auto unitInfos = mtgUnitMap.getMatchingUnitInfo(type);
-				for (const auto& unitInfo: unitInfos)
+				for (const auto& unitInfo: mtgUnitMap.getMatchingUnitInfo(type))
 				{
-					if ((unitInfo.getCategory() == "naval") && theShipVariants.hasVariant(unitInfo.getVersion()))
+					if ((unitInfo.getCategory() == "naval") && theShipVariants.hasMtgVariant(unitInfo.getVersion()))
 					{
 						auto experience = static_cast<float>(regiment->getExperience() / 100);
-						MtgShip newMtgShip(
-							regiment->getName(),
-							unitInfo.getType(),
-							unitInfo.getEquipment(),
-							tag,
-							unitInfo.getVersion(),
-							experience
-						);
+						MtgShip newMtgShip(regiment->getName(),
+							 unitInfo.getType(),
+							 unitInfo.getEquipment(),
+							 tag,
+							 unitInfo.getVersion(),
+							 experience);
 						newMtgNavy.addShip(newMtgShip);
 					}
 				}
