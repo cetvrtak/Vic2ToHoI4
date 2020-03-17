@@ -469,7 +469,6 @@ optional<double> HoI4WarCreator::getDistanceBetweenCountries(shared_ptr<HoI4::Co
 {
 	auto distanceBetweenCountries = getDistanceBetweenCapitals(country1, country2);
 
-	pair<int, int> capital1Position = getCapitalPosition(country1);
 	pair<int, int> capital2Position = getCapitalPosition(country2);
 
 	for (auto province1: country1->getProvinces())

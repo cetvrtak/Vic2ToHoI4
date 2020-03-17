@@ -110,7 +110,7 @@ class Country
 		void convertArmies(const militaryMappings& theMilitaryMappings, const HoI4::States& theStates);
 		void convertTechnology(const mappers::techMapper& theTechMapper);
 		void addState(const State& state);
-		void addCoreState(const State& state) { coreStates.insert(make_pair(state.getID(), state)); }
+		void addCoreState(const State& state) { coreStates.insert(std::make_pair(state.getID(), state)); }
 		void calculateIndustry(const std::map<int, State>& allStates);
 		void addGenericFocusTree(const std::set<std::string>& majorIdeologies);
 		void adjustResearchFocuses() const;

@@ -1594,9 +1594,9 @@ void HoI4::World::buildConquerStrategies()
 
 void HoI4::World::updateDynamicModifiers()
 {
-	auto& revanchismModifier = (dynamicModifiers.find("revanchism"))->second;
-	if (majorIdeologies.count("fascism"))
+	if (ideologies->getMajorIdeologies().count("fascism"))
 	{
+		auto& revanchismModifier = (dynamicModifiers.find("revanchism"))->second;
 		std::string newString;
 
 		newString = "= {\n";
@@ -1606,7 +1606,7 @@ void HoI4::World::updateDynamicModifiers()
 
 		revanchismModifier.addEffect("fascism_drift","var:revanchism");
 	}
-	if (!majorIdeologies.count("fascism"))
+	if (!ideologies->getMajorIdeologies().count("fascism"))
 	{
 		dynamicModifiers.erase("revanchism_fasc");
 	}
