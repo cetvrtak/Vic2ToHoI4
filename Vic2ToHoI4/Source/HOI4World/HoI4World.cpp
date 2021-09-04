@@ -1,4 +1,5 @@
 #include "HoI4World.h"
+#include "CivilWars/CivilWar.h"
 #include "CommonRegexes.h"
 #include "Configuration.h"
 #include "Decisions/Decisions.h"
@@ -146,6 +147,12 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 		 sourceWorld.getProvinces(),
 		 theConfiguration.getDebug());
 	determineCoresAndClaims();
+	convertRebellions(sourceWorld,
+		 *onActions,
+		 *countryMap,
+		 provinceMapper,
+		 states->getProvinceToStateIDMap(),
+		 countryMapperFactory);
 	states->convertResources();
 	supplyZones->convertSupplyZones(*states);
 	strategicRegions->convert(*states);
@@ -557,6 +564,7 @@ void HoI4::World::addDominions(Mappers::CountryMapper::Factory& countryMapperFac
 				state->second.addCores({dominionTag});
 				state->second.setOwner(dominionTag);
 				dominion->addState(state->second);
+				overlord->removeState(stateId);
 			}
 		}
 
@@ -1391,7 +1399,7 @@ std::set<std::string> HoI4::World::getSouthAsianCountries() const
 
 void HoI4::World::addProvincesToHomeAreas()
 {
-	Log(LogLevel::Info) << "Adding provinces to home areas";
+	Log(LogLevel::Info) << "\tAdding provinces to home areas";
 	for (const auto& country: landedCountries | std::views::values)
 	{
 		const auto& capital = country->getCapitalProvince();
@@ -1400,5 +1408,116 @@ void HoI4::World::addProvincesToHomeAreas()
 			continue;
 		}
 		country->addProvincesToHomeArea(*capital, theMapData, states->getStates(), states->getProvinceToStateIDMap());
+	}
+}
+
+
+void HoI4::World::convertRebellions(const Vic2::World& sourceWorld,
+	 OnActions& onActions,
+	 const Mappers::CountryMapper& countryMapper,
+	 const Mappers::ProvinceMapper& provinceMapper,
+	 const std::map<int, int>& provinceToStateIDMap,
+	 Mappers::CountryMapper::Factory& countryMapperFactory)
+{
+	Log(LogLevel::Info) << "\tConverting rebellions to civil wars";
+	for (const auto& rebellion: sourceWorld.getRebellions())
+	{
+		if (rebellion.getProvinces().empty())
+		{
+			continue;
+		}
+
+		const auto& hoi4Tag = countryMap->getHoI4Tag(rebellion.getCountry());
+		if (!hoi4Tag)
+		{
+			continue;
+		}
+		const auto& countryItr = countries.find(*hoi4Tag);
+		if (countryItr == countries.end())
+		{
+			continue;
+		}
+
+		const auto& theCivilWar = new CivilWar(rebellion,
+			 countryItr->second,
+			 sourceWorld.getStateDefinitions(),
+			 sourceWorld.getProvinces(),
+			 provinceMapper,
+			 provinceToStateIDMap,
+			 states->getStates());
+
+		if (!theCivilWar->getOccupiedStates().empty() && getMajorIdeologies().contains(theCivilWar->getIdeology()))
+		{
+			generateCivilWar(*theCivilWar, countryMapperFactory);
+		}
+	}
+}
+
+
+void HoI4::World::generateCivilWar(const CivilWar& civilWar, Mappers::CountryMapper::Factory& countryMapperFactory)
+{
+	const auto& originalCountryItr = countries.find(civilWar.getOriginalTag());
+	if (originalCountryItr == countries.end())
+	{
+		return;
+	}
+	const auto& originalCountry = originalCountryItr->second;
+	const auto& rebelTag = countryMapperFactory.generateNewHoI4Tag();
+	auto rebelCountry = createRebelCountry(rebelTag, originalCountry, civilWar);
+
+	setRebelOccupation(rebelCountry, originalCountry, civilWar);
+
+	rebelCountry->determineBestCapital(states->getStates());
+	if (rebelCountry->getCapitalState())
+	{
+		rebelCountry->createCivilWar(rebelTag, originalCountry->getTag());
+		countries.insert(std::make_pair(rebelTag, rebelCountry));
+	}
+}
+
+
+std::shared_ptr<HoI4::Country> HoI4::World::createRebelCountry(const std::string& rebelTag,
+	 const std::shared_ptr<Country>& originalCountry,
+	 const CivilWar& civilWar)
+{
+	auto rebelCountry =
+		 std::make_shared<Country>(rebelTag, originalCountry, civilWar, *graphicsMapper, *names, *hoi4Localisations);
+
+	return rebelCountry;
+}
+
+
+void HoI4::World::setRebelOccupation(std::shared_ptr<Country>& rebelCountry,
+	 const std::shared_ptr<Country>& originalCountry,
+	 const CivilWar& civilWar)
+{
+	const auto& rebelTag = rebelCountry->getTag();
+	auto& modifiableStates = states->getModifiableStates();
+	for (const auto& stateId: originalCountry->getStates())
+	{
+		if (auto state = modifiableStates.find(stateId); state != modifiableStates.end())
+		{
+			if (originalCountry->getCoreStates().contains(stateId))
+			{
+				state->second.addCores({rebelTag});
+				rebelCountry->addCoreState(stateId);
+			}
+			if (civilWar.getOccupiedStates().contains(std::to_string(stateId)))
+			{
+				state->second.setOwner(rebelTag);
+				rebelCountry->addState(state->second);
+			}
+			for (const auto& province: state->second.getProvinces())
+			{
+				if (civilWar.getOccupiedProvinces().contains(province))
+				{
+					state->second.setControlledProvince(province, rebelTag);
+				}
+				else
+				{
+					state->second.setControlledProvince(province, originalCountry->getTag());
+				}
+			}
+		}
 	}
 }

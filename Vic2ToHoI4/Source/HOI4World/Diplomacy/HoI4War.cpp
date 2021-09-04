@@ -76,3 +76,9 @@ HoI4::War::War(const Vic2::War& sourceWar,
 		}
 	}
 }
+
+
+HoI4::War::War(const std::string& attacker, const std::string& defender, const std::string& cb):
+	 originalAttacker(attacker), originalDefender(defender), CB(cb)
+{
+}

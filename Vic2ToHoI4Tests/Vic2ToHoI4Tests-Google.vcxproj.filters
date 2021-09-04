@@ -1559,6 +1559,9 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Rebellions\RebellionFactory.cpp">
       <Filter>Vic2ToHoI4 files\Vic2\Rebellions</Filter>
     </ClCompile>
+    <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\CivilWars\CivilWar.cpp">
+      <Filter>Vic2ToHoI4 files\HoI4\CivilWars</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Vic2ToHoI4 files">
@@ -2091,6 +2094,9 @@
     </Filter>
     <Filter Include="Vic2ToHoI4 files\Vic2\Rebellions">
       <UniqueIdentifier>{34942160-01c6-407a-b7e4-d17f11942dea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vic2ToHoI4 files\HoI4\CivilWars">
+      <UniqueIdentifier>{f0a5ba6e-3885-4228-ace0-89a168878d8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -3083,6 +3089,9 @@
     </ClInclude>
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Rebellions\RebellionFactory.h">
       <Filter>Vic2ToHoI4 files\Vic2\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vic2ToHoI4\Source\HOI4World\CivilWars\CivilWar.h">
+      <Filter>Vic2ToHoI4 files\HoI4\CivilWars</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

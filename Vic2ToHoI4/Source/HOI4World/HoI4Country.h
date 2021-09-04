@@ -3,6 +3,7 @@
 
 
 
+#include "CivilWars/CivilWar.h"
 #include "Color.h"
 #include "Date.h"
 #include "Diplomacy/Faction.h"
@@ -69,6 +70,12 @@ class Country
 		 const Regions& regions,
 		 Mappers::GraphicsMapper& graphicsMapper,
 		 Names& names);
+	explicit Country(const std::string& tag_,
+		 const std::shared_ptr<Country> originalCountry,
+		 const CivilWar& civilWar,
+		 Mappers::GraphicsMapper& graphicsMapper,
+		 Names& names,
+		 Localisation& hoi4Localisations);
 
 	void addTag(const Country& owner, const std::string& tag_, Names& names, Localisation& hoi4Localisations);
 	void determineCapitalFromVic2(const Mappers::ProvinceMapper& theProvinceMapper,
@@ -109,6 +116,7 @@ class Country
 		 const Configuration& theConfiguration);
 	void convertTechnology(const Mappers::TechMapper& techMapper, const Mappers::ResearchBonusMapper& theTechMapper);
 	void addState(const State& state);
+	void removeState(const int stateId) { states.erase(stateId); }
 	void addCoreState(const int stateId) { coreStates.insert(stateId); }
 	void addClaimedState(const int stateId) { claimedStates.insert(stateId); }
 	void calculateIndustry(const std::map<int, State>& allStates);
@@ -276,6 +284,7 @@ class Country
 	void convertStrategies(const Mappers::CountryMapper& countryMap,
 		 const Vic2::Country& sourceCountry,
 		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries);
+	void createCivilWar(const std::string& rebelTag, const std::string& originalTag);
 
   private:
 	void determineFilename();

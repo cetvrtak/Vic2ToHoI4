@@ -202,6 +202,19 @@ class World: commonItems::parser
 
 	bool dominionIsReleasable(const Country& dominion);
 	void addProvincesToHomeAreas();
+	void convertRebellions(const Vic2::World& sourceWorld,
+		 OnActions& onActions,
+		 const Mappers::CountryMapper& countryMapper,
+		 const Mappers::ProvinceMapper& provinceMapper,
+		 const std::map<int, int>& provinceToStateIDMap,
+		 Mappers::CountryMapper::Factory& countryMapperFactory);
+	void generateCivilWar(const CivilWar& civilWar, Mappers::CountryMapper::Factory& countryMapperFactory);
+	std::shared_ptr<Country> createRebelCountry(const std::string& rebelTag,
+		 const std::shared_ptr<Country>& originalCountry,
+		 const CivilWar& civilWar);
+	void setRebelOccupation(std::shared_ptr<Country>& rebelCountry,
+		 const std::shared_ptr<Country>& originalCountry,
+		 const CivilWar& civilWar);
 
 	// vector<int> getPortLocationCandidates(const vector<int>& locationCandidates, const HoI4AdjacencyMapping&
 	// HoI4AdjacencyMap);

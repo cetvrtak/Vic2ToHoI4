@@ -24,6 +24,7 @@ class War
 		 const Mappers::CasusBellis& casusBellis,
 		 const Mappers::ProvinceMapper& provinceMapper,
 		 const std::map<int, int>& provinceToStateIDMap);
+	explicit War(const std::string& attacker, const std::string& defender, const std::string& cb);
 
 	friend std::ostream& operator<<(std::ostream& out, const War& theWar);
 

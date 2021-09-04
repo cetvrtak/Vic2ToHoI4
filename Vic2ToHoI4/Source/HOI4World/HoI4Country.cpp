@@ -201,6 +201,76 @@ HoI4::Country::Country(const std::shared_ptr<Country> owner,
 }
 
 
+HoI4::Country::Country(const std::string& tag_,
+	 const std::shared_ptr<Country> originalCountry,
+	 const CivilWar& civilWar,
+	 Mappers::GraphicsMapper& graphicsMapper,
+	 Names& names,
+	 Localisation& hoi4Localisations):
+	 tag(tag_),
+	 oldTag(originalCountry->getOldTag()),
+	 primaryCulture(originalCountry->primaryCulture), primaryCultureGroup(originalCountry->primaryCultureGroup),
+	 civilized(originalCountry->civilized), rulingParty(originalCountry->rulingParty), parties(originalCountry->parties),
+	 lastElection(originalCountry->lastElection), color(originalCountry->color),
+	 graphicalCulture(originalCountry->graphicalCulture), graphicalCulture2d(originalCountry->graphicalCulture2d),
+	 warSupport(originalCountry->warSupport),
+	 oldTechnologiesAndInventions(originalCountry->oldTechnologiesAndInventions), shipNames(originalCountry->shipNames),
+	 governmentIdeology(civilWar.getIdeology()), leaderIdeology(originalCountry->getLeaderIdeology()), oldCapital(-1)
+{
+	std::map<std::string, std::string> ideologyLocalisations = {{"absolutist", "Absolutist"},
+		{"communism", "Communist"}, {"democratic", "Democratic"}, {"fascist", "Fascist"},
+		{"radical", "Radical"}};
+	name = ideologyLocalisations.at(governmentIdeology) + " " + *originalCountry->getName();
+	adjective = ideologyLocalisations.at(governmentIdeology) + " " + *originalCountry->getAdjective();
+	determineFilename();
+
+	auto hsv = color.getHsvComponents();
+	if (hsv[2] > 0.2F)
+	{
+		hsv[2] -= 0.2F;
+	}
+	else
+	{
+		hsv[2] += 0.2F;
+	}
+	color = commonItems::Color(hsv);
+
+	armyPortraits = graphicsMapper.getArmyPortraits(primaryCulture, primaryCultureGroup);
+	navyPortraits = graphicsMapper.getNavyPortraits(primaryCulture, primaryCultureGroup);
+	femaleMilitaryPortraits = graphicsMapper.getFemalePortraits(primaryCulture, primaryCultureGroup, "military");
+	femaleMonarchPortraits = graphicsMapper.getFemalePortraits(primaryCulture, primaryCultureGroup, "monarch");
+	femaleIdeologicalPortraits =
+		 graphicsMapper.getFemalePortraits(primaryCulture, primaryCultureGroup, "ideological_leader");
+	maleCommunistPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "communism");
+	maleDemocraticPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "democratic");
+	maleFascistPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "fascism");
+	maleAbsolutistPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "absolutist");
+	maleNeutralPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "neutrality");
+	maleRadicalPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "radical");
+	communistAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "communism");
+	democraticAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "democratic");
+	fascistAdvisorPortrait = graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "fascism");
+	absolutistAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "absolutist");
+	neutralityAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "neutrality");
+	radicalAdvisorPortrait = graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "radical");
+
+
+	initIdeas(names, hoi4Localisations);
+	if (originalCountry->hasMonarchIdea() && governmentIdeology != "communism")
+	{
+		ideas.insert(originalCountry->tag + "_monarch");
+	}
+
+	createOperatives(graphicsMapper, names);
+
+	convertLaws();
+}
+
+
 void HoI4::Country::determineFilename()
 {
 	if (name)
@@ -1568,4 +1638,11 @@ void HoI4::Country::addProvincesToHomeArea(int provinceId,
 	{
 		addProvincesToHomeArea(neighbor, theMapData, states, provinceToStateIdMap);
 	}
+}
+
+
+void HoI4::Country::createCivilWar(const std::string& rebelTag, const std::string& originalTag)
+{
+	wars.push_back(HoI4::War(rebelTag, originalTag, "civil_war"));
+	atWar = true;
 }
