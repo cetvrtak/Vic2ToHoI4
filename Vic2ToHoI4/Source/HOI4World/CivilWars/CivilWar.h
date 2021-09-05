@@ -47,6 +47,7 @@ class CivilWar
 		 const std::map<int, std::shared_ptr<Vic2::Province>>& vic2Provinces);
 
 	[[nodiscard]] const auto& getOriginalTag() const { return originalTag; }
+	[[nodiscard]] const auto& getVic2Ideology() const { return vic2Ideology; }
 	[[nodiscard]] const auto& getIdeology() const { return ideology; }
 	[[nodiscard]] const auto& getOccupiedStates() const { return occupiedStates; }
 	[[nodiscard]] const auto& getOccupiedProvinces() const { return occupiedProvinces; }
@@ -54,6 +55,7 @@ class CivilWar
 
   private:
 	std::string originalTag;
+	std::string vic2Ideology;
 	std::string ideology;
 	std::set<std::string> occupiedStates;
 	std::set<int> occupiedProvinces;

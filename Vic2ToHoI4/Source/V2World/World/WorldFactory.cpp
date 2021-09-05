@@ -10,6 +10,7 @@
 #include "V2World/Localisations/LocalisationsFactory.h"
 #include "V2World/Pops/PopFactory.h"
 #include "V2World/Rebellions/RebellionFactory.h"
+#include "V2World/Rebellions/RebelTypesFactory.h"
 #include "V2World/States/StateDefinitionsFactory.h"
 #include "V2World/States/StateLanguageCategoriesFactory.h"
 
@@ -87,6 +88,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 	world = std::make_unique<World>();
 	world->theStateDefinitions = StateDefinitions::Factory().getStateDefinitions(theConfiguration);
 	world->theLocalisations = Localisations::Factory().importLocalisations(theConfiguration);
+	world->rebelTypes = RebelTypes::Factory().importRebelTypes(theConfiguration);
 	parseFile(theConfiguration.getInputFile());
 	if (!world->diplomacy)
 	{
@@ -112,6 +114,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 	consolidateConquerStrategies();
 	moveArmiesHome();
 	removeBattles();
+	determineRebelTypesForRebellions();
 
 	return std::move(world);
 }
@@ -502,4 +505,13 @@ bool Vic2::World::Factory::armiesHaveDifferentOwners(const std::vector<Army*>& a
 	}
 
 	return armiesFromDifferentOwners;
+}
+
+
+void Vic2::World::Factory::determineRebelTypesForRebellions()
+{
+	for (auto& rebellion: world->rebellions)
+	{
+		rebellion.assignRebelType(world->rebelTypes->getRebelType(rebellion.getType()));
+	}
 }

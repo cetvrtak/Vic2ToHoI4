@@ -9,6 +9,7 @@
 #include "V2World/Localisations/Vic2Localisations.h"
 #include "V2World/Provinces/Province.h"
 #include "V2World/Rebellions/Rebellion.h"
+#include "V2World/Rebellions/RebelTypes.h"
 #include "V2World/States/StateDefinitions.h"
 #include <map>
 #include <memory>
@@ -49,6 +50,7 @@ class World
 	std::unique_ptr<Localisations> theLocalisations;
 	std::unique_ptr<date> theDate;
 	std::vector<Rebellion> rebellions;
+	std::unique_ptr<RebelTypes> rebelTypes;
 };
 
 

@@ -456,7 +456,10 @@
     <ClCompile Include="Source\V2World\Pops\PopFactory.cpp" />
     <ClCompile Include="Source\V2World\Provinces\Province.cpp" />
     <ClCompile Include="Source\V2World\Provinces\ProvinceFactory.cpp" />
+    <ClCompile Include="Source\V2World\Rebellions\Rebellion.cpp" />
     <ClCompile Include="Source\V2World\Rebellions\RebellionFactory.cpp" />
+    <ClCompile Include="Source\V2World\Rebellions\RebelTypeFactory.cpp" />
+    <ClCompile Include="Source\V2World\Rebellions\RebelTypesFactory.cpp" />
     <ClCompile Include="Source\V2World\States\BuildingReader.cpp" />
     <ClCompile Include="Source\V2World\States\State.cpp" />
     <ClCompile Include="Source\V2World\States\StateDefinitions.cpp" />
@@ -883,6 +886,10 @@
     <ClInclude Include="Source\V2World\Provinces\ProvinceFactory.h" />
     <ClInclude Include="Source\V2World\Rebellions\Rebellion.h" />
     <ClInclude Include="Source\V2World\Rebellions\RebellionFactory.h" />
+    <ClInclude Include="Source\V2World\Rebellions\RebelType.h" />
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypeFactory.h" />
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypes.h" />
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypesFactory.h" />
     <ClInclude Include="Source\V2World\States\BuildingReader.h" />
     <ClInclude Include="Source\V2World\States\State.h" />
     <ClInclude Include="Source\V2World\States\StateBuilder.h" />

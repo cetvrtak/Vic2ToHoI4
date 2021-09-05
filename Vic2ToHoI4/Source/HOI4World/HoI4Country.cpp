@@ -210,7 +210,7 @@ HoI4::Country::Country(const std::string& tag_,
 	 tag(tag_),
 	 oldTag(originalCountry->getOldTag()),
 	 primaryCulture(originalCountry->primaryCulture), primaryCultureGroup(originalCountry->primaryCultureGroup),
-	 civilized(originalCountry->civilized), rulingParty(originalCountry->rulingParty), parties(originalCountry->parties),
+	 civilized(originalCountry->civilized), parties(originalCountry->parties),
 	 lastElection(originalCountry->lastElection), color(originalCountry->color),
 	 graphicalCulture(originalCountry->graphicalCulture), graphicalCulture2d(originalCountry->graphicalCulture2d),
 	 warSupport(originalCountry->warSupport),
@@ -223,6 +223,15 @@ HoI4::Country::Country(const std::string& tag_,
 	name = ideologyLocalisations.at(governmentIdeology) + " " + *originalCountry->getName();
 	adjective = ideologyLocalisations.at(governmentIdeology) + " " + *originalCountry->getAdjective();
 	determineFilename();
+
+	for (const auto& party: parties)
+	{
+		if (party.getIdeology() == civilWar.getVic2Ideology())
+		{
+			rulingParty = party;
+			break;
+		}
+	}
 
 	auto hsv = color.getHsvComponents();
 	if (hsv[2] > 0.2F)

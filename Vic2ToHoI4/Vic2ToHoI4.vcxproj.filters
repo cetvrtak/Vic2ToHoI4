@@ -1330,6 +1330,15 @@
     <ClCompile Include="Source\HOI4World\CivilWars\CivilWar.cpp">
       <Filter>HoI4World\CivilWars</Filter>
     </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\RebelTypeFactory.cpp">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\RebelTypesFactory.cpp">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\Rebellion.cpp">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_items\Date.h">
@@ -2606,6 +2615,18 @@
     </ClInclude>
     <ClInclude Include="Source\HOI4World\CivilWars\CivilWar.h">
       <Filter>HoI4World\CivilWars</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelType.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypeFactory.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypes.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypesFactory.h">
+      <Filter>Vic2World\Rebellions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
