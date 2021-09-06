@@ -206,7 +206,8 @@ HoI4::Country::Country(const std::string& tag_,
 	 const Vic2::Rebellion& rebellion,
 	 Mappers::GraphicsMapper& graphicsMapper,
 	 Names& names,
-	 Localisation& hoi4Localisations):
+	 Localisation& hoi4Localisations,
+	 const Vic2::Localisations& vic2Localisations):
 	 tag(tag_),
 	 oldTag(originalCountry->oldTag), primaryCulture(originalCountry->primaryCulture),
 	 primaryCultureGroup(originalCountry->primaryCultureGroup), civilized(originalCountry->civilized),
@@ -226,11 +227,22 @@ HoI4::Country::Country(const std::string& tag_,
 		}
 	}
 
-	std::map<std::string, std::string> ideologyLocalisations = {{"reactionary", "Reactionary"},
-		{"conservative", "Conservative"}, {"socialist", "Socialist"}, {"liberal", "Libaral"},
-		{"anarcho_liberal", "Anarcho-Libaral"}, {"communist", "Communist"}, {"fascist", "Fascist"}};
-	name = ideologyLocalisations.at(rulingParty->getIdeology()) + " " + *originalCountry->getName();
-	adjective = ideologyLocalisations.at(rulingParty->getIdeology()) + " " + *originalCountry->getAdjective();
+	if (auto loc = vic2Localisations.getTextInLanguage(rebellion.getType() + "_name", "english"); loc)
+	{
+		if (const auto& start = loc->find_first_of("\\$"); start != std::string::npos)
+		{
+			const auto& end = loc->find_last_of("\\$") + 1;
+			name = loc->replace(start, end - start, *originalCountry->getAdjective());
+		}
+		else
+		{
+			name = *originalCountry->getAdjective() + " " + *loc;
+		}
+	}
+	if (auto loc = vic2Localisations.getTextInLanguage(rebellion.getRebelType().getIdeology(), "english"); loc)
+	{
+		adjective = *originalCountry->getAdjective() + " " + *loc;
+	}
 	determineFilename();
 
 	auto hsv = color.getHsvComponents();

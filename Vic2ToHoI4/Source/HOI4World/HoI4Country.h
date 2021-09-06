@@ -75,7 +75,8 @@ class Country
 		 const Vic2::Rebellion& rebellion,
 		 Mappers::GraphicsMapper& graphicsMapper,
 		 Names& names,
-		 Localisation& hoi4Localisations);
+		 Localisation& hoi4Localisations,
+		 const Vic2::Localisations& vic2Localisations);
 
 	void addTag(const Country& owner, const std::string& tag_, Names& names, Localisation& hoi4Localisations);
 	void determineCapitalFromVic2(const Mappers::ProvinceMapper& theProvinceMapper,
