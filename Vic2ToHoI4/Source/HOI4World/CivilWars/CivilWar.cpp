@@ -4,17 +4,17 @@
 
 
 HoI4::CivilWar::CivilWar(const Vic2::Rebellion& rebellion,
-	 const std::shared_ptr<HoI4::Country>& country,
+	 const std::string& originalCountryTag,
 	 const Vic2::StateDefinitions& stateDefinitions,
 	 const std::map<int, std::shared_ptr<Vic2::Province>>& vic2Provinces,
 	 const Mappers::ProvinceMapper& provinceMapper,
 	 const std::map<int, int>& provinceToStateIDMap,
 	 const std::map<int, HoI4::State>& states):
-	 originalTag(country->getTag()),
+	 originalTag(originalCountryTag),
 	 vic2Ideology(rebellion.getRebelType().getIdeology()), vic2Government(rebellion.getGovernment())
 {
 	setIdeology(rebellion.getType());
-	setOccupations(rebellion, country, stateDefinitions, vic2Provinces, provinceMapper, provinceToStateIDMap, states);
+	setOccupations(rebellion, originalTag, stateDefinitions, vic2Provinces, provinceMapper, provinceToStateIDMap, states);
 }
 
 
@@ -44,7 +44,7 @@ void HoI4::CivilWar::setIdeology(const std::string& rebelType)
 constexpr float requiredOccupationPercentage = 1;
 
 void HoI4::CivilWar::setOccupations(const Vic2::Rebellion& rebellion,
-	 const std::shared_ptr<HoI4::Country>& country,
+	 const std::string& originalTag,
 	 const Vic2::StateDefinitions& stateDefinitions,
 	 const std::map<int, std::shared_ptr<Vic2::Province>>& vic2Provinces,
 	 const Mappers::ProvinceMapper& provinceMapper,
@@ -78,7 +78,7 @@ void HoI4::CivilWar::setOccupations(const Vic2::Rebellion& rebellion,
 			continue;
 		}
 		const auto& hoi4State = hoi4StateItr->second;
-		if (const auto& owner = hoi4State.getOwner(); owner != country->getTag())
+		if (const auto& owner = hoi4State.getOwner(); owner != originalTag)
 		{
 			continue;
 		}
@@ -91,15 +91,12 @@ void HoI4::CivilWar::setOccupations(const Vic2::Rebellion& rebellion,
 		}
 	}
 
-	if (const auto& capitalState = country->getCapitalState(); occupiedStates.empty() && capitalState)
+	if (occupiedStates.empty())
 	{
 		for (const auto& hoi4StateId: partiallyOccupiedStates)
 		{
-			if (*capitalState != hoi4StateId)
-			{
-				occupiedStates.insert(std::to_string(hoi4StateId));
-				break;
-			}
+			occupiedStates.insert(std::to_string(hoi4StateId));
+			break;
 		}
 	}
 }

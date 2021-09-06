@@ -27,7 +27,7 @@ class CivilWar
 {
   public:
 	CivilWar(const Vic2::Rebellion& rebellion,
-		 const std::shared_ptr<HoI4::Country>& country,
+		 const std::string& originalCountryTag,
 		 const Vic2::StateDefinitions& stateDefinitions,
 		 const std::map<int, std::shared_ptr<Vic2::Province>>& vic2Provinces,
 		 const Mappers::ProvinceMapper& provinceMapper,
@@ -36,7 +36,7 @@ class CivilWar
 
 	void setIdeology(const std::string& rebelType);
 	void setOccupations(const Vic2::Rebellion& rebellion,
-		 const std::shared_ptr<HoI4::Country>& country,
+		 const std::string& originalCountryTag,
 		 const Vic2::StateDefinitions& stateDefinitions,
 		 const std::map<int, std::shared_ptr<Vic2::Province>>& vic2Provinces,
 		 const Mappers::ProvinceMapper& provinceMapper,

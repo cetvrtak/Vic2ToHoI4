@@ -120,7 +120,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	countryNameMapper = Mappers::CountryNameMapper::Factory().importCountryNameMapper();
 	casusBellis = Mappers::CasusBellisFactory{}.importCasusBellis();
 	convertCountries(sourceWorld, provinceMapper);
-	const auto& tagToRebellionMap = createRebelCountries(sourceWorld, countryMapperFactory);
+	const auto& civilWars = createRebelCountries(sourceWorld, countryMapperFactory, provinceMapper, states->getProvinceToStateIDMap());
 	determineGreatPowers(sourceWorld);
 	governmentMapper = Mappers::GovernmentMapper::Factory().importGovernmentMapper();
 	ideologyMapper = Mappers::IdeologyMapper::Factory().importIdeologyMapper();
@@ -148,10 +148,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 		 sourceWorld.getProvinces(),
 		 theConfiguration.getDebug());
 	determineCoresAndClaims();
-	convertRebellions(tagToRebellionMap,
-		 sourceWorld,
-		 provinceMapper,
-		 states->getProvinceToStateIDMap());
+	createCivilWars(civilWars);
 	states->convertResources();
 	supplyZones->convertSupplyZones(*states);
 	strategicRegions->convert(*states);
@@ -1411,11 +1408,13 @@ void HoI4::World::addProvincesToHomeAreas()
 }
 
 
-std::map<std::string, Vic2::Rebellion> HoI4::World::createRebelCountries(const Vic2::World& sourceWorld,
-	 Mappers::CountryMapper::Factory& countryMapperFactory)
+std::map<std::string, HoI4::CivilWar> HoI4::World::createRebelCountries(const Vic2::World& sourceWorld,
+	 Mappers::CountryMapper::Factory& countryMapperFactory,
+	 const Mappers::ProvinceMapper& provinceMapper,
+	 const std::map<int, int>& provinceToStateIDMap)
 {
 	Log(LogLevel::Info) << "\tCreating rebel countries";
-	std::map<std::string, Vic2::Rebellion> tagToRebellionMap;
+	std::map<std::string, CivilWar> civilWars;
 	for (const auto& rebellion: sourceWorld.getRebellions())
 	{
 		if (rebellion.getProvinces().empty())
@@ -1435,52 +1434,34 @@ std::map<std::string, Vic2::Rebellion> HoI4::World::createRebelCountries(const V
 		}
 		const auto& originalCountry = originalCountryItr->second;
 		const auto& rebelTag = countryMapperFactory.generateNewHoI4Tag();
-		
+
 		const auto& rebelCountry =
 			 std::make_shared<Country>(rebelTag, originalCountry, rebellion, *graphicsMapper, *names, *hoi4Localisations);
-		countries.insert(std::make_pair(rebelTag, rebelCountry));
-		tagToRebellionMap.insert(std::make_pair(rebelTag, rebellion));
-	}
-	return tagToRebellionMap;
-}
-
-
-void HoI4::World::convertRebellions(const std::map<std::string, Vic2::Rebellion> tagToRebellionMap,
-	 const Vic2::World& sourceWorld,
-	 const Mappers::ProvinceMapper& provinceMapper,
-	 const std::map<int, int>& provinceToStateIDMap)
-{
-	Log(LogLevel::Info) << "\tConverting rebellions to civil wars";
-	for (const auto& [rebelTag, rebellion]: tagToRebellionMap)
-	{
-		if (rebellion.getProvinces().empty())
-		{
-			continue;
-		}
-
-		const auto& hoi4Tag = countryMap->getHoI4Tag(rebellion.getCountry());
-		if (!hoi4Tag)
-		{
-			continue;
-		}
-		const auto& countryItr = countries.find(*hoi4Tag);
-		if (countryItr == countries.end())
-		{
-			continue;
-		}
 
 		const auto& theCivilWar = new CivilWar(rebellion,
-			 countryItr->second,
+			 *hoi4Tag,
 			 sourceWorld.getStateDefinitions(),
 			 sourceWorld.getProvinces(),
 			 provinceMapper,
 			 provinceToStateIDMap,
 			 states->getStates());
 
-		if (!theCivilWar->getOccupiedStates().empty() && getMajorIdeologies().contains(theCivilWar->getIdeology()))
+		if (!theCivilWar->getOccupiedStates().empty())
 		{
-			generateCivilWar(rebelTag, *theCivilWar);
+			countries.insert(std::make_pair(rebelTag, rebelCountry));
+			civilWars.insert(std::make_pair(rebelTag, *theCivilWar));
 		}
+	}
+	return civilWars;
+}
+
+
+void HoI4::World::createCivilWars(const std::map<std::string, CivilWar> civilWars)
+{
+	Log(LogLevel::Info) << "\tCreating civil wars";
+	for (const auto& [rebelTag, civilWar]: civilWars)
+	{
+		generateCivilWar(rebelTag, civilWar);
 	}
 }
 
