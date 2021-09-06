@@ -19,8 +19,6 @@ namespace HoI4
 {
 
 class Army;
-class Country;
-
 class State;
 
 class CivilWar
@@ -34,7 +32,6 @@ class CivilWar
 		 const std::map<int, int>& provinceToStateIDMap,
 		 const std::map<int, HoI4::State>& states);
 
-	void setIdeology(const std::string& rebelType);
 	void setOccupations(const Vic2::Rebellion& rebellion,
 		 const std::string& originalCountryTag,
 		 const Vic2::StateDefinitions& stateDefinitions,
@@ -49,7 +46,6 @@ class CivilWar
 	[[nodiscard]] const auto& getOriginalTag() const { return originalTag; }
 	[[nodiscard]] const auto& getVic2Government() const { return vic2Government; }
 	[[nodiscard]] const auto& getVic2Ideology() const { return vic2Ideology; }
-	[[nodiscard]] const auto& getIdeology() const { return ideology; }
 	[[nodiscard]] const auto& getOccupiedStates() const { return occupiedStates; }
 	[[nodiscard]] const auto& getOccupiedProvinces() const { return occupiedProvinces; }
 	[[nodiscard]] const auto& getRebelArmies() const { return rebelArmies; }
@@ -58,7 +54,6 @@ class CivilWar
 	std::string originalTag;
 	std::string vic2Government;
 	std::string vic2Ideology;
-	std::string ideology;
 	std::set<std::string> occupiedStates;
 	std::set<int> occupiedProvinces;
 	std::set<Army> rebelArmies;

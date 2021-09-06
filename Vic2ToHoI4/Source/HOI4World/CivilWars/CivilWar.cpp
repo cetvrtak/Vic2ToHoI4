@@ -1,5 +1,6 @@
 #include "CivilWar.h"
-#include "HOI4World/HoI4Country.h"
+#include "HOI4World/Military/HoI4Army.h"
+#include "HOI4World/States/HoI4State.h"
 
 
 
@@ -13,31 +14,13 @@ HoI4::CivilWar::CivilWar(const Vic2::Rebellion& rebellion,
 	 originalTag(originalCountryTag),
 	 vic2Ideology(rebellion.getRebelType().getIdeology()), vic2Government(rebellion.getGovernment())
 {
-	setIdeology(rebellion.getType());
-	setOccupations(rebellion, originalTag, stateDefinitions, vic2Provinces, provinceMapper, provinceToStateIDMap, states);
-}
-
-
-void HoI4::CivilWar::setIdeology(const std::string& rebelType)
-{
-	const std::map<std::string, std::string>& theMap = {{"reactionary_rebels", "absolutist"},
-		 {"fascist_rebels", "fascism"},
-		 {"communist_rebels", "communism"},
-		 {"anarcho_liberal_rebels", "radical"},
-		 {"carlist_rebels", "absolutist"},
-		 {"boxer_rebels", "absolutist"},
-		 {"liberal_rebels", "democratic"},
-		 {"unciv_reactionary_rebels", "absolutist"},
-		 // HPM
-		 {"christino_rebels", "democratic"},
-		 {"socialist_rebels", "communism"},
-		 {"turkish_nationalist_rebels", "democratic"},
-		 {"native_rebels", "democratic"}};
-
-	if (theMap.contains(rebelType))
-	{
-		ideology = theMap.at(rebelType);
-	}
+	setOccupations(rebellion,
+		 originalTag,
+		 stateDefinitions,
+		 vic2Provinces,
+		 provinceMapper,
+		 provinceToStateIDMap,
+		 states);
 }
 
 
@@ -65,7 +48,7 @@ void HoI4::CivilWar::setOccupations(const Vic2::Rebellion& rebellion,
 		{
 			occupiedProvinces.insert(hoi4Province);
 		}
-		
+
 		const auto& hoi4StateIdItr = provinceToStateIDMap.find(*hoi4Provinces.begin());
 		if (hoi4StateIdItr == provinceToStateIDMap.end())
 		{
@@ -130,9 +113,12 @@ std::vector<std::pair<int, float>> HoI4::CivilWar::getOccupationRatios(const Vic
 		const auto& ratio = static_cast<float>(numOccupied) / ownedProvinces.size();
 		ratios.push_back(std::make_pair(province, ratio));
 	}
-	std::sort(ratios.begin(), ratios.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b) {
-		return a.second > b.second;
-	});
+	std::sort(ratios.begin(),
+		 ratios.end(),
+		 [](const std::pair<int, float>& a, const std::pair<int, float>& b)
+		 {
+			 return a.second > b.second;
+		 });
 
 	return ratios;
 }
