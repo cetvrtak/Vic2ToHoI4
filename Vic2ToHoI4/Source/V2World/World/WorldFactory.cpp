@@ -513,5 +513,6 @@ void Vic2::World::Factory::determineRebelTypesForRebellions()
 	for (auto& rebellion: world->rebellions)
 	{
 		rebellion.assignRebelType(world->rebelTypes->getRebelType(rebellion.getType()));
+		rebellion.setGovernment(world->countries);
 	}
 }

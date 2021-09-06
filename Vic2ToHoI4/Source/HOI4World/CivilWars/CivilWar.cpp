@@ -11,7 +11,7 @@ HoI4::CivilWar::CivilWar(const Vic2::Rebellion& rebellion,
 	 const std::map<int, int>& provinceToStateIDMap,
 	 const std::map<int, HoI4::State>& states):
 	 originalTag(country->getTag()),
-	 vic2Ideology(rebellion.getRebelType().getIdeology())
+	 vic2Ideology(rebellion.getRebelType().getIdeology()), vic2Government(rebellion.getGovernment())
 {
 	setIdeology(rebellion.getType());
 	setOccupations(rebellion, country, stateDefinitions, vic2Provinces, provinceMapper, provinceToStateIDMap, states);

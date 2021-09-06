@@ -203,35 +203,35 @@ HoI4::Country::Country(const std::shared_ptr<Country> owner,
 
 HoI4::Country::Country(const std::string& tag_,
 	 const std::shared_ptr<Country> originalCountry,
-	 const CivilWar& civilWar,
+	 const Vic2::Rebellion& rebellion,
 	 Mappers::GraphicsMapper& graphicsMapper,
 	 Names& names,
 	 Localisation& hoi4Localisations):
 	 tag(tag_),
-	 oldTag(originalCountry->getOldTag()),
-	 primaryCulture(originalCountry->primaryCulture), primaryCultureGroup(originalCountry->primaryCultureGroup),
-	 civilized(originalCountry->civilized), parties(originalCountry->parties),
-	 lastElection(originalCountry->lastElection), color(originalCountry->color),
-	 graphicalCulture(originalCountry->graphicalCulture), graphicalCulture2d(originalCountry->graphicalCulture2d),
-	 warSupport(originalCountry->warSupport),
+	 oldTag(originalCountry->oldTag), primaryCulture(originalCountry->primaryCulture),
+	 primaryCultureGroup(originalCountry->primaryCultureGroup), civilized(originalCountry->civilized),
+	 color(originalCountry->color), graphicalCulture(originalCountry->graphicalCulture),
+	 graphicalCulture2d(originalCountry->graphicalCulture2d), warSupport(originalCountry->warSupport),
 	 oldTechnologiesAndInventions(originalCountry->oldTechnologiesAndInventions), shipNames(originalCountry->shipNames),
-	 governmentIdeology(civilWar.getIdeology()), leaderIdeology(originalCountry->getLeaderIdeology()), oldCapital(-1)
+	 parties(originalCountry->parties), lastElection(originalCountry->lastElection),
+	 oldCapital(rebellion.getProvinces().front()), oldGovernment(rebellion.getGovernment())
 {
-	std::map<std::string, std::string> ideologyLocalisations = {{"absolutist", "Absolutist"},
-		{"communism", "Communist"}, {"democratic", "Democratic"}, {"fascist", "Fascist"},
-		{"radical", "Radical"}};
-	name = ideologyLocalisations.at(governmentIdeology) + " " + *originalCountry->getName();
-	adjective = ideologyLocalisations.at(governmentIdeology) + " " + *originalCountry->getAdjective();
-	determineFilename();
-
-	for (const auto& party: parties)
+	upperHouseComposition[rebellion.getRebelType().getIdeology()] = 1;
+	for (const auto& vic2Party: parties)
 	{
-		if (party.getIdeology() == civilWar.getVic2Ideology())
+		if (vic2Party.getIdeology() == rebellion.getRebelType().getIdeology())
 		{
-			rulingParty = party;
+			rulingParty = vic2Party;
 			break;
 		}
 	}
+
+	std::map<std::string, std::string> ideologyLocalisations = {{"reactionary", "Reactionary"},
+		{"conservative", "Conservative"}, {"socialist", "Socialist"}, {"liberal", "Libaral"},
+		{"anarcho_liberal", "Anarcho-Libaral"}, {"communist", "Communist"}, {"fascist", "Fascist"}};
+	name = ideologyLocalisations.at(rulingParty->getIdeology()) + " " + *originalCountry->getName();
+	adjective = ideologyLocalisations.at(rulingParty->getIdeology()) + " " + *originalCountry->getAdjective();
+	determineFilename();
 
 	auto hsv = color.getHsvComponents();
 	if (hsv[2] > 0.2F)
