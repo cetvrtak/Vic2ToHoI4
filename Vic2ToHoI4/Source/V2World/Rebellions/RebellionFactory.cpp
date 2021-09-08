@@ -8,12 +8,13 @@
 Vic2::Rebellion::Factory::Factory()
 {
 	registerKeyword("country", [this](std::istream& theStream) {
-		const auto& countryStr = commonItems::singleString{theStream}.getString();
-		rebellion->country = commonItems::remQuotes(countryStr);
+		rebellion->country = commonItems::singleString{theStream}.getString();
 	});
 	registerKeyword("type", [this](std::istream& theStream) {
-		const auto& typeStr = commonItems::singleString{theStream}.getString();
-		rebellion->type = commonItems::remQuotes(typeStr);
+		rebellion->type = commonItems::singleString{theStream}.getString();
+	});
+	registerKeyword("government", [this](std::istream& theStream) {
+		rebellion->government = commonItems::singleString{theStream}.getString();
 	});
 	registerKeyword("provinces", [this](std::istream& theStream) {
 		rebellion->provinces = commonItems::intList(theStream).getInts();

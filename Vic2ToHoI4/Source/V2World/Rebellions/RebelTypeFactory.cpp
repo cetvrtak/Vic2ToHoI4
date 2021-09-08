@@ -6,9 +6,6 @@
 
 Vic2::RebelType::Factory::Factory()
 {
-	registerKeyword("government", [this](std::istream& theStream) {
-		rebelType->governmentMap = commonItems::assignments(theStream).getAssignments();
-	});
 	registerKeyword("ideology", [this](std::istream& theStream) {
 		rebelType->ideology = commonItems::singleString(theStream).getString();
 	});

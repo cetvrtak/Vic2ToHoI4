@@ -1439,7 +1439,6 @@ std::map<std::string, HoI4::CivilWar> HoI4::World::createRebelCountries(const Vi
 		}
 		const auto& originalCountry = originalCountryItr->second;
 		const auto& rebelTag = countryMapperFactory.generateNewHoI4Tag();
-
 		const auto& rebelCountry = std::make_shared<Country>(rebelTag,
 			 originalCountry,
 			 rebellion,
@@ -1484,6 +1483,12 @@ void HoI4::World::generateCivilWar(const std::string& rebelTag, const CivilWar& 
 		return;
 	}
 	const auto& originalCountry = originalCountryItr->second;
+	// Skip one-state countries for now
+	// TODO split-off rebel state
+	if (originalCountry->getStates().size() == 1)
+	{
+		return;
+	}
 	auto rebelCountry = countries.find(rebelTag)->second;
 
 	setRebelOccupation(rebelCountry, originalCountry, civilWar);

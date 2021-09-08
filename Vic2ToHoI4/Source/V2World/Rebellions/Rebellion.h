@@ -19,7 +19,6 @@ class Rebellion
 	class Factory;
 
 	void assignRebelType(const RebelType& rebelType_) { rebelType = rebelType_; }
-	void setGovernment(const std::map<std::string, Country>& countries);
 
 	[[nodiscard]] const auto& getCountry() const { return country; }
 	[[nodiscard]] const auto& getType() const { return type; }

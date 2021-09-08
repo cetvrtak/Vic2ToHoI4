@@ -16,12 +16,9 @@ class RebelType: commonItems::parser
   public:
 	class Factory;
 
-	[[nodiscard]] const auto& getGovernmentMap() const { return governmentMap; }
 	[[nodiscard]] const auto& getIdeology() const { return ideology; }
-	[[nodiscard]] const auto& getGovernment(const std::string& govt) const { return governmentMap.at(govt); }
 
   private:
-	std::map<std::string, std::string> governmentMap;
 	std::string ideology;
 };
 
