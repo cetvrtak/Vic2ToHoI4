@@ -114,7 +114,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 	consolidateConquerStrategies();
 	moveArmiesHome();
 	removeBattles();
-	determineRebelTypesForRebellions();
+	setRebellionsData();
 
 	return std::move(world);
 }
@@ -260,7 +260,7 @@ void Vic2::World::Factory::removeEmptyNations()
 	Log(LogLevel::Info) << "\tRemoving empty nations";
 	for (auto country = world->countries.begin(); country != world->countries.end();)
 	{
-		if (country->second.isEmpty())
+		if (country->second.isEmpty() && country->second.getTag() != "REB")
 		{
 			country = world->countries.erase(country);
 		}
@@ -508,10 +508,19 @@ bool Vic2::World::Factory::armiesHaveDifferentOwners(const std::vector<Army*>& a
 }
 
 
-void Vic2::World::Factory::determineRebelTypesForRebellions()
+void Vic2::World::Factory::setRebellionsData()
 {
+	const auto& rebelCountry = world->countries.find("REB")->second;
 	for (auto& rebellion: world->rebellions)
 	{
 		rebellion.assignRebelType(world->rebelTypes->getRebelType(rebellion.getType()));
+
+		for (const auto& army: rebelCountry.getArmies())
+		{
+			if (rebellion.getArmyIds().contains(army.getId()))
+			{
+				rebellion.assignRebelArmy(army);
+			}
+		}
 	}
 }

@@ -46,7 +46,7 @@ class World::Factory: commonItems::parser
 	void removeBattles();
 	[[nodiscard]] std::map<int, std::vector<Army*>> determineArmyLocations() const;
 	[[nodiscard]] static bool armiesHaveDifferentOwners(const std::vector<Army*>& armies);
-	void determineRebelTypesForRebellions();
+	void setRebellionsData();
 
 	std::unique_ptr<World> world;
 

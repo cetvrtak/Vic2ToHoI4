@@ -78,3 +78,31 @@ TEST(Vic2World_Rebellion_Tests, GovernmentCanBeSet)
 
 	ASSERT_EQ("presidential_dictatorship", newRebellion->getGovernment());
 }
+
+
+TEST(Vic2World_Rebellion_Tests, ArmyIdsDefaultToEmpty)
+{
+	std::stringstream input;
+	const auto newRebellion = Vic2::Rebellion::Factory().importRebellion(input);
+
+	ASSERT_TRUE(newRebellion->getArmyIds().empty());
+}
+
+
+TEST(Vic2World_Rebellion_Tests, ArmyIdsCanBeSet)
+{
+	std::stringstream input;
+	input << "\tarmy=\n";
+	input << "\t{\n";
+	input << "\t\tid=17066\n";
+	input << "\t\ttype=38\n";
+	input << "\t}\n";
+	input << "\tarmy=\n";
+	input << "\t{\n";
+	input << "\t\tid=17082\n";
+	input << "\t\ttype=38\n";
+	input << "\t}\n";
+	const auto newRebellion = Vic2::Rebellion::Factory().importRebellion(input);
+
+	ASSERT_EQ(std::set<std::string>({"17066", "17082"}), newRebellion->getArmyIds());
+}

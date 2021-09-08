@@ -3,6 +3,7 @@
 
 
 
+#include "V2World/Military/Army.h"
 #include "V2World/Countries/Country.h"
 #include "V2World/Rebellions/RebelType.h"
 #include <string>
@@ -19,12 +20,15 @@ class Rebellion
 	class Factory;
 
 	void assignRebelType(const RebelType& rebelType_) { rebelType = rebelType_; }
+	void assignRebelArmy(const Army& army) { armies.push_back(army); }
 
 	[[nodiscard]] const auto& getCountry() const { return country; }
 	[[nodiscard]] const auto& getType() const { return type; }
 	[[nodiscard]] const auto& getProvinces() const { return provinces; }
 	[[nodiscard]] const auto& getRebelType() const { return rebelType; }
 	[[nodiscard]] const auto& getGovernment() const { return government; }
+	[[nodiscard]] const auto& getArmyIds() const { return armyIds; }
+	[[nodiscard]] const auto& getArmies() const { return armies; }
 
   private:
 	std::string country;
@@ -32,6 +36,8 @@ class Rebellion
 	std::vector<int> provinces;
 	RebelType rebelType;
 	std::string government;
+	std::set<std::string> armyIds;
+	std::vector<Army> armies;
 };
 
 } // namespace Vic2

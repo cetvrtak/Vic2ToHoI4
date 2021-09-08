@@ -286,6 +286,7 @@ class Country
 		 const Vic2::Country& sourceCountry,
 		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries);
 	void createCivilWar(const std::string& rebelTag, const std::string& originalTag);
+	void giveSourceArmies(const std::vector<Vic2::Army>& vic2Armies) { theArmy.addSourceArmies(vic2Armies); }
 
   private:
 	void determineFilename();

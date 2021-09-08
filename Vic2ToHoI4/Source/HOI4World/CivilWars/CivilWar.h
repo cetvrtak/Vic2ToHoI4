@@ -48,7 +48,7 @@ class CivilWar
 	[[nodiscard]] const auto& getVic2Ideology() const { return vic2Ideology; }
 	[[nodiscard]] const auto& getOccupiedStates() const { return occupiedStates; }
 	[[nodiscard]] const auto& getOccupiedProvinces() const { return occupiedProvinces; }
-	[[nodiscard]] const auto& getRebelArmies() const { return rebelArmies; }
+	[[nodiscard]] const auto& getVic2Armies() const { return vic2Armies; }
 
   private:
 	std::string originalTag;
@@ -56,7 +56,7 @@ class CivilWar
 	std::string vic2Ideology;
 	std::set<std::string> occupiedStates;
 	std::set<int> occupiedProvinces;
-	std::set<Army> rebelArmies;
+	std::vector<Vic2::Army> vic2Armies;
 };
 
 } // namespace HoI4

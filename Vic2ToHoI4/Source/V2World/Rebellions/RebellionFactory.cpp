@@ -19,6 +19,12 @@ Vic2::Rebellion::Factory::Factory()
 	registerKeyword("provinces", [this](std::istream& theStream) {
 		rebellion->provinces = commonItems::intList(theStream).getInts();
 	});
+	registerKeyword("army", [this](std::istream& theStream) {
+		const auto& armyStr = commonItems::stringOfItem{theStream}.getString();
+		std::smatch sm;
+		std::regex_search(armyStr, sm, std::regex("id=([0-9]+)"));
+		rebellion->armyIds.insert(sm[1]);
+	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
