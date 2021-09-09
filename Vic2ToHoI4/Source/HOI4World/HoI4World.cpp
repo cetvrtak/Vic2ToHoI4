@@ -1509,15 +1509,18 @@ void HoI4::World::setRebelOccupation(std::shared_ptr<Country>& rebelCountry,
 {
 	const auto& rebelTag = rebelCountry->getTag();
 	auto& modifiableStates = states->getModifiableStates();
+	for (const auto& stateId: originalCountry->getCoreStates())
+	{
+		if (auto state = modifiableStates.find(stateId); state != modifiableStates.end())
+		{
+			state->second.addCores({rebelTag});
+			rebelCountry->addCoreState(stateId);
+		}
+	}
 	for (const auto& stateId: originalCountry->getStates())
 	{
 		if (auto state = modifiableStates.find(stateId); state != modifiableStates.end())
 		{
-			if (originalCountry->getCoreStates().contains(stateId))
-			{
-				state->second.addCores({rebelTag});
-				rebelCountry->addCoreState(stateId);
-			}
 			if (civilWar.getOccupiedStates().contains(std::to_string(stateId)))
 			{
 				state->second.setOwner(rebelTag);
