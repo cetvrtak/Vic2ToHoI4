@@ -22,7 +22,7 @@
 
 
 
-HoI4::Country::Country(std::string tag,
+HoI4::Country::Country(std::string tag_,
 	 const Vic2::Country& sourceCountry,
 	 Names& names,
 	 Mappers::GraphicsMapper& graphicsMapper,
@@ -32,8 +32,8 @@ HoI4::Country::Country(std::string tag,
 	 const date& startDate,
 	 const Mappers::ProvinceMapper& theProvinceMapper,
 	 const States& worldStates):
-	 tag(std::move(tag)),
-	 name(sourceCountry.getName("english")), adjective(sourceCountry.getAdjective("english")),
+	 tag(tag_),
+	 originalTag(tag_), name(sourceCountry.getName("english")), adjective(sourceCountry.getAdjective("english")),
 	 oldTag(sourceCountry.getTag()), human(human = sourceCountry.isHuman()), threat(sourceCountry.getBadBoy() / 10.0),
 	 oldCapital(sourceCountry.getCapital()), primaryCulture(sourceCountry.getPrimaryCulture()),
 	 civilized(sourceCountry.isCivilized()), primaryCultureGroup(sourceCountry.getPrimaryCultureGroup()),
@@ -215,7 +215,8 @@ HoI4::Country::Country(const std::string& tag_,
 	 graphicalCulture2d(originalCountry->graphicalCulture2d), warSupport(originalCountry->warSupport),
 	 oldTechnologiesAndInventions(originalCountry->oldTechnologiesAndInventions), shipNames(originalCountry->shipNames),
 	 parties(originalCountry->parties), lastElection(originalCountry->lastElection),
-	 oldCapital(rebellion.getProvinces().front()), oldGovernment(rebellion.getGovernment())
+	 oldCapital(rebellion.getProvinces().front()), oldGovernment(rebellion.getGovernment()),
+	 originalTag(originalCountry->originalTag)
 {
 	upperHouseComposition[rebellion.getRebelType().getIdeology()] = 1;
 	for (const auto& vic2Party: parties)
@@ -1662,8 +1663,8 @@ void HoI4::Country::addProvincesToHomeArea(int provinceId,
 }
 
 
-void HoI4::Country::createCivilWar(const std::string& rebelTag, const std::string& originalTag)
+void HoI4::Country::createCivilWar()
 {
-	wars.push_back(HoI4::War(rebelTag, originalTag, "civil_war"));
+	wars.push_back(HoI4::War(tag, originalTag, "civil_war"));
 	atWar = true;
 }

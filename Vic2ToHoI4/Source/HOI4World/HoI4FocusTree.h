@@ -84,11 +84,13 @@ class HoI4FocusTree: commonItems::parser
 	int getMaxConquerValue(const std::vector<HoI4::AIStrategy>& conquerStrategies);
 	std::map<std::string, std::set<int>> addReconquestBranch(std::shared_ptr<HoI4::Country> theCountry,
 		 int& numWarsWithNeighbors,
+		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries,
 		 const std::set<std::string>& majorIdeologies,
 		 const std::map<int, HoI4::State>& states,
 		 HoI4::Localisation& hoi4Localisations);
 	std::set<std::string> addConquerBranch(std::shared_ptr<HoI4::Country> theCountry,
 		 int& numWarsWithNeighbors,
+		 const std::map<std::string, std::shared_ptr<HoI4::Country>> countries,
 		 const std::set<std::string>& majorIdeologies,
 		 const std::map<std::string, std::set<int>>& coreHolders,
 		 const std::map<int, HoI4::State>& states,
@@ -99,7 +101,8 @@ class HoI4FocusTree: commonItems::parser
 		 HoI4::Localisation& hoi4Localisations);
 	std::map<std::string, std::set<int>> determineWarTargets(std::shared_ptr<HoI4::Country> theCountry,
 		 const std::set<int>& stateIds,
-		 const std::map<int, HoI4::State>& states);
+		 const std::map<int, HoI4::State>& states,
+		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries);
 	int calculateNumEnemyOwnedCores(const std::set<int>& coreStates, const std::map<int, HoI4::State>& states);
 	void removeFocus(const std::string& id);
 

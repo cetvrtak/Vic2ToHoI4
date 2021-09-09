@@ -156,6 +156,7 @@ class Country
 
 	[[nodiscard]] const std::string& getTag() const { return tag; }
 	[[nodiscard]] const auto& getOldTag() const { return oldTag; }
+	[[nodiscard]] const auto& getOriginalTag() const { return originalTag; }
 	[[nodiscard]] const auto& getName() const { return name; }
 	[[nodiscard]] const auto& getAdjective() const { return adjective; }
 	[[nodiscard]] const std::string& getFilename() const { return filename; }
@@ -285,7 +286,7 @@ class Country
 	void convertStrategies(const Mappers::CountryMapper& countryMap,
 		 const Vic2::Country& sourceCountry,
 		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries);
-	void createCivilWar(const std::string& rebelTag, const std::string& originalTag);
+	void createCivilWar();
 	void giveSourceArmies(const std::vector<Vic2::Army>& vic2Armies) { theArmy.addSourceArmies(vic2Armies); }
 
   private:
@@ -324,6 +325,7 @@ class Country
 
 	std::string tag;
 	std::string oldTag;
+	std::string originalTag;
 	std::optional<std::string> name;
 	std::optional<std::string> adjective;
 	std::string filename;

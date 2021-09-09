@@ -979,6 +979,11 @@ void HoI4WarCreator::generateReconquestWars(std::ofstream& AILog,
 
 	for (const auto& [tag, country]: theWorld->getCountries())
 	{
+		// Civil war country inherits original country's tree
+		if (tag != country->getOriginalTag())
+		{
+			continue;
+		}
 		if (tag == "UCV")
 		{
 			continue;
@@ -991,6 +996,7 @@ void HoI4WarCreator::generateReconquestWars(std::ofstream& AILog,
 		auto focusTree = genericFocusTree->makeCustomizedCopy(*country);
 		const auto& coreHolders = focusTree->addReconquestBranch(country,
 			 numWarsWithNeighbors,
+			 theWorld->getCountries(),
 			 theWorld->getMajorIdeologies(),
 			 theWorld->getStates(),
 			 hoi4Localisations);
@@ -1013,6 +1019,7 @@ void HoI4WarCreator::generateReconquestWars(std::ofstream& AILog,
 
 		const auto& conquerTags = focusTree->addConquerBranch(country,
 			 numWarsWithNeighbors,
+			 theWorld->getCountries(),
 			 theWorld->getMajorIdeologies(),
 			 coreHolders,
 			 theWorld->getStates(),

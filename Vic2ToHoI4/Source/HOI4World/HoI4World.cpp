@@ -1496,7 +1496,7 @@ void HoI4::World::generateCivilWar(const std::string& rebelTag, const CivilWar& 
 	rebelCountry->determineBestCapital(states->getStates());
 	if (rebelCountry->getCapitalState())
 	{
-		rebelCountry->createCivilWar(rebelTag, originalCountry->getTag());
+		rebelCountry->createCivilWar();
 		rebelCountry->giveSourceArmies(civilWar.getVic2Armies());
 	}
 }
