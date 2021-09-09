@@ -288,6 +288,8 @@ class Country
 		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries);
 	void createCivilWar();
 	void giveSourceArmies(const std::vector<Vic2::Army>& vic2Armies) { theArmy.addSourceArmies(vic2Armies); }
+	void addRebelTag(const std::string& rebelTag) { rebelTags.insert(rebelTag); }
+	[[nodiscard]] const auto& getRebelTags() const { return rebelTags; }
 
   private:
 	void determineFilename();
@@ -435,6 +437,7 @@ class Country
 	std::map<std::string, float> sourceCountryGoods;
 	std::set<std::string> globalEventTargets;
 	std::set<int> homeAreaProvinces;
+	std::set<std::string> rebelTags;
 };
 
 } // namespace HoI4

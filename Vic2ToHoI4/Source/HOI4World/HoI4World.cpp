@@ -1498,6 +1498,7 @@ void HoI4::World::generateCivilWar(const std::string& rebelTag, const CivilWar& 
 	{
 		rebelCountry->createCivilWar();
 		rebelCountry->giveSourceArmies(civilWar.getVic2Armies());
+		originalCountry->addRebelTag(rebelTag);
 	}
 }
 

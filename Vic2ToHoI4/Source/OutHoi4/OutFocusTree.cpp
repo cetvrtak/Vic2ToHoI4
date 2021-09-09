@@ -26,6 +26,14 @@ void HoI4::outputFocusTree(const HoI4FocusTree& focusTree, const std::string& fi
 		out << "\t\t\tadd = 10\n";
 		out << "\t\t\ttag = " << focusTree.getDestinationCountryTag() << "\n";
 		out << "\t\t}\n";
+		for (const auto& tag: focusTree.getAdditionalTags())
+		{
+			out << "\t\t\n";
+			out << "\t\tmodifier = {\n";
+			out << "\t\t\tadd = 10\n";
+			out << "\t\t\ttag = " << tag << "\n";
+			out << "\t\t}\n";
+		}
 		out << "\t}\n";
 		out << "\t\n";
 		out << "\tdefault = no\n";

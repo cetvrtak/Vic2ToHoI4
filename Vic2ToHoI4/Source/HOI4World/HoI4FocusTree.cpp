@@ -656,6 +656,7 @@ std::unique_ptr<HoI4FocusTree> HoI4FocusTree::makeCustomizedCopy(const HoI4::Cou
 		auto newFocus = focus->makeCustomizedCopy(newFocusTree.dstCountryTag);
 		newFocusTree.addFocus(newFocus);
 	}
+	newFocusTree.setAdditionalTags(country.getRebelTags());
 	newFocusTree.setNextFreeColumn(nextFreeColumn);
 
 	return std::make_unique<HoI4FocusTree>(std::move(newFocusTree));
