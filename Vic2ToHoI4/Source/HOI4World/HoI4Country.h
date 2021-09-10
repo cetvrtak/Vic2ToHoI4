@@ -72,7 +72,7 @@ class Country
 		 Names& names);
 	explicit Country(const std::string& tag_,
 		 const std::shared_ptr<Country> originalCountry,
-		 const Vic2::Rebellion& rebellion,
+		 const CivilWar& civilWar,
 		 Mappers::GraphicsMapper& graphicsMapper,
 		 Names& names,
 		 Localisation& hoi4Localisations,

@@ -203,7 +203,7 @@ HoI4::Country::Country(const std::shared_ptr<Country> owner,
 
 HoI4::Country::Country(const std::string& tag_,
 	 const std::shared_ptr<Country> originalCountry,
-	 const Vic2::Rebellion& rebellion,
+	 const CivilWar& civilWar,
 	 Mappers::GraphicsMapper& graphicsMapper,
 	 Names& names,
 	 Localisation& hoi4Localisations,
@@ -215,20 +215,20 @@ HoI4::Country::Country(const std::string& tag_,
 	 graphicalCulture2d(originalCountry->graphicalCulture2d), warSupport(originalCountry->warSupport),
 	 oldTechnologiesAndInventions(originalCountry->oldTechnologiesAndInventions), shipNames(originalCountry->shipNames),
 	 parties(originalCountry->parties), lastElection(originalCountry->lastElection),
-	 oldCapital(rebellion.getProvinces().front()), oldGovernment(rebellion.getGovernment()),
+	 oldCapital(civilWar.getVic2Capital()), oldGovernment(civilWar.getVic2Government()),
 	 originalTag(originalCountry->originalTag)
 {
-	upperHouseComposition[rebellion.getRebelType().getIdeology()] = 1;
+	upperHouseComposition[civilWar.getVic2Ideology()] = 1;
 	for (const auto& vic2Party: parties)
 	{
-		if (vic2Party.getIdeology() == rebellion.getRebelType().getIdeology())
+		if (vic2Party.getIdeology() == civilWar.getVic2Ideology())
 		{
 			rulingParty = vic2Party;
 			break;
 		}
 	}
 
-	if (auto loc = vic2Localisations.getTextInLanguage(rebellion.getType() + "_name", "english"); loc)
+	if (auto loc = vic2Localisations.getTextInLanguage(civilWar.getVic2RebelType() + "_name", "english"); loc)
 	{
 		if (const auto& start = loc->find_first_of("\\$"); start != std::string::npos)
 		{
@@ -240,7 +240,7 @@ HoI4::Country::Country(const std::string& tag_,
 			name = *originalCountry->getAdjective() + " " + *loc;
 		}
 	}
-	if (auto loc = vic2Localisations.getTextInLanguage(rebellion.getRebelType().getIdeology(), "english"); loc)
+	if (auto loc = vic2Localisations.getTextInLanguage(civilWar.getVic2Ideology(), "english"); loc)
 	{
 		adjective = *originalCountry->getAdjective() + " " + *loc;
 	}

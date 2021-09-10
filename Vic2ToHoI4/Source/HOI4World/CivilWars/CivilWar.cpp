@@ -12,6 +12,7 @@ HoI4::CivilWar::CivilWar(const Vic2::Rebellion& rebellion,
 	 const std::map<int, int>& provinceToStateIDMap,
 	 const std::map<int, HoI4::State>& states):
 	 originalTag(originalCountryTag),
+	 vic2RebelType(rebellion.getType()), vic2Capital(*rebellion.getProvinces().begin()),
 	 vic2Ideology(rebellion.getRebelType().getIdeology()), vic2Government(rebellion.getGovernment()),
 	 vic2Armies(rebellion.getArmies())
 {
@@ -114,12 +115,9 @@ std::vector<std::pair<int, float>> HoI4::CivilWar::getOccupationRatios(const Vic
 		const auto& ratio = static_cast<float>(numOccupied) / ownedProvinces.size();
 		ratios.push_back(std::make_pair(province, ratio));
 	}
-	std::sort(ratios.begin(),
-		 ratios.end(),
-		 [](const std::pair<int, float>& a, const std::pair<int, float>& b)
-		 {
-			 return a.second > b.second;
-		 });
+	std::sort(ratios.begin(), ratios.end(), [](const std::pair<int, float>& a, const std::pair<int, float>& b) {
+		return a.second > b.second;
+	});
 
 	return ratios;
 }

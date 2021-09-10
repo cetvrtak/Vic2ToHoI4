@@ -1432,6 +1432,14 @@ std::map<std::string, HoI4::CivilWar> HoI4::World::createRebelCountries(const Vi
 		{
 			continue;
 		}
+		CivilWar theCivilWar(rebellion,
+			 *hoi4Tag,
+			 sourceWorld.getStateDefinitions(),
+			 sourceWorld.getProvinces(),
+			 provinceMapper,
+			 provinceToStateIDMap,
+			 states->getStates());
+
 		const auto& originalCountryItr = countries.find(*hoi4Tag);
 		if (originalCountryItr == countries.end())
 		{
@@ -1441,24 +1449,16 @@ std::map<std::string, HoI4::CivilWar> HoI4::World::createRebelCountries(const Vi
 		const auto& rebelTag = countryMapperFactory.generateNewHoI4Tag();
 		const auto& rebelCountry = std::make_shared<Country>(rebelTag,
 			 originalCountry,
-			 rebellion,
+			 theCivilWar,
 			 *graphicsMapper,
 			 *names,
 			 *hoi4Localisations,
 			 vic2Localisations);
 
-		const auto& theCivilWar = new CivilWar(rebellion,
-			 *hoi4Tag,
-			 sourceWorld.getStateDefinitions(),
-			 sourceWorld.getProvinces(),
-			 provinceMapper,
-			 provinceToStateIDMap,
-			 states->getStates());
-
-		if (!theCivilWar->getOccupiedStates().empty())
+		if (!theCivilWar.getOccupiedStates().empty())
 		{
 			countries.insert(std::make_pair(rebelTag, rebelCountry));
-			civilWars.insert(std::make_pair(rebelTag, *theCivilWar));
+			civilWars.insert(std::make_pair(rebelTag, theCivilWar));
 		}
 	}
 	return civilWars;
@@ -1528,7 +1528,8 @@ void HoI4::World::setRebelOccupation(std::shared_ptr<Country>& rebelCountry,
 			}
 			for (const auto& province: state->second.getProvinces())
 			{
-				if (civilWar.getOccupiedProvinces().contains(province))
+				if (const auto& provinces = civilWar.getOccupiedProvinces();
+					 std::find(provinces.begin(), provinces.end(), province) != provinces.end())
 				{
 					state->second.setControlledProvince(province, rebelTag);
 				}
