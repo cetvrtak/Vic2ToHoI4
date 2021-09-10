@@ -1668,3 +1668,12 @@ void HoI4::Country::createCivilWar()
 	wars.push_back(HoI4::War(tag, originalTag, "civil_war"));
 	atWar = true;
 }
+
+
+void HoI4::Country::adjustRebelCapital(const CivilWar& civilWar,
+	 const std::map<int, int>& provinceToStateIDMap,
+	 std::map<int, State>& states)
+{
+	capitalProvince = *civilWar.getOccupiedProvinces().begin();
+	capitalState = provinceToStateIDMap.at(*capitalProvince);
+}

@@ -48,7 +48,7 @@ void HoI4::CivilWar::setOccupations(const Vic2::Rebellion& rebellion,
 		}
 		for (const auto& hoi4Province: hoi4Provinces)
 		{
-			occupiedProvinces.insert(hoi4Province);
+			occupiedProvinces.push_back(hoi4Province);
 		}
 
 		const auto& hoi4StateIdItr = provinceToStateIDMap.find(*hoi4Provinces.begin());

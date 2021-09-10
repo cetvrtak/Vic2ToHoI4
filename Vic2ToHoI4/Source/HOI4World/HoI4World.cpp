@@ -152,7 +152,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 		 sourceWorld.getProvinces(),
 		 theConfiguration.getDebug());
 	determineCoresAndClaims();
-	createCivilWars(civilWars);
+	createCivilWars(civilWars, states->getProvinceToStateIDMap());
 	states->convertResources();
 	supplyZones->convertSupplyZones(*states);
 	strategicRegions->convert(*states);
@@ -1465,40 +1465,35 @@ std::map<std::string, HoI4::CivilWar> HoI4::World::createRebelCountries(const Vi
 }
 
 
-void HoI4::World::createCivilWars(const std::map<std::string, CivilWar> civilWars)
+void HoI4::World::createCivilWars(const std::map<std::string, CivilWar> civilWars,
+	 const std::map<int, int>& provinceToStateIDMap)
 {
 	Log(LogLevel::Info) << "\tCreating civil wars";
 	for (const auto& [rebelTag, civilWar]: civilWars)
 	{
-		generateCivilWar(rebelTag, civilWar);
-	}
-}
+		const auto& originalCountryItr = countries.find(civilWar.getOriginalTag());
+		if (originalCountryItr == countries.end())
+		{
+			return;
+		}
+		const auto& originalCountry = originalCountryItr->second;
+		// Skip one-state countries for now - TODO split-off rebel state
+		if (originalCountry->getStates().size() == 1)
+		{
+			return;
+		}
+		auto rebelCountry = countries.find(rebelTag)->second;
 
+		setRebelOccupation(rebelCountry, originalCountry, civilWar);
 
-void HoI4::World::generateCivilWar(const std::string& rebelTag, const CivilWar& civilWar)
-{
-	const auto& originalCountryItr = countries.find(civilWar.getOriginalTag());
-	if (originalCountryItr == countries.end())
-	{
-		return;
-	}
-	const auto& originalCountry = originalCountryItr->second;
-	// Skip one-state countries for now
-	// TODO split-off rebel state
-	if (originalCountry->getStates().size() == 1)
-	{
-		return;
-	}
-	auto rebelCountry = countries.find(rebelTag)->second;
-
-	setRebelOccupation(rebelCountry, originalCountry, civilWar);
-
-	rebelCountry->determineBestCapital(states->getStates());
-	if (rebelCountry->getCapitalState())
-	{
-		rebelCountry->createCivilWar();
-		rebelCountry->giveSourceArmies(civilWar.getVic2Armies());
-		originalCountry->addRebelTag(rebelTag);
+		rebelCountry->determineBestCapital(states->getStates());
+		if (rebelCountry->getCapitalState())
+		{
+			rebelCountry->adjustRebelCapital(civilWar, provinceToStateIDMap, states->getModifiableStates());
+			rebelCountry->createCivilWar();
+			rebelCountry->giveSourceArmies(civilWar.getVic2Armies());
+			originalCountry->addRebelTag(rebelTag);
+		}
 	}
 }
 

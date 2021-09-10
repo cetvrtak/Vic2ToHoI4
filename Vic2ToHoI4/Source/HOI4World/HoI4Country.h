@@ -289,6 +289,9 @@ class Country
 	void createCivilWar();
 	void giveSourceArmies(const std::vector<Vic2::Army>& vic2Armies) { theArmy.addSourceArmies(vic2Armies); }
 	void addRebelTag(const std::string& rebelTag) { rebelTags.insert(rebelTag); }
+	void adjustRebelCapital(const CivilWar& civilWar,
+		 const std::map<int, int>& provinceToStateIDMap,
+		 std::map<int, State>& states);
 	[[nodiscard]] const auto& getRebelTags() const { return rebelTags; }
 
   private:

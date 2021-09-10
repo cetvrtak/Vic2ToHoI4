@@ -59,7 +59,7 @@ class CivilWar
 	std::string vic2Government;
 	std::string vic2Ideology;
 	std::set<std::string> occupiedStates;
-	std::set<int> occupiedProvinces;
+	std::vector<int> occupiedProvinces;
 	std::vector<Vic2::Army> vic2Armies;
 };
 
