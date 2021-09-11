@@ -33,16 +33,19 @@ void HoI4::outputHoI4State(std::ostream& output, const State& theState, const bo
 	}
 	if (!theState.isImpassable())
 	{
-		if (theState.getVPLocation())
+		if (theState.getCapitalProvince())
 		{
 			if (debugEnabled)
 			{
-				output << "\t\tvictory_points = {\n";
-				output << "\t\t\t" << *theState.getVPLocation() << " 10\n";
-				output << "\t\t}\n";
+				for (const auto& victoryPoint: theState.getVictoryPoints())
+				{
+					output << "\t\tvictory_points = {\n";
+					output << "\t\t\t" << victoryPoint.first << " 10\n";
+					output << "\t\t}\n";
+				}
 				for (auto VP: theState.getDebugVPs())
 				{
-					if (VP == theState.getVPLocation())
+					if (theState.getVictoryPoints().contains(VP))
 					{
 						continue;
 					}
@@ -51,7 +54,7 @@ void HoI4::outputHoI4State(std::ostream& output, const State& theState, const bo
 				}
 				for (auto VP: theState.getSecondaryDebugVPs())
 				{
-					if (VP == theState.getVPLocation())
+					if (theState.getVictoryPoints().contains(VP))
 					{
 						continue;
 					}
@@ -60,9 +63,12 @@ void HoI4::outputHoI4State(std::ostream& output, const State& theState, const bo
 			}
 			else
 			{
-				output << "\t\tvictory_points = {\n";
-				output << "\t\t\t" << *theState.getVPLocation() << " " << theState.getVpValue() << " \n";
-				output << "\t\t}\n";
+				for (const auto& [province, value]: theState.getVictoryPoints())
+				{
+					output << "\t\tvictory_points = {\n";
+					output << "\t\t\t" << province << " " << value << " \n";
+					output << "\t\t}\n";
+				}
 			}
 		}
 	}

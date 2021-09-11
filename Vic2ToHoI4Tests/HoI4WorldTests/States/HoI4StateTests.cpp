@@ -40,7 +40,8 @@ TEST(HoI4World_States_StateTests, DefaultsAreAsSet)
 	EXPECT_EQ(0, theState.getAirbaseLevel());
 	EXPECT_EQ(1, theState.getManpower());
 	EXPECT_FALSE(theState.hasResources());
-	EXPECT_FALSE(theState.getVPLocation());
+	EXPECT_FALSE(theState.getCapitalProvince());
+	EXPECT_TRUE(theState.getVictoryPoints().empty());
 	EXPECT_FALSE(theState.getMainNavalLocation());
 }
 
@@ -462,18 +463,18 @@ TEST(HoI4World_States_StateTests, ResourcesCanBeAdded)
 }
 
 
-TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetManually)
+TEST(HoI4World_States_StateTests, CapitalProvinceCanBeSetManually)
 {
 	const auto sourceState = *Vic2::State::Builder().build();
 	HoI4::State theState(sourceState, 42, "TAG");
 
-	theState.setVPLocation(12);
+	theState.setCapitalProvince(12);
 
-	EXPECT_EQ(12, theState.getVPLocation());
+	EXPECT_EQ(12, theState.getCapitalProvince());
 }
 
 
-TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapital)
+TEST(HoI4World_States_StateTests, CapitalProvinceCanBeSetFromStateCapital)
 {
 	const auto sourceState = *Vic2::State::Builder().setCapitalProvince(12).build();
 	HoI4::State theState(sourceState, 42, "TAG");
@@ -485,11 +486,11 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapital)
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(12, {12}).Build(),
 		 theConfiguration);
 
-	EXPECT_EQ(theState.getVPLocation(), 12);
+	EXPECT_EQ(theState.getCapitalProvince(), 12);
 }
 
 
-TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDetectedViaAristocrats)
+TEST(HoI4World_States_StateTests, CapitalProvinceCanBeSetFromStateCapitalDetectedViaAristocrats)
 {
 	const auto sourceState =
 		 *Vic2::State::Builder()
@@ -519,11 +520,11 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDe
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
-	EXPECT_EQ(24, theState.getVPLocation());
+	EXPECT_EQ(24, theState.getCapitalProvince());
 }
 
 
-TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDetectedViaBureaucrats)
+TEST(HoI4World_States_StateTests, CapitalProvinceCanBeSetFromStateCapitalDetectedViaBureaucrats)
 {
 	const auto sourceState =
 		 *Vic2::State::Builder()
@@ -553,11 +554,11 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDe
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
-	EXPECT_EQ(24, theState.getVPLocation());
+	EXPECT_EQ(24, theState.getCapitalProvince());
 }
 
 
-TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDetectedViaCapitalists)
+TEST(HoI4World_States_StateTests, CapitalProvinceCanBeSetFromStateCapitalDetectedViaCapitalists)
 {
 	const auto sourceState =
 		 *Vic2::State::Builder()
@@ -587,11 +588,11 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDe
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
-	EXPECT_EQ(24, theState.getVPLocation());
+	EXPECT_EQ(24, theState.getCapitalProvince());
 }
 
 
-TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromMostPopulousProvince)
+TEST(HoI4World_States_StateTests, CapitalProvinceCanBeSetFromMostPopulousProvince)
 {
 	const auto sourceState =
 		 *Vic2::State::Builder()
@@ -621,7 +622,7 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromMostPopulousPr
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
-	EXPECT_EQ(24, theState.getVPLocation());
+	EXPECT_EQ(24, theState.getCapitalProvince());
 }
 
 
@@ -641,8 +642,19 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionLoggedIfNotSet)
 
 	std::cout.rdbuf(coutBuffer);
 
-	EXPECT_EQ(std::nullopt, theState.getVPLocation());
+	EXPECT_EQ(std::nullopt, theState.getCapitalProvince());
 	EXPECT_EQ(log.str(), " [WARNING] Could not create VP for state 42\n");
+}
+
+
+TEST(HoI4World_States_StateTests, AdditionalVictoryPointsCanBeSet)
+{
+	const auto sourceState = *Vic2::State::Builder().build();
+
+	HoI4::State theState(sourceState, 42, "TAG");
+	theState.addVictoryPointValue(12, 10);
+
+	EXPECT_EQ(10, theState.getVictoryPoints().at(12));
 }
 
 
@@ -707,11 +719,11 @@ TEST(HoI4World_States_StateTests, DebugVpsAreOutput)
 	expectedOutput << "\n";
 	expectedOutput << "\thistory={\n";
 	expectedOutput << "\t\towner = TAG\n";
-	expectedOutput << "\t\tvictory_points = {\n";
-	expectedOutput << "\t\t\t12 10\n";
-	expectedOutput << "\t\t}\n";
+	expectedOutput << "\t\tvictory_points = { 12 5\n";
+	expectedOutput << "\t}\n";
 	expectedOutput << "\t\tvictory_points = { 24 5\n";
 	expectedOutput << "\t}\n";
+	expectedOutput << "\t\tvictory_points = { 12 1 }\n";
 	expectedOutput << "\t\tvictory_points = { 13 1 }\n";
 	expectedOutput << "\t\tvictory_points = { 24 1 }\n";
 	expectedOutput << "\t\tvictory_points = { 25 1 }\n";

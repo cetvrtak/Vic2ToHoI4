@@ -143,7 +143,6 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	addStatesToCountries(provinceMapper);
 	states->addCapitalsToStates(countries);
 	intelligenceAgencies = IntelligenceAgencies::Factory::createIntelligenceAgencies(countries, *names);
-	hoi4Localisations->addStateLocalisations(*states, vic2Localisations, provinceMapper, theConfiguration);
 	convertIndustry(theConfiguration);
 	addProvincesToHomeAreas();
 	addDominions(countryMapperFactory);
@@ -202,6 +201,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	addLeaders();
 	convertIdeologySupport();
 	states->convertCapitalVPs(countries, greatPowers);
+	hoi4Localisations->addVPLocalisations(*states, vic2Localisations, provinceMapper, theConfiguration);
 	states->convertAirBases(countries, greatPowers);
 	factionNameMapper = Mappers::FactionNameMapper::Factory().importFactionNameMapper();
 	if (theConfiguration.getCreateFactions())

@@ -49,9 +49,9 @@ class State
 		if (airbaseLevel > 10)
 			airbaseLevel = 10;
 	}
-	void addVictoryPointValue(int additionalValue) { victoryPointValue += additionalValue; }
-	void setVPValue(int value) { victoryPointValue = value; }
-	void setVPLocation(int province) { victoryPointPosition = province; }
+	void addVictoryPointValue(int province, int additionalValue);
+	void setCapitalVP(int value);
+	void setCapitalProvince(int province) { capitalProvince = province; }
 
 	void convertNavalBases(const std::map<int, int>& sourceNavalBases,
 		 const CoastalProvinces& theCoastalProvinces,
@@ -82,8 +82,8 @@ class State
 	int getAirbaseLevel() const { return airbaseLevel; }
 	bool hasResources() const { return !resources.empty(); }
 	const std::map<std::string, double>& getResources() const { return resources; }
-	std::optional<int> getVPLocation() const { return victoryPointPosition; }
-	int getVpValue() const { return victoryPointValue; }
+	std::optional<int> getCapitalProvince() const { return capitalProvince; }
+	const std::map<int, int>& getVictoryPoints() const { return victoryPoints; }
 	const std::set<int>& getDebugVPs() const { return debugVictoryPoints; }
 	const std::set<int>& getSecondaryDebugVPs() const { return secondaryDebugVictoryPoints; }
 
@@ -149,8 +149,8 @@ class State
 
 	std::map<std::string, double> resources;
 
-	std::optional<int> victoryPointPosition;
-	int victoryPointValue = 0;
+	std::optional<int> capitalProvince;
+	std::map<int, int> victoryPoints;
 	std::set<int> debugVictoryPoints;
 	std::set<int> secondaryDebugVictoryPoints;
 

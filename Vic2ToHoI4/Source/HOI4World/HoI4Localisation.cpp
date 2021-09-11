@@ -643,7 +643,7 @@ void HoI4::Localisation::addStateLocalisation(const State& hoi4State,
 }
 
 
-void HoI4::Localisation::addStateLocalisations(const States& states,
+void HoI4::Localisation::addVPLocalisations(const States& states,
 	 const Vic2::Localisations& vic2Localisations,
 	 const Mappers::ProvinceMapper& theProvinceMapper,
 	 const Configuration& theConfiguration)
@@ -651,16 +651,21 @@ void HoI4::Localisation::addStateLocalisations(const States& states,
 	Log(LogLevel::Info) << "\tAdding state localisations";
 	for (const auto& state: states.getStates())
 	{
-		auto VPPositionInHoI4 = state.second.getVPLocation();
-		if (VPPositionInHoI4)
+		auto capitalProvince = state.second.getCapitalProvince();
+		if (!capitalProvince)
 		{
-			if (auto VPProvinceMapping = theProvinceMapper.getHoI4ToVic2ProvinceMapping(*VPPositionInHoI4);
-				 !VPProvinceMapping.empty())
+			continue;
+		}
+		for (const auto& victoryPoint: state.second.getVictoryPoints())
+		{
+			if (auto mapping = theProvinceMapper.getHoI4ToVic2ProvinceMapping(victoryPoint.first);
+				 !mapping.empty())
 			{
 				for (const auto& [language, name]:
-					 vic2Localisations.getTextInEachLanguage("PROV" + std::to_string(VPProvinceMapping[0])))
+					 vic2Localisations.getTextInEachLanguage("PROV" + std::to_string(mapping[0])))
 				{
-					addVPLocalisationForLanguage(state.second, language, name);
+					getExistingVPLocalisation(language).insert(
+						 std::make_pair("VICTORY_POINTS_" + std::to_string(victoryPoint.first), name));
 				}
 			}
 		}
@@ -919,18 +924,6 @@ void HoI4::Localisation::addStateLocalisationForLanguage(const State& hoi4State,
 	}
 
 	getExistingStateLocalisation(language).insert(std::make_pair(hoi4State.getID(), localisedName));
-}
-
-
-void HoI4::Localisation::addVPLocalisationForLanguage(const State& state,
-	 const std::string& language,
-	 const std::string& name)
-{
-	if (state.getVPLocation())
-	{
-		getExistingVPLocalisation(language).insert(
-			 std::make_pair("VICTORY_POINTS_" + std::to_string(*state.getVPLocation()), name));
-	}
 }
 
 

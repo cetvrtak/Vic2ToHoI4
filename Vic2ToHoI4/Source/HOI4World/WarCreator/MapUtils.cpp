@@ -206,7 +206,7 @@ std::vector<int> HoI4::MapUtils::sortStatesByDistance(const std::set<int>& state
 		if (auto state = states.find(stateID); state != states.end())
 		{
 			auto distance = std::numeric_limits<float>::max();
-			if (const auto stateCapital = state->second.getVPLocation(); stateCapital)
+			if (const auto stateCapital = state->second.getCapitalProvince(); stateCapital)
 			{
 				const auto stateCapitalLocation = getProvincePosition(*stateCapital);
 				if (stateCapitalLocation)

@@ -1676,4 +1676,9 @@ void HoI4::Country::adjustRebelCapital(const CivilWar& civilWar,
 {
 	capitalProvince = *civilWar.getOccupiedProvinces().begin();
 	capitalState = provinceToStateIDMap.at(*capitalProvince);
+	if (const auto& stateItr = states.find(*capitalState);
+		 stateItr != states.end() && !stateItr->second.getVictoryPoints().contains(*capitalProvince))
+	{
+		stateItr->second.addVictoryPointValue(*capitalProvince, 5);
+	}
 }
