@@ -63,7 +63,7 @@ std::optional<Vic2::LanguageToLocalisationMap> getConfigurableDominionNames(
 	return std::nullopt;
 }
 
-	
+
 Vic2::LanguageToLocalisationMap configureDominionNames(const Vic2::LanguageToLocalisationMap& configurableDominionNames,
 	 const Vic2::LanguageToLocalisationMap& ownerNames,
 	 const Vic2::LanguageToLocalisationMap& ownerAdjectives)
@@ -658,8 +658,7 @@ void HoI4::Localisation::addVPLocalisations(const States& states,
 		}
 		for (const auto& victoryPoint: state.second.getVictoryPoints())
 		{
-			if (auto mapping = theProvinceMapper.getHoI4ToVic2ProvinceMapping(victoryPoint.first);
-				 !mapping.empty())
+			if (auto mapping = theProvinceMapper.getHoI4ToVic2ProvinceMapping(victoryPoint.first); !mapping.empty())
 			{
 				for (const auto& [language, name]:
 					 vic2Localisations.getTextInEachLanguage("PROV" + std::to_string(mapping[0])))

@@ -292,7 +292,7 @@ class Country
 	void adjustRebelCapital(const CivilWar& civilWar,
 		 const std::map<int, int>& provinceToStateIDMap,
 		 std::map<int, State>& states,
-	 	 OnActions& onActions);
+		 OnActions& onActions);
 	[[nodiscard]] const auto& getRebelTags() const { return rebelTags; }
 
   private:

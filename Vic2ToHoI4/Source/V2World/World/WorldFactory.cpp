@@ -9,8 +9,8 @@
 #include "V2World/Issues/IssuesFactory.h"
 #include "V2World/Localisations/LocalisationsFactory.h"
 #include "V2World/Pops/PopFactory.h"
-#include "V2World/Rebellions/RebellionFactory.h"
 #include "V2World/Rebellions/RebelTypesFactory.h"
+#include "V2World/Rebellions/RebellionFactory.h"
 #include "V2World/States/StateDefinitionsFactory.h"
 #include "V2World/States/StateLanguageCategoriesFactory.h"
 

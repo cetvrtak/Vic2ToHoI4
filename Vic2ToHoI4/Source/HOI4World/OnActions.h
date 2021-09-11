@@ -19,7 +19,10 @@ class OnActions
 
 	void addElectionEvent(const std::string& electionEvent) { electionEvents.push_back(electionEvent); }
 	void addFocusEvent(const std::string& tag, const std::string& focusId) { focusEvents[tag] = focusId; }
-	void addRebelVPEffect(const std::string& tag, int province, int VPs) { rebelVPEffects.push_back(std::make_tuple(tag, province, VPs)); }
+	void addRebelVPEffect(const std::string& tag, int province, int VPs)
+	{
+		rebelVPEffects.push_back(std::make_tuple(tag, province, VPs));
+	}
 
 	[[nodiscard]] const auto& getElectionEvents() const { return electionEvents; }
 	[[nodiscard]] const auto& getFocusEvents() const { return focusEvents; }
