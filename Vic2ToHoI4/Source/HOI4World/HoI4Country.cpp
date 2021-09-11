@@ -1670,15 +1670,18 @@ void HoI4::Country::createCivilWar()
 }
 
 
+constexpr int rebelVPs = 5;
 void HoI4::Country::adjustRebelCapital(const CivilWar& civilWar,
 	 const std::map<int, int>& provinceToStateIDMap,
-	 std::map<int, State>& states)
+	 std::map<int, State>& states,
+	 OnActions& onActions)
 {
 	capitalProvince = *civilWar.getOccupiedProvinces().begin();
 	capitalState = provinceToStateIDMap.at(*capitalProvince);
 	if (const auto& stateItr = states.find(*capitalState);
 		 stateItr != states.end() && !stateItr->second.getVictoryPoints().contains(*capitalProvince))
 	{
-		stateItr->second.addVictoryPointValue(*capitalProvince, 5);
+		stateItr->second.addVictoryPointValue(*capitalProvince, rebelVPs);
+		onActions.addRebelVPEffect(tag, *capitalProvince, -rebelVPs);
 	}
 }

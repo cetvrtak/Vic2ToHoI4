@@ -136,6 +136,18 @@ void HoI4::outputOnActions(const OnActions& onActions,
 	onActionsFile << "\t\t}\n";
 	onActionsFile << "\t}\n";
 
+	onActionsFile << "\ton_civil_war_end = {\n";
+	onActionsFile << "\t\teffect = {\n";
+	for (const auto& [tag, province, VPs]: onActions.getRebelVPEffects())
+	{
+		onActionsFile << "\t\t\tif = {\n";
+		onActionsFile << "\t\t\t\tlimit = { FROM = { tag = " << tag << " } }\n";
+		onActionsFile << "\t\t\t\tadd_victory_points = { province = " << province << " value = " << VPs << " }\n";
+		onActionsFile << "\t\t\t}\n";
+	}
+	onActionsFile << "\t\t}\n";
+	onActionsFile << "\t}\n";
+
 	onActionsFile << "}\n";
 
 	onActionsFile.close();

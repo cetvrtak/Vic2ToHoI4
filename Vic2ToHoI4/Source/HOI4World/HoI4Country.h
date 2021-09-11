@@ -291,7 +291,8 @@ class Country
 	void addRebelTag(const std::string& rebelTag) { rebelTags.insert(rebelTag); }
 	void adjustRebelCapital(const CivilWar& civilWar,
 		 const std::map<int, int>& provinceToStateIDMap,
-		 std::map<int, State>& states);
+		 std::map<int, State>& states,
+	 	 OnActions& onActions);
 	[[nodiscard]] const auto& getRebelTags() const { return rebelTags; }
 
   private:
