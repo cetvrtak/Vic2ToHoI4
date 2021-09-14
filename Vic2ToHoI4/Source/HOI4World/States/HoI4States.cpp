@@ -852,10 +852,15 @@ void HoI4::States::addGreatPowerVPs(const std::vector<std::shared_ptr<Country>>&
 
 void HoI4::States::addCapitalVictoryPoints(const std::map<std::string, std::shared_ptr<Country>>& countries)
 {
+	std::vector<std::string> unlanded;
 	std::vector<std::string> tags;
 	for (const auto& [tag, country]: countries)
 	{
-		if (!country->isGreatPower())
+		if (!country->hasProvinces())
+		{
+			unlanded.push_back(tag);
+		}
+		else if (!country->isGreatPower())
 		{
 			tags.push_back(tag);
 		}
@@ -903,6 +908,21 @@ void HoI4::States::addCapitalVictoryPoints(const std::map<std::string, std::shar
 		if (auto capitalState = states.find(*country->getCapitalState()); capitalState != states.end())
 		{
 			capitalState->second.setCapitalVP(10);
+		}
+	}
+
+	for (const auto& tag: unlanded)
+	{
+		auto country = countries.at(tag);
+		if (auto capitalStateItr = states.find(*country->getCapitalState()); capitalStateItr != states.end())
+		{
+			int capitalProvince = *country->getCapitalProvince();
+			// Ping localisations
+			capitalStateItr->second.addVictoryPointValue(capitalProvince, 0);
+			if (capitalStateItr->second.getVictoryPoints().at(capitalProvince) < 10)
+			{
+				unlandedCapitals.insert(std::make_pair(capitalStateItr->second.getID(), capitalProvince));
+			}
 		}
 	}
 }

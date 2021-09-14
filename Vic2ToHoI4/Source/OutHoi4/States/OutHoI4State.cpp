@@ -65,9 +65,12 @@ void HoI4::outputHoI4State(std::ostream& output, const State& theState, const bo
 			{
 				for (const auto& [province, value]: theState.getVictoryPoints())
 				{
-					output << "\t\tvictory_points = {\n";
-					output << "\t\t\t" << province << " " << value << " \n";
-					output << "\t\t}\n";
+					if (value > 0)
+					{
+						output << "\t\tvictory_points = {\n";
+						output << "\t\t\t" << province << " " << value << " \n";
+						output << "\t\t}\n";
+					}
 				}
 			}
 		}
