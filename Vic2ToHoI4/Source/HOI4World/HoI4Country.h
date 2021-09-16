@@ -286,7 +286,7 @@ class Country
 	void convertStrategies(const Mappers::CountryMapper& countryMap,
 		 const Vic2::Country& sourceCountry,
 		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries);
-	void createCivilWar();
+	void createWar(const std::string& target, const std::string& cb);
 	void giveSourceArmies(const std::vector<Vic2::Army>& vic2Armies) { theArmy.addSourceArmies(vic2Armies); }
 	void addRebelTag(const std::string& rebelTag) { rebelTags.insert(rebelTag); }
 	void adjustRebelCapital(const CivilWar& civilWar,

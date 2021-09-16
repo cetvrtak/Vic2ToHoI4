@@ -10,6 +10,9 @@ Vic2::Rebellion::Factory::Factory()
 	registerKeyword("country", [this](std::istream& theStream) {
 		rebellion->country = commonItems::singleString{theStream}.getString();
 	});
+	registerKeyword("independence", [this](std::istream& theStream) {
+		rebellion->independence = commonItems::singleString{theStream}.getString();
+	});
 	registerKeyword("type", [this](std::istream& theStream) {
 		rebellion->type = commonItems::singleString{theStream}.getString();
 	});

@@ -29,6 +29,7 @@ class Rebellion
 	[[nodiscard]] const auto& getGovernment() const { return government; }
 	[[nodiscard]] const auto& getArmyIds() const { return armyIds; }
 	[[nodiscard]] const auto& getArmies() const { return armies; }
+	[[nodiscard]] const auto& getIndependence() const { return independence; }
 
   private:
 	std::string country;
@@ -38,6 +39,7 @@ class Rebellion
 	std::string government;
 	std::set<std::string> armyIds;
 	std::vector<Army> armies;
+	std::string independence;
 };
 
 } // namespace Vic2

@@ -1663,9 +1663,9 @@ void HoI4::Country::addProvincesToHomeArea(int provinceId,
 }
 
 
-void HoI4::Country::createCivilWar()
+void HoI4::Country::createWar(const std::string& target, const std::string& cb)
 {
-	wars.push_back(HoI4::War(tag, originalTag, "civil_war"));
+	wars.push_back(HoI4::War(tag, target, cb));
 	atWar = true;
 }
 

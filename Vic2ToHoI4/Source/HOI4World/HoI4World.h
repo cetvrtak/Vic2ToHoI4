@@ -209,6 +209,10 @@ class World: commonItems::parser
 		 const Vic2::Localisations& vic2Localisations);
 	void createCivilWars(const std::map<std::string, CivilWar> civilWars,
 		 const std::map<int, int>& provinceToStateIDMap);
+	void createSeparatistWars(const Vic2::World& sourceWorld,
+	 Mappers::CountryMapper::Factory& countryMapperFactory,
+	 const Mappers::ProvinceMapper& provinceMapper,
+	 const std::map<int, int>& provinceToStateIDMap);
 	void setRebelOccupation(std::shared_ptr<Country>& rebelCountry,
 		 const std::shared_ptr<Country>& originalCountry,
 		 const CivilWar& civilWar);
