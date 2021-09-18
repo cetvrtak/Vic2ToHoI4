@@ -374,6 +374,7 @@ void Vic2::World::Factory::consolidateConquerStrategies()
 // said nation isn't at war with the owner.
 void Vic2::World::Factory::moveArmiesHome()
 {
+	Log(LogLevel::Info) << "\tMoving armies home";
 	for (auto& [tag, country]: world->countries)
 	{
 		for (auto& army: country.getModifiableArmies())
@@ -419,6 +420,21 @@ void Vic2::World::Factory::moveArmiesHome()
 				}
 			}
 			if (atWarWithAnother)
+			{
+				continue;
+			}
+
+			// rebels are allowed to roam free their country of origin
+			auto rebelsAtHome = false;
+			for (const auto& rebellion: world->rebellions)
+			{
+				if (rebellion.getCountry() == provinceOwner && rebellion.getArmyIds().contains(army.getId()))
+				{
+					rebelsAtHome = true;
+					break;
+				}
+			}
+			if (rebelsAtHome)
 			{
 				continue;
 			}

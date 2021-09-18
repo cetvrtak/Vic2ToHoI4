@@ -26,6 +26,11 @@ class War
 		 const std::map<int, int>& provinceToStateIDMap);
 	explicit War(const std::string& attacker, const std::string& defender, const std::string& cb);
 
+	[[nodiscard]] const auto& getOriginalDefender() const { return originalDefender; }
+	[[nodiscard]] const auto& getOriginalAttacker() const { return originalAttacker; }
+	[[nodiscard]] const auto& getExtraDefenders() const { return extraDefenders; }
+	[[nodiscard]] const auto& getExtraAttackers() const { return extraAttackers; }
+
 	friend std::ostream& operator<<(std::ostream& out, const War& theWar);
 
   private:

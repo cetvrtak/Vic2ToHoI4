@@ -928,6 +928,19 @@ void HoI4::World::convertArmies(const militaryMappings& localMilitaryMappings,
 				ownersToSkip.insert(tag);
 			}
 		}
+		for (const auto& war: country->getWars())
+		{
+			ownersToSkip.insert(war.getOriginalAttacker());
+			for (const auto& extraAttacker: war.getExtraAttackers())
+			{
+				ownersToSkip.insert(extraAttacker);
+			}
+			ownersToSkip.insert(war.getOriginalDefender());
+			for (const auto& extraDefender: war.getExtraDefenders())
+			{
+				ownersToSkip.insert(extraDefender);
+			}
+		}
 
 		country->convertArmies(localMilitaryMappings, *states, provinceMapper, theConfiguration);
 		if (!country->getProvinces().empty())
