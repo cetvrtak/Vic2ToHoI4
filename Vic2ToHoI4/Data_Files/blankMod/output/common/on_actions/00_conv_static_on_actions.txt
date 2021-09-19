@@ -1,0 +1,11 @@
+on_actions = {
+	on_capitulation = {
+		effect = {
+			if = {
+				limit = { has_country_flag = rebel_tag_@FROM }
+				FROM = { annex_country = { target = ROOT } }
+				clr_country_flag = rebel_tag_@FROM
+			}
+		}
+	}
+}

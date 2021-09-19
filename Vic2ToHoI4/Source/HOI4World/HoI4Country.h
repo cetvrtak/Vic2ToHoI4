@@ -83,6 +83,7 @@ class Country
 		 const std::map<int, int>& provinceToStateIDMap,
 		 const std::map<int, State>& allStates);
 	void determineBestCapital(const std::map<int, State>& allStates);
+	void addFlag(const std::string& flag) { flags.insert(flag); }
 	void setCapitalRegionFlag(const Regions& regions);
 	void setGovernmentToExistingIdeology(const std::set<std::string>& majorIdeologies,
 		 const Ideologies& ideologies,

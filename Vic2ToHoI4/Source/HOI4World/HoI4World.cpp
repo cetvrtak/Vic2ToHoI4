@@ -1637,6 +1637,7 @@ void HoI4::World::createSeparatistWars(const Vic2::World& sourceWorld,
 		{
 			rebelCountry->adjustRebelCapital(theCivilWar, provinceToStateIDMap, states->getModifiableStates(), *onActions);
 			rebelCountry->giveSourceArmies(theCivilWar.getVic2Armies());
+			rebelCountry->addFlag("rebel_tag_" + *hoi4OriginalTag);
 			originalCountry->createWar(*hoi4RebelTag, "annex_everything");
 		}
 	}
