@@ -9,6 +9,8 @@
 #include "V2World/Issues/IssuesFactory.h"
 #include "V2World/Localisations/LocalisationsFactory.h"
 #include "V2World/Pops/PopFactory.h"
+#include "V2World/Rebellions/RebelTypesFactory.h"
+#include "V2World/Rebellions/RebellionFactory.h"
 #include "V2World/States/StateDefinitionsFactory.h"
 #include "V2World/States/StateLanguageCategoriesFactory.h"
 
@@ -65,6 +67,9 @@ Vic2::World::Factory::Factory(const Configuration& theConfiguration):
 	registerKeyword("active_war", [this](std::istream& theStream) {
 		wars.push_back(warFactory.getWar(theStream));
 	});
+	registerKeyword("rebel_faction", [this](std::istream& theStream) {
+		world->rebellions.push_back(*Rebellion::Factory().importRebellion(theStream));
+	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
@@ -83,6 +88,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 	world = std::make_unique<World>();
 	world->theStateDefinitions = StateDefinitions::Factory().getStateDefinitions(theConfiguration);
 	world->theLocalisations = Localisations::Factory().importLocalisations(theConfiguration);
+	world->rebelTypes = RebelTypes::Factory().importRebelTypes(theConfiguration);
 	parseFile(theConfiguration.getInputFile());
 	if (!world->diplomacy)
 	{
@@ -108,6 +114,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 	consolidateConquerStrategies();
 	moveArmiesHome();
 	removeBattles();
+	setRebellionsData();
 
 	return std::move(world);
 }
@@ -253,7 +260,7 @@ void Vic2::World::Factory::removeEmptyNations()
 	Log(LogLevel::Info) << "\tRemoving empty nations";
 	for (auto country = world->countries.begin(); country != world->countries.end();)
 	{
-		if (country->second.isEmpty())
+		if (country->second.isEmpty() && country->second.getTag() != "REB")
 		{
 			country = world->countries.erase(country);
 		}
@@ -367,6 +374,7 @@ void Vic2::World::Factory::consolidateConquerStrategies()
 // said nation isn't at war with the owner.
 void Vic2::World::Factory::moveArmiesHome()
 {
+	Log(LogLevel::Info) << "\tMoving armies home";
 	for (auto& [tag, country]: world->countries)
 	{
 		for (auto& army: country.getModifiableArmies())
@@ -412,6 +420,21 @@ void Vic2::World::Factory::moveArmiesHome()
 				}
 			}
 			if (atWarWithAnother)
+			{
+				continue;
+			}
+
+			// rebels are allowed to roam free their country of origin
+			auto rebelsAtHome = false;
+			for (const auto& rebellion: world->rebellions)
+			{
+				if (rebellion.getCountry() == provinceOwner && rebellion.getArmyIds().contains(army.getId()))
+				{
+					rebelsAtHome = true;
+					break;
+				}
+			}
+			if (rebelsAtHome)
 			{
 				continue;
 			}
@@ -498,4 +521,22 @@ bool Vic2::World::Factory::armiesHaveDifferentOwners(const std::vector<Army*>& a
 	}
 
 	return armiesFromDifferentOwners;
+}
+
+
+void Vic2::World::Factory::setRebellionsData()
+{
+	const auto& rebelCountry = world->countries.find("REB")->second;
+	for (auto& rebellion: world->rebellions)
+	{
+		rebellion.assignRebelType(world->rebelTypes->getRebelType(rebellion.getType()));
+
+		for (const auto& army: rebelCountry.getArmies())
+		{
+			if (rebellion.getArmyIds().contains(army.getId()))
+			{
+				rebellion.assignRebelArmy(army);
+			}
+		}
+	}
 }

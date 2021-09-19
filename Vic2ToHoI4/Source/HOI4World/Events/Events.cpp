@@ -1632,3 +1632,50 @@ void HoI4::Events::importLarOccupationEvents(const Configuration& theConfigurati
 		}
 	}
 }
+
+
+void HoI4::Events::createUnlandedCapitalsEvent(const std::map<int, int>& unlandedCapitals)
+{
+	unlandedCapitalsEvent.giveType("country_event");
+	unlandedCapitalsEvent.giveId("unlanded_capitals.1");
+	unlandedCapitalsEvent.giveTitle("none");
+	unlandedCapitalsEvent.giveDescription("= none");
+	unlandedCapitalsEvent.givePicture("none");
+	unlandedCapitalsEvent.setHidden();
+
+	std::string theTrigger = "= {\n";
+	theTrigger += "\t\tcapital_scope = {\n";
+	theTrigger += "\t\t\tNOT = { has_state_flag = victory_points_added }\n";
+	theTrigger += "\t\t\tOR = {\n";
+	for (const auto& capital: unlandedCapitals)
+	{
+		theTrigger += "\t\t\t\tstate = " + std::to_string(capital.first) + "\n";
+	}
+	theTrigger += "\t\t\t}\n";
+	theTrigger += "\t\t}\n";
+	theTrigger += "\t}";
+	unlandedCapitalsEvent.giveTrigger(std::move(theTrigger));
+
+	std::string mtth = "= {\n";
+	mtth += "\t\tdays = 2\n";
+	mtth += "\t}";
+	unlandedCapitalsEvent.giveMeanTimeToHappen(std::move(mtth));
+
+	EventOption theOption;
+	theOption.giveName("none");
+	std::string effects;
+	for (const auto& [state, province]: unlandedCapitals)
+	{
+		if (!effects.empty())
+		{
+			effects += "\t\t";
+		}
+		effects += "if = {\n";
+		effects += "\t\t\tlimit = { capital_scope = { state = " + std::to_string(state) + " } }\n";
+		effects += "\t\t\tadd_victory_points = { province = " + std::to_string(province) + " value = 10 }\n";
+		effects += "\t\t}\n";
+	}
+	effects += "\t\tcapital_scope = { set_state_flag = victory_points_added }";
+	theOption.giveScriptBlock(std::move(effects));
+	unlandedCapitalsEvent.giveOption(std::move(theOption));
+}

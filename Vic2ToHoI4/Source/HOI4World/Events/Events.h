@@ -63,6 +63,7 @@ class Events: commonItems::parser
 	void importLarOccupationEvents(const Configuration& theConfiguration, const std::set<std::string>& majorIdeologies);
 
 	void giveGovernmentInExileEvent(Event&& gieEvent) { governmentInExileEvent = gieEvent; }
+	void createUnlandedCapitalsEvent(const std::map<int, int>& unlandedCapitals);
 
 	[[nodiscard]] std::optional<int> getEventNumber(const std::string& eventName) const;
 
@@ -80,6 +81,7 @@ class Events: commonItems::parser
 	[[nodiscard]] const auto& getCapitulationEvents() const { return capitulationEvents; }
 	[[nodiscard]] const auto& getMtgNavalTreatyEvents() const { return mtgNavalTreatyEvents; }
 	[[nodiscard]] const auto& getLarOccupationEvents() const { return larOccupationEvents; }
+	[[nodiscard]] const auto& getUnlandedCapitalsEvent() const { return unlandedCapitalsEvent; }
 
   private:
 	void addOnTheRise(const std::set<std::string>& majorIdeologies, Localisation& localisation);
@@ -108,6 +110,7 @@ class Events: commonItems::parser
 	std::vector<Event> capitulationEvents;
 	std::vector<Event> mtgNavalTreatyEvents;
 	std::vector<Event> larOccupationEvents;
+	Event unlandedCapitalsEvent;
 
 	std::map<std::string, int> eventNumbers;
 };

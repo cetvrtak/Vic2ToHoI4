@@ -84,11 +84,13 @@ class HoI4FocusTree: commonItems::parser
 	int getMaxConquerValue(const std::vector<HoI4::AIStrategy>& conquerStrategies);
 	std::map<std::string, std::set<int>> addReconquestBranch(std::shared_ptr<HoI4::Country> theCountry,
 		 int& numWarsWithNeighbors,
+		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries,
 		 const std::set<std::string>& majorIdeologies,
 		 const std::map<int, HoI4::State>& states,
 		 HoI4::Localisation& hoi4Localisations);
 	std::set<std::string> addConquerBranch(std::shared_ptr<HoI4::Country> theCountry,
 		 int& numWarsWithNeighbors,
+		 const std::map<std::string, std::shared_ptr<HoI4::Country>> countries,
 		 const std::set<std::string>& majorIdeologies,
 		 const std::map<std::string, std::set<int>>& coreHolders,
 		 const std::map<int, HoI4::State>& states,
@@ -99,13 +101,15 @@ class HoI4FocusTree: commonItems::parser
 		 HoI4::Localisation& hoi4Localisations);
 	std::map<std::string, std::set<int>> determineWarTargets(std::shared_ptr<HoI4::Country> theCountry,
 		 const std::set<int>& stateIds,
-		 const std::map<int, HoI4::State>& states);
+		 const std::map<int, HoI4::State>& states,
+		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries);
 	int calculateNumEnemyOwnedCores(const std::set<int>& coreStates, const std::map<int, HoI4::State>& states);
 	void removeFocus(const std::string& id);
 
 	void addFocus(std::shared_ptr<HoI4Focus> newFocus) { focuses.push_back(newFocus); }
 
 	[[nodiscard]] const auto& getDestinationCountryTag() const { return dstCountryTag; }
+	[[nodiscard]] const auto& getAdditionalTags() const { return additionalTags; }
 	[[nodiscard]] const auto& getFocuses() const { return focuses; }
 	[[nodiscard]] const auto& getSharedFocuses() const { return sharedFocuses; }
 	[[nodiscard]] const auto& getBranches() const { return branches; }
@@ -114,6 +118,7 @@ class HoI4FocusTree: commonItems::parser
 
 	void addBranch(const std::string& tag, const std::string& branch, HoI4::OnActions& onActions);
 	void eraseBranch(const std::string& branch) { branches.erase(branch); }
+	void setAdditionalTags(const std::set<std::string> tags) { additionalTags = tags; }
 
   private:
 	void confirmLoadedFocuses();
@@ -129,6 +134,7 @@ class HoI4FocusTree: commonItems::parser
 	void addRadicalGenericFocuses(int relativePosition, const std::set<std::string>& majorIdeologies);
 
 	std::string dstCountryTag;
+	std::set<std::string> additionalTags;
 	std::vector<std::shared_ptr<HoI4Focus>> focuses;
 	std::vector<std::shared_ptr<HoI4::SharedFocus>> sharedFocuses;
 	std::map<std::string, std::map<std::string, int>> branches; // <first focus, all focuses>

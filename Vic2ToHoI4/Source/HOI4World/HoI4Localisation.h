@@ -65,7 +65,7 @@ class Localisation
 		 const Vic2::Localisations& vic2Localisations,
 		 const Mappers::ProvinceMapper& theProvinceMapper,
 		 const std::map<std::string, std::string>& grammarMappings);
-	void addStateLocalisations(const States& states,
+	void addVPLocalisations(const States& states,
 		 const Vic2::Localisations& vic2Localisations,
 		 const Mappers::ProvinceMapper& theProvinceMapper,
 		 const Configuration& theConfiguration);
@@ -159,7 +159,6 @@ class Localisation
 		 const Vic2::Localisations& vic2Localisations,
 		 const Mappers::ProvinceMapper& theProvinceMapper,
 		 const std::map<std::string, std::string>& grammarMappings);
-	void addVPLocalisationForLanguage(const State& state, const std::string& language, const std::string& name);
 	std::map<stateNumber, std::string>& getExistingStateLocalisation(const std::string& language);
 	keyToLocalisationMap& getExistingVPLocalisation(const std::string& language);
 	void addLanguageToStateLocalisations(const std::string& language);

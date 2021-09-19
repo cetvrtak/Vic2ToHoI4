@@ -1,4 +1,5 @@
 #include "HoI4World.h"
+#include "CivilWars/CivilWar.h"
 #include "CommonRegexes.h"
 #include "Configuration.h"
 #include "Decisions/Decisions.h"
@@ -119,6 +120,11 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	countryNameMapper = Mappers::CountryNameMapper::Factory().importCountryNameMapper();
 	casusBellis = Mappers::CasusBellisFactory{}.importCasusBellis();
 	convertCountries(sourceWorld, provinceMapper);
+	const auto& civilWars = createRebelCountries(sourceWorld,
+		 countryMapperFactory,
+		 provinceMapper,
+		 states->getProvinceToStateIDMap(),
+		 vic2Localisations);
 	determineGreatPowers(sourceWorld);
 	governmentMapper = Mappers::GovernmentMapper::Factory().importGovernmentMapper();
 	ideologyMapper = Mappers::IdeologyMapper::Factory().importIdeologyMapper();
@@ -135,9 +141,8 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	}
 
 	addStatesToCountries(provinceMapper);
-	states->addCapitalsToStates(countries);
+	states->addCapitalsToStates(landedCountries);
 	intelligenceAgencies = IntelligenceAgencies::Factory::createIntelligenceAgencies(countries, *names);
-	hoi4Localisations->addStateLocalisations(*states, vic2Localisations, provinceMapper, theConfiguration);
 	convertIndustry(theConfiguration);
 	addProvincesToHomeAreas();
 	addDominions(countryMapperFactory);
@@ -146,6 +151,8 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 		 sourceWorld.getProvinces(),
 		 theConfiguration.getDebug());
 	determineCoresAndClaims();
+	createCivilWars(civilWars, states->getProvinceToStateIDMap());
+	createSeparatistWars(sourceWorld, countryMapperFactory, provinceMapper, states->getProvinceToStateIDMap());
 	states->convertResources();
 	supplyZones->convertSupplyZones(*states);
 	strategicRegions->convert(*states);
@@ -195,6 +202,8 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	addLeaders();
 	convertIdeologySupport();
 	states->convertCapitalVPs(countries, greatPowers);
+	events->createUnlandedCapitalsEvent(states->getUnlandedCapitals());
+	hoi4Localisations->addVPLocalisations(*states, vic2Localisations, provinceMapper, theConfiguration);
 	states->convertAirBases(countries, greatPowers);
 	factionNameMapper = Mappers::FactionNameMapper::Factory().importFactionNameMapper();
 	if (theConfiguration.getCreateFactions())
@@ -557,6 +566,7 @@ void HoI4::World::addDominions(Mappers::CountryMapper::Factory& countryMapperFac
 				state->second.addCores({dominionTag});
 				state->second.setOwner(dominionTag);
 				dominion->addState(state->second);
+				overlord->removeState(stateId);
 			}
 		}
 
@@ -916,6 +926,19 @@ void HoI4::World::convertArmies(const militaryMappings& localMilitaryMappings,
 			if (relation.hasMilitaryAccess())
 			{
 				ownersToSkip.insert(tag);
+			}
+		}
+		for (const auto& war: country->getWars())
+		{
+			ownersToSkip.insert(war.getOriginalAttacker());
+			for (const auto& extraAttacker: war.getExtraAttackers())
+			{
+				ownersToSkip.insert(extraAttacker);
+			}
+			ownersToSkip.insert(war.getOriginalDefender());
+			for (const auto& extraDefender: war.getExtraDefenders())
+			{
+				ownersToSkip.insert(extraDefender);
 			}
 		}
 
@@ -1391,7 +1414,7 @@ std::set<std::string> HoI4::World::getSouthAsianCountries() const
 
 void HoI4::World::addProvincesToHomeAreas()
 {
-	Log(LogLevel::Info) << "Adding provinces to home areas";
+	Log(LogLevel::Info) << "\tAdding provinces to home areas";
 	for (const auto& country: landedCountries | std::views::values)
 	{
 		const auto& capital = country->getCapitalProvince();
@@ -1400,5 +1423,222 @@ void HoI4::World::addProvincesToHomeAreas()
 			continue;
 		}
 		country->addProvincesToHomeArea(*capital, theMapData, states->getStates(), states->getProvinceToStateIDMap());
+	}
+}
+
+
+std::map<std::string, HoI4::CivilWar> HoI4::World::createRebelCountries(const Vic2::World& sourceWorld,
+	 Mappers::CountryMapper::Factory& countryMapperFactory,
+	 const Mappers::ProvinceMapper& provinceMapper,
+	 const std::map<int, int>& provinceToStateIDMap,
+	 const Vic2::Localisations& vic2Localisations)
+{
+	Log(LogLevel::Info) << "\tCreating rebel countries";
+	std::map<std::string, CivilWar> civilWars;
+	for (const auto& rebellion: sourceWorld.getRebellions())
+	{
+		if (rebellion.getProvinces().empty())
+		{
+			continue;
+		}
+		if (rebellion.getIndependence() != "---")
+		{
+			continue;
+		}
+
+		const auto& hoi4Tag = countryMap->getHoI4Tag(rebellion.getCountry());
+		if (!hoi4Tag)
+		{
+			continue;
+		}
+		CivilWar theCivilWar(rebellion,
+			 *hoi4Tag,
+			 sourceWorld.getStateDefinitions(),
+			 sourceWorld.getProvinces(),
+			 provinceMapper,
+			 provinceToStateIDMap,
+			 states->getStates());
+
+		const auto& originalCountryItr = countries.find(*hoi4Tag);
+		if (originalCountryItr == countries.end())
+		{
+			continue;
+		}
+		const auto& originalCountry = originalCountryItr->second;
+		const auto& rebelTag = countryMapperFactory.generateNewHoI4Tag();
+		const auto& rebelCountry = std::make_shared<Country>(rebelTag,
+			 originalCountry,
+			 theCivilWar,
+			 *graphicsMapper,
+			 *names,
+			 *hoi4Localisations,
+			 vic2Localisations);
+
+		if (!theCivilWar.getOccupiedStates().empty())
+		{
+			countries.insert(std::make_pair(rebelTag, rebelCountry));
+			civilWars.insert(std::make_pair(rebelTag, theCivilWar));
+		}
+	}
+	return civilWars;
+}
+
+
+void HoI4::World::createCivilWars(const std::map<std::string, CivilWar> civilWars,
+	 const std::map<int, int>& provinceToStateIDMap)
+{
+	Log(LogLevel::Info) << "\tCreating civil wars";
+	for (const auto& [rebelTag, civilWar]: civilWars)
+	{
+		const auto& originalCountryItr = countries.find(civilWar.getOriginalTag());
+		if (originalCountryItr == countries.end())
+		{
+			return;
+		}
+		const auto& originalCountry = originalCountryItr->second;
+		// Skip one-state countries for now - TODO split-off rebel state
+		if (originalCountry->getStates().size() == 1)
+		{
+			return;
+		}
+		auto rebelCountry = countries.find(rebelTag)->second;
+
+		setRebelOccupation(rebelCountry, originalCountry, civilWar);
+
+		rebelCountry->determineBestCapital(states->getStates());
+		if (rebelCountry->getCapitalState())
+		{
+			rebelCountry->adjustRebelCapital(civilWar, provinceToStateIDMap, states->getModifiableStates(), *onActions);
+			rebelCountry->createWar(originalCountry->getTag(), "civil_war");
+			rebelCountry->giveSourceArmies(civilWar.getVic2Armies());
+			originalCountry->addRebelTag(rebelTag);
+		}
+	}
+}
+
+
+void HoI4::World::setRebelOccupation(std::shared_ptr<Country>& rebelCountry,
+	 const std::shared_ptr<Country>& originalCountry,
+	 const CivilWar& civilWar)
+{
+	const auto& rebelTag = rebelCountry->getTag();
+	auto& modifiableStates = states->getModifiableStates();
+	for (const auto& stateId: originalCountry->getCoreStates())
+	{
+		if (auto state = modifiableStates.find(stateId); state != modifiableStates.end())
+		{
+			state->second.addCores({rebelTag});
+			rebelCountry->addCoreState(stateId);
+		}
+	}
+	for (const auto& stateId: originalCountry->getStates())
+	{
+		if (auto state = modifiableStates.find(stateId); state != modifiableStates.end())
+		{
+			if (civilWar.getOccupiedStates().contains(std::to_string(stateId)))
+			{
+				state->second.setOwner(rebelTag);
+				rebelCountry->addState(state->second);
+			}
+			for (const auto& province: state->second.getProvinces())
+			{
+				if (const auto& provinces = civilWar.getOccupiedProvinces();
+					 std::find(provinces.begin(), provinces.end(), province) != provinces.end())
+				{
+					state->second.setControlledProvince(province, rebelTag);
+				}
+				else
+				{
+					state->second.setControlledProvince(province, originalCountry->getTag());
+				}
+			}
+		}
+	}
+}
+
+
+void HoI4::World::createSeparatistWars(const Vic2::World& sourceWorld,
+	 Mappers::CountryMapper::Factory& countryMapperFactory,
+	 const Mappers::ProvinceMapper& provinceMapper,
+	 const std::map<int, int>& provinceToStateIDMap)
+{
+	Log(LogLevel::Info) << "\tCreating separatist wars";
+	for (const auto& rebellion: sourceWorld.getRebellions())
+	{
+		if (rebellion.getProvinces().empty())
+		{
+			continue;
+		}
+
+		const auto& vic2RebelTag = rebellion.getIndependence();
+		if (vic2RebelTag == "---")
+		{
+			continue;
+		}
+		const auto& hoi4RebelTag = countryMap->getHoI4Tag(vic2RebelTag);
+		if (!hoi4RebelTag)
+		{
+			continue;
+		}
+		const auto& rebelCountryItr = countries.find(*hoi4RebelTag);
+		if (rebelCountryItr == countries.end())
+		{
+			continue;
+		}
+		auto rebelCountry = rebelCountryItr->second;
+
+		const auto& hoi4OriginalTag = countryMap->getHoI4Tag(rebellion.getCountry());
+		if (!hoi4OriginalTag)
+		{
+			continue;
+		}
+		const auto& originalCountryItr = countries.find(*hoi4OriginalTag);
+		if (originalCountryItr == countries.end())
+		{
+			continue;
+		}
+		const auto& originalCountry = originalCountryItr->second;
+
+		CivilWar theCivilWar(rebellion,
+			 *hoi4RebelTag,
+			 sourceWorld.getStateDefinitions(),
+			 sourceWorld.getProvinces(),
+			 provinceMapper,
+			 provinceToStateIDMap,
+			 states->getStates());
+
+		auto& modifiableStates = states->getModifiableStates();
+		for (const auto& stateId: originalCountry->getStates())
+		{
+			if (auto state = modifiableStates.find(stateId); state != modifiableStates.end())
+			{
+				if (state->second.getCores().contains(*hoi4RebelTag))
+				{
+					state->second.setOwner(*hoi4RebelTag);
+					rebelCountry->addState(state->second);
+				}
+				for (const auto& province: state->second.getProvinces())
+				{
+					if (const auto& provinces = theCivilWar.getOccupiedProvinces();
+						 std::find(provinces.begin(), provinces.end(), province) != provinces.end())
+					{
+						state->second.setControlledProvince(province, *hoi4RebelTag);
+					}
+					else
+					{
+						state->second.setControlledProvince(province, *hoi4OriginalTag);
+					}
+				}
+			}
+		}
+
+		rebelCountry->determineBestCapital(states->getStates());
+		if (rebelCountry->getCapitalState())
+		{
+			rebelCountry->adjustRebelCapital(theCivilWar, provinceToStateIDMap, states->getModifiableStates(), *onActions);
+			rebelCountry->giveSourceArmies(theCivilWar.getVic2Armies());
+			rebelCountry->addFlag("rebel_tag_" + *hoi4OriginalTag);
+			originalCountry->createWar(*hoi4RebelTag, "annex_everything");
+		}
 	}
 }

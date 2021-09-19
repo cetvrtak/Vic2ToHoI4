@@ -22,7 +22,7 @@
 
 
 
-HoI4::Country::Country(std::string tag,
+HoI4::Country::Country(std::string tag_,
 	 const Vic2::Country& sourceCountry,
 	 Names& names,
 	 Mappers::GraphicsMapper& graphicsMapper,
@@ -32,8 +32,8 @@ HoI4::Country::Country(std::string tag,
 	 const date& startDate,
 	 const Mappers::ProvinceMapper& theProvinceMapper,
 	 const States& worldStates):
-	 tag(std::move(tag)),
-	 name(sourceCountry.getName("english")), adjective(sourceCountry.getAdjective("english")),
+	 tag(tag_),
+	 originalTag(tag_), name(sourceCountry.getName("english")), adjective(sourceCountry.getAdjective("english")),
 	 oldTag(sourceCountry.getTag()), human(human = sourceCountry.isHuman()), threat(sourceCountry.getBadBoy() / 10.0),
 	 oldCapital(sourceCountry.getCapital()), primaryCulture(sourceCountry.getPrimaryCulture()),
 	 civilized(sourceCountry.isCivilized()), primaryCultureGroup(sourceCountry.getPrimaryCultureGroup()),
@@ -194,6 +194,98 @@ HoI4::Country::Country(const std::shared_ptr<Country> owner,
 	neutralityAdvisorPortrait =
 		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "neutrality");
 	radicalAdvisorPortrait = graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "radical");
+
+	createOperatives(graphicsMapper, names);
+
+	convertLaws();
+}
+
+
+HoI4::Country::Country(const std::string& tag_,
+	 const std::shared_ptr<Country> originalCountry,
+	 const CivilWar& civilWar,
+	 Mappers::GraphicsMapper& graphicsMapper,
+	 Names& names,
+	 Localisation& hoi4Localisations,
+	 const Vic2::Localisations& vic2Localisations):
+	 tag(tag_),
+	 oldTag(originalCountry->oldTag), primaryCulture(originalCountry->primaryCulture),
+	 primaryCultureGroup(originalCountry->primaryCultureGroup), civilized(originalCountry->civilized),
+	 color(originalCountry->color), graphicalCulture(originalCountry->graphicalCulture),
+	 graphicalCulture2d(originalCountry->graphicalCulture2d), warSupport(originalCountry->warSupport),
+	 oldTechnologiesAndInventions(originalCountry->oldTechnologiesAndInventions), shipNames(originalCountry->shipNames),
+	 parties(originalCountry->parties), lastElection(originalCountry->lastElection),
+	 oldCapital(civilWar.getVic2Capital()), oldGovernment(civilWar.getVic2Government()),
+	 originalTag(originalCountry->originalTag)
+{
+	upperHouseComposition[civilWar.getVic2Ideology()] = 1;
+	for (const auto& vic2Party: parties)
+	{
+		if (vic2Party.getIdeology() == civilWar.getVic2Ideology())
+		{
+			rulingParty = vic2Party;
+			break;
+		}
+	}
+
+	if (auto loc = vic2Localisations.getTextInLanguage(civilWar.getVic2RebelType() + "_name", "english"); loc)
+	{
+		if (const auto& start = loc->find_first_of("\\$"); start != std::string::npos)
+		{
+			const auto& end = loc->find_last_of("\\$") + 1;
+			name = loc->replace(start, end - start, *originalCountry->getAdjective());
+		}
+		else
+		{
+			name = *originalCountry->getAdjective() + " " + *loc;
+		}
+	}
+	if (auto loc = vic2Localisations.getTextInLanguage(civilWar.getVic2Ideology(), "english"); loc)
+	{
+		adjective = *originalCountry->getAdjective() + " " + *loc;
+	}
+	determineFilename();
+
+	auto hsv = color.getHsvComponents();
+	if (hsv[2] > 0.2F)
+	{
+		hsv[2] -= 0.2F;
+	}
+	else
+	{
+		hsv[2] += 0.2F;
+	}
+	color = commonItems::Color(hsv);
+
+	armyPortraits = graphicsMapper.getArmyPortraits(primaryCulture, primaryCultureGroup);
+	navyPortraits = graphicsMapper.getNavyPortraits(primaryCulture, primaryCultureGroup);
+	femaleMilitaryPortraits = graphicsMapper.getFemalePortraits(primaryCulture, primaryCultureGroup, "military");
+	femaleMonarchPortraits = graphicsMapper.getFemalePortraits(primaryCulture, primaryCultureGroup, "monarch");
+	femaleIdeologicalPortraits =
+		 graphicsMapper.getFemalePortraits(primaryCulture, primaryCultureGroup, "ideological_leader");
+	maleCommunistPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "communism");
+	maleDemocraticPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "democratic");
+	maleFascistPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "fascism");
+	maleAbsolutistPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "absolutist");
+	maleNeutralPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "neutrality");
+	maleRadicalPortraits = graphicsMapper.getLeaderPortraits(primaryCulture, primaryCultureGroup, "radical");
+	communistAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "communism");
+	democraticAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "democratic");
+	fascistAdvisorPortrait = graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "fascism");
+	absolutistAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "absolutist");
+	neutralityAdvisorPortrait =
+		 graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "neutrality");
+	radicalAdvisorPortrait = graphicsMapper.getIdeologyMinisterPortrait(primaryCulture, primaryCultureGroup, "radical");
+
+
+	initIdeas(names, hoi4Localisations);
+	if (originalCountry->hasMonarchIdea() && governmentIdeology != "communism")
+	{
+		ideas.insert(originalCountry->tag + "_monarch");
+	}
 
 	createOperatives(graphicsMapper, names);
 
@@ -1567,5 +1659,29 @@ void HoI4::Country::addProvincesToHomeArea(int provinceId,
 	for (const auto& neighbor: theMapData->getNeighbors(provinceId))
 	{
 		addProvincesToHomeArea(neighbor, theMapData, states, provinceToStateIdMap);
+	}
+}
+
+
+void HoI4::Country::createWar(const std::string& target, const std::string& cb)
+{
+	wars.push_back(HoI4::War(tag, target, cb));
+	atWar = true;
+}
+
+
+constexpr int rebelVPs = 5;
+void HoI4::Country::adjustRebelCapital(const CivilWar& civilWar,
+	 const std::map<int, int>& provinceToStateIDMap,
+	 std::map<int, State>& states,
+	 OnActions& onActions)
+{
+	capitalProvince = *civilWar.getOccupiedProvinces().begin();
+	capitalState = provinceToStateIDMap.at(*capitalProvince);
+	if (const auto& stateItr = states.find(*capitalState);
+		 stateItr != states.end() && !stateItr->second.getVictoryPoints().contains(*capitalProvince))
+	{
+		stateItr->second.addVictoryPointValue(*capitalProvince, rebelVPs);
+		onActions.addRebelVPEffect(tag, *capitalProvince, -rebelVPs);
 	}
 }

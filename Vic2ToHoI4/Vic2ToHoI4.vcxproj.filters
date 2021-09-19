@@ -289,6 +289,12 @@
     <Filter Include="Data Files\Configurables\Vic2Localisations">
       <UniqueIdentifier>{08285fb8-fe10-4ea0-bbe2-ce589a5043b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vic2World\Rebellions">
+      <UniqueIdentifier>{ceb58a29-aaa5-4212-8b09-9b1f6bb0c61d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HoI4World\CivilWars">
+      <UniqueIdentifier>{9ff17bb5-f69b-4877-8473-8d11ba86713d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common_items\Date.cpp">
@@ -1317,6 +1323,21 @@
     </ClCompile>
     <ClCompile Include="Source\HOI4World\Diplomacy\HoI4Relations.cpp">
       <Filter>HoI4World\Diplomacy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\RebellionFactory.cpp">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\HOI4World\CivilWars\CivilWar.cpp">
+      <Filter>HoI4World\CivilWars</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\RebelTypeFactory.cpp">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\RebelTypesFactory.cpp">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\Rebellion.cpp">
+      <Filter>Vic2World\Rebellions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2585,6 +2606,27 @@
     </ClInclude>
     <ClInclude Include="Source\Mappers\FactionName\FactionNameMappingFactory.h">
       <Filter>Mappers\FactionName</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\Rebellion.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebellionFactory.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HOI4World\CivilWars\CivilWar.h">
+      <Filter>HoI4World\CivilWars</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelType.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypeFactory.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypes.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelTypesFactory.h">
+      <Filter>Vic2World\Rebellions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -656,6 +656,7 @@ std::unique_ptr<HoI4FocusTree> HoI4FocusTree::makeCustomizedCopy(const HoI4::Cou
 		auto newFocus = focus->makeCustomizedCopy(newFocusTree.dstCountryTag);
 		newFocusTree.addFocus(newFocus);
 	}
+	newFocusTree.setAdditionalTags(country.getRebelTags());
 	newFocusTree.setNextFreeColumn(nextFreeColumn);
 
 	return std::make_unique<HoI4FocusTree>(std::move(newFocusTree));
@@ -1780,7 +1781,8 @@ void HoI4FocusTree::addGPWarBranch(std::shared_ptr<HoI4::Country> Home,
 
 std::map<std::string, std::set<int>> HoI4FocusTree::determineWarTargets(std::shared_ptr<HoI4::Country> theCountry,
 	 const std::set<int>& stateIds,
-	 const std::map<int, HoI4::State>& states)
+	 const std::map<int, HoI4::State>& states,
+	 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries)
 {
 	std::map<std::string, std::set<int>> targets;
 
@@ -1791,13 +1793,23 @@ std::map<std::string, std::set<int>> HoI4FocusTree::determineWarTargets(std::sha
 		{
 			continue;
 		}
-		const auto& state = stateItr->second;
-		if (const auto& owner = state.getOwner(); owner != theCountry->getTag())
+		const auto& ownerTag = stateItr->second.getOwner();
+		if (ownerTag == theCountry->getTag())
 		{
-			if (theCountry->isEligibleEnemy(owner))
-			{
-				targets[owner].emplace(stateID);
-			}
+			continue;
+		}
+		const auto& ownerItr = countries.find(ownerTag);
+		if (ownerItr == countries.end())
+		{
+			continue;
+		}
+		if (const auto& owner = ownerItr->second; owner->getOriginalTag() == theCountry->getOriginalTag())
+		{
+			continue;
+		}
+		if (theCountry->isEligibleEnemy(ownerTag))
+		{
+			targets[ownerTag].emplace(stateID);
 		}
 	}
 
@@ -1827,11 +1839,12 @@ int HoI4FocusTree::calculateNumEnemyOwnedCores(const std::set<int>& coreStates,
 
 std::map<std::string, std::set<int>> HoI4FocusTree::addReconquestBranch(std::shared_ptr<HoI4::Country> theCountry,
 	 int& numWarsWithNeighbors,
+	 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries,
 	 const std::set<std::string>& majorIdeologies,
 	 const std::map<int, HoI4::State>& states,
 	 HoI4::Localisation& hoi4Localisations)
 {
-	const auto& coreHolders = determineWarTargets(theCountry, theCountry->getCoreStates(), states);
+	const auto& coreHolders = determineWarTargets(theCountry, theCountry->getCoreStates(), states, countries);
 	if (coreHolders.empty())
 	{
 		return coreHolders;
@@ -2145,6 +2158,7 @@ int HoI4FocusTree::getMaxConquerValue(const std::vector<HoI4::AIStrategy>& conqu
 
 std::set<std::string> HoI4FocusTree::addConquerBranch(std::shared_ptr<HoI4::Country> theCountry,
 	 int& numWarsWithNeighbors,
+	 const std::map<std::string, std::shared_ptr<HoI4::Country>> countries,
 	 const std::set<std::string>& majorIdeologies,
 	 const std::map<std::string, std::set<int>>& coreHolders,
 	 const std::map<int, HoI4::State>& states,
@@ -2187,7 +2201,7 @@ std::set<std::string> HoI4FocusTree::addConquerBranch(std::shared_ptr<HoI4::Coun
 
 		const auto& truceUntil = theCountry->getTruceUntil(strategy.getID());
 		std::optional<int> newClaim;
-		const auto& claimsHolders = determineWarTargets(theCountry, theCountry->getClaimedStates(), states);
+		const auto& claimsHolders = determineWarTargets(theCountry, theCountry->getClaimedStates(), states, countries);
 		if (!claimsHolders.contains(strategy.getID()) && potentialClaims.contains(strategy.getID()))
 		{
 			const auto& borderStates = potentialClaims.at(strategy.getID());

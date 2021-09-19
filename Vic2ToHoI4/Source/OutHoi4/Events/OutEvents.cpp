@@ -15,6 +15,7 @@ void outputStabilityEvents(const std::map<std::string, HoI4::Event>& stabilityEv
 	 const std::map<std::string, HoI4::Event>& mutinyEvents,
 	 const std::string& outputName);
 void outputGovernmentInExileDecision(const HoI4::Event& governmentInExileEvent, const std::string& outputName);
+void outputUnlandedCapitalsEvent(const HoI4::Event& unlandedCapitalsEvent, const std::string& outputName);
 
 
 
@@ -43,6 +44,7 @@ void HoI4::outputEvents(const Events& theEvents, const std::string& outputName)
 		 theEvents.getMtgNavalTreatyEvents(),
 		 outputName);
 	outputActualEvents("LAR_occupation.txt", "occupied_countries", theEvents.getLarOccupationEvents(), outputName);
+	outputUnlandedCapitalsEvent(theEvents.getUnlandedCapitalsEvent(), outputName);
 }
 
 
@@ -139,5 +141,21 @@ void outputGovernmentInExileDecision(const HoI4::Event& governmentInExileEvent, 
 	}
 
 	outEvents << governmentInExileEvent;
+	outEvents.close();
+}
+
+
+void outputUnlandedCapitalsEvent(const HoI4::Event& unlandedCapitalsEvent, const std::string& outputName)
+{
+	std::ofstream outEvents("output/" + outputName + "/events/converterVPEvents.txt", std::ofstream::app);
+	if (!outEvents.is_open())
+	{
+		throw std::runtime_error("Could not add to converterVPEvents.txt");
+	}
+
+	outEvents << "add_namespace = unlanded_capitals\n";
+	outEvents << "\n";
+
+	outEvents << unlandedCapitalsEvent;
 	outEvents.close();
 }

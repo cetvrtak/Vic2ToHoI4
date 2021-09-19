@@ -196,11 +196,11 @@ bool HoI4::State::assignVPFromVic2Province(int Vic2ProvinceNumber, const Mappers
 
 void HoI4::State::assignVP(int location)
 {
-	victoryPointPosition = location;
+	capitalProvince = location;
 
 	if (cores.contains(ownerTag))
 	{
-		victoryPointValue += 1;
+		addVictoryPointValue(*capitalProvince, 1);
 	}
 }
 
@@ -336,7 +336,10 @@ void HoI4::State::convertIndustry(double workerFactoryRatio,
 	determineCategory(factories, theStateCategories);
 	addInfrastructureFromFactories(factories);
 	setIndustry(factories, theCoastalProvinces);
-	addVictoryPointValue(factories / 2);
+	if (capitalProvince)
+	{
+		addVictoryPointValue(*capitalProvince, factories / 2);
+	}
 }
 
 
@@ -497,4 +500,26 @@ bool HoI4::State::ownerHasNoCore() const
 bool HoI4::State::isProvinceInState(int provinceNum) const
 {
 	return provinces.contains(provinceNum);
+}
+
+
+void HoI4::State::addVictoryPointValue(int province, int additionalValue)
+{
+	if (victoryPoints.contains(province))
+	{
+		victoryPoints[province] += additionalValue;
+	}
+	else
+	{
+		victoryPoints.insert(std::make_pair(province, additionalValue));
+	}
+}
+
+
+void HoI4::State::setCapitalVP(int value)
+{
+	if (capitalProvince)
+	{
+		victoryPoints[*capitalProvince] = value;
+	}
 }

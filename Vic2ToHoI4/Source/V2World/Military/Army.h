@@ -19,6 +19,7 @@ class Army // also Navy
 	class Factory;
 	class Builder;
 
+	[[nodiscard]] const auto& getId() const { return id; }
 	[[nodiscard]] const auto& getName() const { return name; }
 	[[nodiscard]] const auto& getOwner() const { return owner; }
 	[[nodiscard]] const auto& getLocation() const { return location; }
@@ -30,6 +31,7 @@ class Army // also Navy
 	bool operator<=>(const Army&) const = default;
 
   private:
+	std::string id;
 	std::string name;
 	std::string owner;
 	std::optional<int> location;
