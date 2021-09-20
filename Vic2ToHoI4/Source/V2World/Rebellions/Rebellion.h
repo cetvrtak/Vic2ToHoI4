@@ -18,9 +18,10 @@ class Rebellion
 {
   public:
 	class Factory;
+	class Army;
 
 	void assignRebelType(const RebelType& rebelType_) { rebelType = rebelType_; }
-	void assignRebelArmy(const Army& army) { armies.push_back(army); }
+	void assignRebelArmy(const Vic2::Army& army) { armies.push_back(army); }
 
 	[[nodiscard]] const auto& getCountry() const { return country; }
 	[[nodiscard]] const auto& getType() const { return type; }
@@ -38,7 +39,7 @@ class Rebellion
 	RebelType rebelType;
 	std::string government;
 	std::set<std::string> armyIds;
-	std::vector<Army> armies;
+	std::vector<Vic2::Army> armies;
 	std::string independence;
 };
 

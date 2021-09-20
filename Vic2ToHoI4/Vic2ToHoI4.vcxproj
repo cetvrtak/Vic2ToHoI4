@@ -443,6 +443,7 @@
     <ClCompile Include="Source\V2World\Localisations\LocalisationsFactory.cpp" />
     <ClCompile Include="Source\V2World\Localisations\Vic2Localisations.cpp" />
     <ClCompile Include="Source\V2World\Military\ArmyFactory.cpp" />
+    <ClCompile Include="Source\V2World\Military\ArmyId.cpp" />
     <ClCompile Include="Source\V2World\Military\Leaders\Leader.cpp" />
     <ClCompile Include="Source\V2World\Military\Leaders\LeaderFactory.cpp" />
     <ClCompile Include="Source\V2World\Military\Leaders\Trait.cpp" />
@@ -456,7 +457,7 @@
     <ClCompile Include="Source\V2World\Pops\PopFactory.cpp" />
     <ClCompile Include="Source\V2World\Provinces\Province.cpp" />
     <ClCompile Include="Source\V2World\Provinces\ProvinceFactory.cpp" />
-    <ClCompile Include="Source\V2World\Rebellions\Rebellion.cpp" />
+    <ClCompile Include="Source\V2World\Rebellions\RebelArmy.cpp" />
     <ClCompile Include="Source\V2World\Rebellions\RebellionFactory.cpp" />
     <ClCompile Include="Source\V2World\Rebellions\RebelTypeFactory.cpp" />
     <ClCompile Include="Source\V2World\Rebellions\RebelTypesFactory.cpp" />
@@ -867,6 +868,7 @@
     <ClInclude Include="Source\V2World\Military\Army.h" />
     <ClInclude Include="Source\V2World\Military\ArmyBuilder.h" />
     <ClInclude Include="Source\V2World\Military\ArmyFactory.h" />
+    <ClInclude Include="Source\V2World\Military\ArmyId.h" />
     <ClInclude Include="Source\V2World\Military\Leaders\Leader.h" />
     <ClInclude Include="Source\V2World\Military\Leaders\LeaderFactory.h" />
     <ClInclude Include="Source\V2World\Military\Leaders\Trait.h" />
@@ -884,6 +886,7 @@
     <ClInclude Include="Source\V2World\Provinces\Province.h" />
     <ClInclude Include="Source\V2World\Provinces\ProvinceBuilder.h" />
     <ClInclude Include="Source\V2World\Provinces\ProvinceFactory.h" />
+    <ClInclude Include="Source\V2World\Rebellions\RebelArmy.h" />
     <ClInclude Include="Source\V2World\Rebellions\Rebellion.h" />
     <ClInclude Include="Source\V2World\Rebellions\RebellionFactory.h" />
     <ClInclude Include="Source\V2World\Rebellions\RebelType.h" />

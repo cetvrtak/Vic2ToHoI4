@@ -1336,7 +1336,10 @@
     <ClCompile Include="Source\V2World\Rebellions\RebelTypesFactory.cpp">
       <Filter>Vic2World\Rebellions</Filter>
     </ClCompile>
-    <ClCompile Include="Source\V2World\Rebellions\Rebellion.cpp">
+    <ClCompile Include="Source\V2World\Military\ArmyId.cpp">
+      <Filter>Vic2World\Military</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\V2World\Rebellions\RebelArmy.cpp">
       <Filter>Vic2World\Rebellions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2626,6 +2629,12 @@
       <Filter>Vic2World\Rebellions</Filter>
     </ClInclude>
     <ClInclude Include="Source\V2World\Rebellions\RebelTypesFactory.h">
+      <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Military\ArmyId.h">
+      <Filter>Vic2World\Military</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Rebellions\RebelArmy.h">
       <Filter>Vic2World\Rebellions</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "RebellionFactory.h"
 #include "CommonRegexes.h"
 #include "ParserHelpers.h"
-#include "StringUtils.h"
+#include "RebelArmy.h"
 
 
 
@@ -23,10 +23,8 @@ Vic2::Rebellion::Factory::Factory()
 		rebellion->provinces = commonItems::intList(theStream).getInts();
 	});
 	registerKeyword("army", [this](std::istream& theStream) {
-		const auto& armyStr = commonItems::stringOfItem{theStream}.getString();
-		std::smatch sm;
-		std::regex_search(armyStr, sm, std::regex("id=([0-9]+)"));
-		rebellion->armyIds.insert(sm[1]);
+		Army rebelArmy(theStream);
+		rebellion->armyIds.insert(rebelArmy.getId());
 	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }

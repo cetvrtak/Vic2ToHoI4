@@ -5,6 +5,29 @@
 
 
 
+TEST(Vic2World_Military_ArmyTests, IdDefaultsToEmpty)
+{
+	std::stringstream input;
+	const auto army = Vic2::Army::Factory().getArmy("", input);
+
+	ASSERT_TRUE(army->getId().empty());
+}
+
+
+TEST(Vic2World_Military_ArmyTests, IdCanBeSet)
+{
+	std::stringstream input;
+	input << "= {\n";
+	input << "\tid = {\n";
+	input << "\t\tid = 12345\n";
+	input << "\t}\n";
+	input << "}";
+	const auto army = Vic2::Army::Factory().getArmy("", input);
+
+	ASSERT_EQ("12345", army->getId());
+}
+
+
 TEST(Vic2World_Military_ArmyTests, NameDefaultsToEmpty)
 {
 	std::stringstream input;
