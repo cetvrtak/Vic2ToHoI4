@@ -1,5 +1,7 @@
 #include "ArmyFactory.h"
+#include "ArmyId.h"
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "OSCompatibilityLayer.h"
 #include "ParserHelpers.h"
 
@@ -8,10 +10,9 @@
 Vic2::Army::Factory::Factory()
 {
 	registerKeyword("id", [this](std::istream& theStream) {
-		const auto& idStr = commonItems::stringOfItem{theStream}.getString();
-		std::smatch sm;
-		std::regex_search(idStr, sm, std::regex("id=([0-9]+)"));
-		army->id = sm[1];
+		ArmyId armyId(theStream);
+		Log(LogLevel::Info) << " -> Army ID: " << armyId.getId();
+		army->id = armyId.getId();
 	});
 	registerKeyword("name", [this](std::istream& theStream) {
 		army->name = commonItems::convertWin1252ToUTF8(commonItems::singleString{theStream}.getString());

@@ -1339,6 +1339,9 @@
     <ClCompile Include="Source\V2World\Rebellions\Rebellion.cpp">
       <Filter>Vic2World\Rebellions</Filter>
     </ClCompile>
+    <ClCompile Include="Source\V2World\Military\ArmyId.cpp">
+      <Filter>Vic2World\Military</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_items\Date.h">
@@ -2627,6 +2630,9 @@
     </ClInclude>
     <ClInclude Include="Source\V2World\Rebellions\RebelTypesFactory.h">
       <Filter>Vic2World\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\Military\ArmyId.h">
+      <Filter>Vic2World\Military</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

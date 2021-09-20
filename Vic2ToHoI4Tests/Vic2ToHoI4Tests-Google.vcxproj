@@ -353,6 +353,7 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Localisations\LocalisationsFactory.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Localisations\Vic2Localisations.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Military\ArmyFactory.cpp" />
+    <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Military\ArmyId.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Military\Leaders\Leader.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Military\Leaders\LeaderFactory.cpp" />
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Military\Leaders\Trait.cpp" />
@@ -547,8 +548,8 @@
     <ClCompile Include="Vic2WorldTests\Provinces\ProvinceBuilderTests.cpp" />
     <ClCompile Include="Vic2WorldTests\Provinces\ProvinceFactoryTests.cpp" />
     <ClCompile Include="Vic2WorldTests\Provinces\ProvinceTests.cpp" />
-    <ClCompile Include="Vic2WorldTests\Rebellions\RebellionTests.cpp" />
-    <ClCompile Include="Vic2WorldTests\Rebellions\RebelTypeTests.cpp" />
+    <ClCompile Include="Vic2WorldTests\Rebellions\RebellionFactoryTests.cpp" />
+    <ClCompile Include="Vic2WorldTests\Rebellions\RebelTypeFactoryTests.cpp" />
     <ClCompile Include="Vic2WorldTests\States\BuildingTests.cpp" />
     <ClCompile Include="Vic2WorldTests\States\StateDefinitionsFactoryTests.cpp" />
     <ClCompile Include="Vic2WorldTests\States\StateDefinitionsTests.cpp" />
@@ -967,6 +968,7 @@
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\Army.h" />
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\ArmyBuilder.h" />
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\ArmyFactory.h" />
+    <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\ArmyId.h" />
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\Leaders\Leader.h" />
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\Leaders\LeaderFactory.h" />
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\Leaders\Trait.h" />

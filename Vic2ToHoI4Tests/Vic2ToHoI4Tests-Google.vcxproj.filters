@@ -1553,9 +1553,6 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\HOI4World\Diplomacy\HoI4Relations.cpp">
       <Filter>Vic2ToHoI4 files\HoI4\Diplomacy</Filter>
     </ClCompile>
-    <ClCompile Include="Vic2WorldTests\Rebellions\RebellionTests.cpp">
-      <Filter>Vic2WorldTests\Rebellions</Filter>
-    </ClCompile>
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Rebellions\RebellionFactory.cpp">
       <Filter>Vic2ToHoI4 files\Vic2\Rebellions</Filter>
     </ClCompile>
@@ -1565,14 +1562,20 @@
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Rebellions\RebelTypeFactory.cpp">
       <Filter>Vic2ToHoI4 files\Vic2\Rebellions</Filter>
     </ClCompile>
-    <ClCompile Include="Vic2WorldTests\Rebellions\RebelTypeTests.cpp">
-      <Filter>Vic2WorldTests\Rebellions</Filter>
-    </ClCompile>
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Rebellions\RebelTypesFactory.cpp">
       <Filter>Vic2ToHoI4 files\Vic2\Rebellions</Filter>
     </ClCompile>
     <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Rebellions\Rebellion.cpp">
       <Filter>Vic2ToHoI4 files\Vic2\Rebellions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Vic2ToHoI4\Source\V2World\Military\ArmyId.cpp">
+      <Filter>Vic2ToHoI4 files\Vic2\Military</Filter>
+    </ClCompile>
+    <ClCompile Include="Vic2WorldTests\Rebellions\RebellionFactoryTests.cpp">
+      <Filter>Vic2WorldTests\Rebellions</Filter>
+    </ClCompile>
+    <ClCompile Include="Vic2WorldTests\Rebellions\RebelTypeFactoryTests.cpp">
+      <Filter>Vic2WorldTests\Rebellions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3116,6 +3119,9 @@
     </ClInclude>
     <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Rebellions\RebelTypesFactory.h">
       <Filter>Vic2ToHoI4 files\Vic2\Rebellions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Vic2ToHoI4\Source\V2World\Military\ArmyId.h">
+      <Filter>Vic2ToHoI4 files\Vic2\Military</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
