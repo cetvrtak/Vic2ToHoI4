@@ -17,7 +17,7 @@ HoI4::MapData::MapData(const ProvinceDefinitions& provinceDefinitions, const Con
 	 provinceMap(theConfiguration.getHoI4Path() + "/map/provinces.bmp")
 {
 	importProvinces(provinceDefinitions, theConfiguration.getHoI4Path());
-	importAdjacencies(theConfiguration.getHoI4Path());
+	importAdjacencies();
 }
 
 
@@ -223,12 +223,12 @@ void HoI4::MapData::addPointToBorder(int mainProvince, int neighborProvince, con
 }
 
 
-void HoI4::MapData::importAdjacencies(const std::string& hoi4Path)
+void HoI4::MapData::importAdjacencies()
 {
-	std::ifstream adjacenciesFile(hoi4Path + "/map/adjacencies.csv");
+	std::ifstream adjacenciesFile("configurables/Map/adjacencies.csv");
 	if (!adjacenciesFile.is_open())
 	{
-		throw std::runtime_error("Could not open " + hoi4Path + "/map/adjacencies.csv");
+		throw std::runtime_error("Could not open configurables/Map/adjacencies.csv");
 	}
 
 	while (!adjacenciesFile.eof())
