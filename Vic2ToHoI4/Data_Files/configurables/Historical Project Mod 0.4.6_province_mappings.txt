@@ -1300,7 +1300,8 @@
 	link = { vic2 = 738 hoi4 = 3773 hoi4 = 6790 hoi4 = 11726 } # Parma -> Salsomaggiore, Piacenza, Tortona
 	link = { vic2 = 724 hoi4 = 6788 } # Genoa -> Genova
 	link = { vic2 = 725 hoi4 = 3772 hoi4 = 11891 } # Savona -> Savona, Sanremo
-	link = { vic2 = 720 hoi4 = 6780 hoi4 = 9738 hoi4 = 11721 hoi4 = 770 hoi4 = 11730 } # Turin -> Torino, Pinerolo, Cuneo, Alba, Chivasso
+	link = { vic2 = 3327 hoi4 = 11721 hoi4 = 9738 } # Saluzzo -> Cuneo, Pinerolo
+	link = { vic2 = 720 hoi4 = 6780 hoi4 = 770 hoi4 = 11730 } # Turin -> Torino, Alba, Chivasso
 	link = { vic2 = 723 hoi4 = 11723 hoi4 = 771 hoi4 = 9741 } # Alessandria -> Asti, Alessandria, Vercelli
 	link = { vic2 = 722 hoi4 = 11570 hoi4 = 3782 hoi4 = 776 hoi4 = 6635 } # Novara -> Châtillon, Ivrea, Novara, Verbania
 	link = { vic2 = 721 hoi4 = 611 } # Aosta -> Aosta
@@ -1470,8 +1471,9 @@
 	link = { vic2 = 561 hoi4 = 9497 hoi4 = 482 } # Weimar -> Sonneberg, Suhl
 	link = { vic2 = 562 hoi4 = 13116 } # Gotha -> Bad Neustadt
 	link = { vic2 = 563 hoi4 = 6421 } # Meiningen -> Schweinfurt
-	link = { vic2 = 598 hoi4 = 9416 hoi4 = 3474 hoi4 = 11404 hoi4 = 586 } # Bayreuth -> Bamberg, Coburg, Bayreuth, Weiden
-	link = { vic2 = 602 hoi4 = 571 hoi4 = 3571 hoi4 = 3299 hoi4 = 3541 hoi4 = 11497 } # Regensburg -> Amberg, Schwandorf, Neumarkt, Deggendorf, Cham
+	link = { vic2 = 3324 hoi4 = 586 hoi4 = 571 hoi4 = 3571 } # Oberpfalz -> Weiden, Amberg, Schwandorf
+	link = { vic2 = 598 hoi4 = 9416 hoi4 = 3474 hoi4 = 11404 } # Bayreuth -> Bamberg, Coburg, Bayreuth
+	link = { vic2 = 602 hoi4 = 3299 hoi4 = 3541 hoi4 = 11497 } # Regensburg -> Neumarkt, Deggendorf, Cham
 	link = { vic2 = 597 hoi4 = 11417 hoi4 = 9572 hoi4 = 9557 } # Wurzburg -> Bad Kissingen, Kitzingen, Würzburg
 	link = { vic2 = 538 hoi4 = 11388 } # Osnabruck -> Osnabrück
 	link = { vic2 = 585 hoi4 = 3355 } # Detmold -> Paderborn
@@ -1505,18 +1507,21 @@
 	link = { vic2 = 594 hoi4 = 519 } # Sigmaringen -> Reutlingen
 	link = { vic2 = 590 hoi4 = 6555 hoi4 = 9545 } # Heilbronn -> Heilbronn, Aalen
 	link = { vic2 = 589 hoi4 = 9517 hoi4 = 11499 } # Stuttgart -> Stuttgart, Ulm
-	link = { vic2 = 593 hoi4 = 3690 hoi4 = 9655 } # Ulm -> Biberach, Ravensburg
+	link = { vic2 = 3325 hoi4 = 9655 } # Memmingen -> Ravensburg
+	link = { vic2 = 593 hoi4 = 3690 } # Ulm -> Biberach
 	link = { vic2 = 592 hoi4 = 9666 hoi4 = 708 hoi4 = 6693 hoi4 = 11638 } # Augsburg -> Memmingen, Augsburg, Landsberg, Kempten
 	link = { vic2 = 595 hoi4 = 11544 hoi4 = 11529 hoi4 = 6540 hoi4 = 561 } # Nuremburg -> Nürnberg, Rothenburg ob der Tauber, Ingolstadt, Schwabach
 	link = { vic2 = 601 hoi4 = 3705 } # Ingolstadt -> Dachau
 	link = { vic2 = 599 hoi4 = 692 hoi4 = 11653 hoi4 = 11620 hoi4 = 9652 hoi4 = 707 hoi4 = 6725 hoi4 = 3688 } # Munich -> München, Landshut, Garmisch-Partenkirchen, Rosenheim, Traunreut, Dingolfing, Waldkraiburg
-	link = { vic2 = 600 hoi4 = 9681 hoi4 = 9515 hoi4 = 532 } # Landshut -> Pocking, Regensburg, Passau
+	link = { vic2 = 3323 hoi4 = 532 } # Passau -> Passau
+	link = { vic2 = 600 hoi4 = 9681 hoi4 = 9515 } # Landshut -> Pocking, Regensburg
 	link = { vic2 = 546 hoi4 = 6282 hoi4 = 6334 hoi4 = 6390 hoi4 = 537 hoi4 = 6309 } # Stettin -> Stettin, Swinemünde, Stargard, Neudamm, Arnswalde
 	link = { vic2 = 679 hoi4 = 9334 hoi4 = 9361 hoi4 = 9277 hoi4 = 9306 } # Kolberg -> Greifenberg, Kolberg, Dramburg, Belgard
 	link = { vic2 = 680 hoi4 = 11372 hoi4 = 11343 hoi4 = 11316 } # Koslin -> Köslin, Stolp, Lauenburg
 	link = { vic2 = 692 hoi4 = 11260 hoi4 = 9252 hoi4 = 11288 } # Deutsch Krone -> Neustettin, Deutsch Krone, Bütow
-	link = { vic2 = 681 hoi4 = 3473 hoi4 = 3572 hoi4 = 444 hoi4 = 11478 hoi4 = 6236 hoi4 = 9387 } # Kustrin -> Küstrin, Sorau, Schwiebus, Landsberg an der Warthe, Berlinchen, Driesen
-	link = { vic2 = 682 hoi4 = 9570 hoi4 = 552 hoi4 = 6595 hoi4 = 3283 hoi4 = 6462 hoi4 = 3510 hoi4 = 9470 hoi4 = 3438 } # Breslau -> Breslau, Liegnitz, Bunzlau, Trebnitz, Zwickau, Dyhernfurth, Glogau, Sagan
+	link = { vic2 = 681 hoi4 = 3473 hoi4 = 444 hoi4 = 11478 hoi4 = 6236 hoi4 = 9387 } # Kustrin -> Küstrin, Schwiebus, Landsberg an der Warthe, Berlinchen, Driesen
+	link = { vic2 = 682 hoi4 = 9570 hoi4 = 552 hoi4 = 3283 hoi4 = 6462 hoi4 = 3510 } # Breslau -> Breslau, Liegnitz, Trebnitz, Zwickau, Dyhernfurth
+	link = { vic2 = 3326 hoi4 = 9470 hoi4 = 3438 hoi4 = 3572 hoi4 = 6595 } # Glogau -> Glogau, Sagan, Sorau, Bunzlau
 	link = { vic2 = 683 hoi4 = 6534 hoi4 = 11517 hoi4 = 3485 hoi4 = 3545 } # Waldenburg -> Oels, Lauban, Glatz, Waldenburg
 	link = { vic2 = 688 hoi4 = 3414 hoi4 = 6485 hoi4 = 3583 } # Troppau -> Opava, Krnov, Ostrava
 	link = { vic2 = 684 hoi4 = 9511 hoi4 = 6512 hoi4 = 9457 hoi4 = 11467 hoi4 = 479 } # Oppeln -> Oppeln, Neisse, Rybnick, Gleiwitz, Kreuzburg
