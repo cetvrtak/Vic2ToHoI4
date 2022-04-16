@@ -1,7 +1,9 @@
 #include "ProvinceFactory.h"
 #include "CommonRegexes.h"
 #include "ParserHelpers.h"
+#include "RGO.h"
 #include <ranges>
+#include "Log.h"
 
 
 
@@ -38,6 +40,10 @@ Vic2::Province::Factory::Factory(std::unique_ptr<PopFactory>&& _popFactory): pop
 	registerKeyword("life_rating", [this](std::istream& theStream) {
 		province->landProvince_ = true;
 		const auto unused = commonItems::getInt(theStream);
+	});
+	registerKeyword("rgo", [this](std::istream& theStream) {
+		const auto rgo = RGO(theStream);
+		province->rgoEmployees = rgo.getEmployees();
 	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }

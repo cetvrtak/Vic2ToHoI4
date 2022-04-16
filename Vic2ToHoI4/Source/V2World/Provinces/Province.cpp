@@ -65,3 +65,17 @@ int Vic2::Province::calculateLiteracyWeightedPop(const Pop& thePop)
 {
 	return static_cast<int>(thePop.getSize() * (thePop.getLiteracy() * literacyWeighting + minimumLiteracyWeighting));
 }
+
+
+int Vic2::Province::getFarmers() const
+{
+	int count = 0;
+	for (const auto& pop: pops)
+	{
+		if (pop.getType() == "farmers" || pop.getType() == "labourers")
+		{
+			count += pop.getSize();
+		}
+	}
+	return count;
+}

@@ -109,6 +109,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 	moveArmiesHome();
 	removeBattles();
 	importMapData(theConfiguration.getVic2Path());
+	calculateUnemployment();
 
 	return std::move(world);
 }
@@ -128,6 +129,27 @@ void Vic2::World::Factory::setGreatPowerStatus()
 		const auto& tag = tagsInOrder.at(index);
 		world->greatPowers.push_back(tag);
 	}
+}
+
+
+void Vic2::World::Factory::calculateUnemployment()
+{
+	Log(LogLevel::Info) << "\tCalculating Unemployment";
+	int employed = 0;
+	int totalWorkers = 0;
+	for (auto& [provinceNum, province]: world->provinces)
+	{
+		employed += province->getRgoEmployees();
+		totalWorkers += province->getFarmers();
+	}
+	const auto& unemployment = 1 - employed / static_cast<double>(totalWorkers);
+
+	std::ofstream out("C:/Users/volga/OneDrive/Docs/Paradox Interactive/Romania/results/unemployment.csv", std::ios_base::app);
+	out << world->getDate().getYear() << ";";
+	out << totalWorkers << ";";
+	out << totalWorkers - employed << ";";
+	out << unemployment << ";x\n";
+	out.close();
 }
 
 

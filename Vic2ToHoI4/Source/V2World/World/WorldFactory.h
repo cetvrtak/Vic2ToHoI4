@@ -29,6 +29,7 @@ class World::Factory: commonItems::parser
 		 const Mappers::ProvinceMapper& provinceMapper);
 
   private:
+	void calculateUnemployment();
 	void setLocalisations(Localisations& vic2Localisations);
 	void setGreatPowerStatus();
 	void setProvinceOwners();

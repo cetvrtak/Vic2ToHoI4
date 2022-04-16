@@ -40,6 +40,8 @@ class Province
 	[[nodiscard]] const auto& getNavalBaseLevel() const { return navalBaseLevel; }
 	[[nodiscard]] const auto& getRailLevel() const { return railLevel; }
 	[[nodiscard]] const auto& getFlags() const { return flags; }
+	[[nodiscard]] int getRgoEmployees() const { return rgoEmployees; }
+	[[nodiscard]] int getFarmers() const;
 
   private:
 	[[nodiscard]] static int calculateLiteracyWeightedPop(const Pop& thePop);
@@ -53,6 +55,7 @@ class Province
 	std::set<std::string> cores;
 
 	std::vector<Pop> pops;
+	int rgoEmployees;
 
 	int navalBaseLevel = 0;
 	int railLevel = 0;
