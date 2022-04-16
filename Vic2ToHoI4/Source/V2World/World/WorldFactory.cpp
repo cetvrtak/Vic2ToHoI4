@@ -150,6 +150,7 @@ void Vic2::World::Factory::calculateUnemployment()
 	out << totalWorkers - employed << ";";
 	out << unemployment << ";x\n";
 	out.close();
+	throw std::runtime_error("Finished calculating unemployment");
 }
 
 
