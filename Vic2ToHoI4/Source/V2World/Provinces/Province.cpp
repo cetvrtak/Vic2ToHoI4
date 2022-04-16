@@ -72,7 +72,8 @@ int Vic2::Province::getFarmers() const
 	int count = 0;
 	for (const auto& pop: pops)
 	{
-		if (pop.getType() == "farmers" || pop.getType() == "labourers")
+		if (pop.getType() == "farmers" || pop.getType() == "labourers" || pop.getType() == "slaves"
+			 || pop.getType() == "serfs")
 		{
 			count += pop.getSize();
 		}
