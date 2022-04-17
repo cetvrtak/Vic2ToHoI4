@@ -41,7 +41,6 @@ class Province
 	[[nodiscard]] const auto& getRailLevel() const { return railLevel; }
 	[[nodiscard]] const auto& getFlags() const { return flags; }
 	[[nodiscard]] int getRgoEmployees() const { return rgoEmployees; }
-	[[nodiscard]] int getFarmers() const;
 
   private:
 	[[nodiscard]] static int calculateLiteracyWeightedPop(const Pop& thePop);

@@ -115,6 +115,42 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 }
 
 
+void Vic2::World::Factory::calculateUnemployment()
+{
+	Log(LogLevel::Info) << "\tCalculating Unemployment";
+	std::map<std::string, int> popCount;
+	int employed = 0;
+	for (auto& [provinceNum, province]: world->provinces)
+	{
+		employed += province->getRgoEmployees();
+		for (const auto& pop: province->getPops())
+		{
+			popCount[pop.getType()] += pop.getSize();
+			popCount["total"] += pop.getSize();
+		}
+	}
+	const auto& rgoWorkers = popCount["farmers"] + popCount["labourers"] + popCount["slaves"] + popCount["serfs"];
+	const auto& rgoUnemployment = 1 - employed / static_cast<double>(rgoWorkers);
+
+	std::ofstream out("C:/Users/volga/OneDrive/Docs/Paradox Interactive/Romania/results/unemployment.csv", std::ios_base::app);
+	out << world->getDate().getYear() << ";";
+	out << popCount["total"] << ";";
+	out << rgoWorkers << ";";
+	out << popCount["farmers"] + popCount["labourers"] << ";";
+	out << popCount["slaves"] << ";";
+	out << popCount["serfs"] << ";";
+	out << rgoWorkers - employed << ";";
+	out << rgoUnemployment << ";";
+	out << popCount["craftsmen"] + popCount["clerks"] << ";";
+	out << popCount["craftsmen"] << ";";
+	out << popCount["clerks"] << ";";
+	out << ";";
+	out << ";x\n";
+	out.close();
+	throw std::runtime_error("Finished calculating unemployment");
+}
+
+
 void Vic2::World::Factory::setGreatPowerStatus()
 {
 	Log(LogLevel::Info) << "\tSetting Great Power statuses";
@@ -129,28 +165,6 @@ void Vic2::World::Factory::setGreatPowerStatus()
 		const auto& tag = tagsInOrder.at(index);
 		world->greatPowers.push_back(tag);
 	}
-}
-
-
-void Vic2::World::Factory::calculateUnemployment()
-{
-	Log(LogLevel::Info) << "\tCalculating Unemployment";
-	int employed = 0;
-	int totalWorkers = 0;
-	for (auto& [provinceNum, province]: world->provinces)
-	{
-		employed += province->getRgoEmployees();
-		totalWorkers += province->getFarmers();
-	}
-	const auto& unemployment = 1 - employed / static_cast<double>(totalWorkers);
-
-	std::ofstream out("C:/Users/volga/OneDrive/Docs/Paradox Interactive/Romania/results/unemployment.csv", std::ios_base::app);
-	out << world->getDate().getYear() << ";";
-	out << totalWorkers << ";";
-	out << totalWorkers - employed << ";";
-	out << unemployment << ";x\n";
-	out.close();
-	throw std::runtime_error("Finished calculating unemployment");
 }
 
 
