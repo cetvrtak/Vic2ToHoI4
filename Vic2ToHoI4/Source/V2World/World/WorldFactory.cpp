@@ -84,7 +84,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 
 	world = std::make_unique<World>();
 	world->theStateDefinitions = StateDefinitions::Factory().getStateDefinitions(theConfiguration);
-	world->theLocalisations = Localisations::Factory().importLocalisations(theConfiguration);
+	//world->theLocalisations = Localisations::Factory().importLocalisations(theConfiguration);
 	parseFile(theConfiguration.getInputFile());
 	if (!world->diplomacy)
 	{
@@ -103,7 +103,7 @@ std::unique_ptr<Vic2::World> Vic2::World::Factory::importWorld(const Configurati
 	removeEmptyNations();
 	consolidatePartialStates();
 	addWarsToCountries(wars);
-	setLocalisations(*world->theLocalisations);
+	//setLocalisations(*world->theLocalisations);
 	checkAllProvincesMapped(provinceMapper);
 	consolidateConquerStrategies();
 	moveArmiesHome();
