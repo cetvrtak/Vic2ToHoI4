@@ -16,9 +16,11 @@ class BuildingReader: commonItems::parser
 	BuildingReader();
 
 	int getLevel(std::istream& theStream);
+	int getEmployees() const { return employees; }
 
   private:
 	int level = 0;
+	int employees = 0;
 };
 
 } // namespace Vic2

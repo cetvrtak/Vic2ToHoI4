@@ -119,6 +119,8 @@ void Vic2::World::Factory::calculateUnemployment()
 {
 	Log(LogLevel::Info) << "\tCalculating Unemployment";
 	std::map<std::string, int> popCount;
+
+	Log(LogLevel::Info) << "\t\tRGOs";
 	int employed = 0;
 	for (auto& [provinceNum, province]: world->provinces)
 	{
@@ -133,6 +135,18 @@ void Vic2::World::Factory::calculateUnemployment()
 	const auto& rgoUnemployment = 1 - employed / static_cast<double>(rgoWorkers);
 
 	std::ofstream out("C:/Users/volga/OneDrive/Docs/Paradox Interactive/Romania/results/unemployment.csv", std::ios_base::app);
+	Log(LogLevel::Info) << "\t\tFactories";
+	int factoryEmployees = 0;
+	for (const auto& country: world->countries | std::views::values)
+	{
+		for (const auto& state: country.getStates())
+		{
+			factoryEmployees += state.getFactoryEmployees();
+		}
+	}
+	const auto& factoryWorkers = popCount["craftsmen"] + popCount["clerks"];
+	const auto& factoryUnemployment = 1 - factoryEmployees / static_cast<double>(factoryWorkers);
+
 	out << world->getDate().getYear() << ";";
 	out << popCount["total"] << ";";
 	out << rgoWorkers << ";";

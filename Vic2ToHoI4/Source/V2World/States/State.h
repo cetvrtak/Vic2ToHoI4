@@ -53,6 +53,7 @@ class State
 	[[nodiscard]] std::optional<int> getCapitalProvince() const { return capitalProvince; }
 	[[nodiscard]] const std::string& getLanguageCategory() const { return languageCategory; }
 	[[nodiscard]] int getEmployedWorkers() const { return employedWorkers; }
+	[[nodiscard]] int getFactoryEmployees() const { return factoryEmployees; }
 
   private:
 	[[nodiscard]] workerStruct countEmployedWorkers() const;
@@ -71,6 +72,7 @@ class State
 
 	int factoryLevel = 0;
 	int employedWorkers = 0;
+	int factoryEmployees = 0;
 };
 
 } // namespace Vic2

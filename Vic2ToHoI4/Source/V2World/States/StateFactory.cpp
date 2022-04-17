@@ -15,6 +15,7 @@ Vic2::State::Factory::Factory()
 	});
 	registerKeyword("state_buildings", [this](std::istream& theStream) {
 		state->factoryLevel += buildingReader.getLevel(theStream);
+		state->factoryEmployees += buildingReader.getEmployees();
 	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
