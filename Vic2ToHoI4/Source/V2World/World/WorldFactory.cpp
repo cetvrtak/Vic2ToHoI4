@@ -159,7 +159,8 @@ void Vic2::World::Factory::calculateUnemployment()
 	out << factoryWorkers << ";";
 	out << popCount["craftsmen"] << ";";
 	out << popCount["clerks"] << ";";
-	out << factoryWorkers - factoryEmployees << ";x\n";
+	out << factoryWorkers - factoryEmployees << ";";
+	out << popCount["soldiers"] << ";x\n";
 	out.close();
 	throw std::runtime_error("Finished calculating unemployment");
 }
