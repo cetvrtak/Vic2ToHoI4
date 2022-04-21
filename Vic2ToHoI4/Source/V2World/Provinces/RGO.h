@@ -15,11 +15,15 @@ class RGO: commonItems::parser
 	RGO() = default;
 	explicit RGO(std::istream& theStream);
 
-	[[nodiscard]] int getEmployees() const { return employees; }
+	[[nodiscard]] const auto& getEmployees() const { return employees; }
+	[[nodiscard]] const auto& getIncome() const { return income; }
+	[[nodiscard]] const auto& getType() const { return type; }
 
   private:
 	void registerKeys();
  	int employees = 0;
+ 	double income = 0.0;
+ 	std::string type;
 };
 
 } // namespace Vic2

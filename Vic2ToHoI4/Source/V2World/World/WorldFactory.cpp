@@ -210,8 +210,9 @@ void ::Vic2::World::Factory::logPopsQoL(std::shared_ptr<Vic2::Province> province
 		 "D:/Paradox Interactive/Romania/results/qol/" + std::to_string(province->getNumber()) + ".csv";
 	std::ofstream out(filePath, std::ios_base::app);
 	out << world->getDate().getYear() << ";";
-	out << province->getNumber() << ";";
 	out << province->getOwner() << ";";
+	out << province->getRgoType() << ";";
+	out << province->getRgoIncome() << ";";
 
 	province->processWorkers();
 	const auto& rgo = province->getRgoWorkersData();

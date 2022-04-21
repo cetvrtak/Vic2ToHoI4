@@ -50,7 +50,9 @@ class Province
 	[[nodiscard]] const auto& getNavalBaseLevel() const { return navalBaseLevel; }
 	[[nodiscard]] const auto& getRailLevel() const { return railLevel; }
 	[[nodiscard]] const auto& getFlags() const { return flags; }
-	[[nodiscard]] int getRgoEmployees() const { return rgoEmployees; }
+	[[nodiscard]] const auto& getRgoEmployees() const { return rgoEmployees; }
+	[[nodiscard]] const auto& getRgoIncome() const { return rgoIncome; }
+	[[nodiscard]] const auto& getRgoType() const { return rgoType; }
 	[[nodiscard]] const auto& getRgoWorkersData() const { return rgoWorkers; }
 	[[nodiscard]] const auto& getFactoryWorkersData() const { return factoryWorkers; }
 
@@ -67,6 +69,8 @@ class Province
 
 	std::vector<Pop> pops;
 	int rgoEmployees;
+	double rgoIncome;
+	std::string rgoType;
 	PopData rgoWorkers;
 	PopData factoryWorkers;
 

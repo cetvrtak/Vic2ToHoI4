@@ -44,6 +44,8 @@ Vic2::Province::Factory::Factory(std::unique_ptr<PopFactory>&& _popFactory): pop
 	registerKeyword("rgo", [this](std::istream& theStream) {
 		const auto rgo = RGO(theStream);
 		province->rgoEmployees = rgo.getEmployees();
+		province->rgoIncome = rgo.getIncome();
+		province->rgoType = rgo.getType();
 	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }

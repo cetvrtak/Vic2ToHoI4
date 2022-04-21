@@ -32,5 +32,11 @@ void Vic2::RGO::registerKeys()
 	registerKeyword("count", [this](std::istream& theStream) {
 		employees = commonItems::getInt(theStream);
 	});
+	registerKeyword("last_income", [this](std::istream& theStream) {
+		income = commonItems::getDouble(theStream);
+	});
+	registerKeyword("goods_type", [this](std::istream& theStream) {
+		type = commonItems::getString(theStream);
+	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
