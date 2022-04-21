@@ -30,6 +30,9 @@ class World::Factory: commonItems::parser
 
   private:
 	void calculateUnemployment();
+	int getRgoEmployees();
+	int getFactoryEmployees();
+	void logResults(std::map<std::string, int> popCount, int rgoEmployees, int factoryEmployees);
 	void setLocalisations(Localisations& vic2Localisations);
 	void setGreatPowerStatus();
 	void setProvinceOwners();

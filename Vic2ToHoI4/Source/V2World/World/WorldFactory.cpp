@@ -119,22 +119,35 @@ void Vic2::World::Factory::calculateUnemployment()
 {
 	Log(LogLevel::Info) << "\tCalculating Unemployment";
 	std::map<std::string, int> popCount;
-
-	Log(LogLevel::Info) << "\t\tRGOs";
-	int employed = 0;
 	for (auto& [provinceNum, province]: world->provinces)
 	{
-		employed += province->getRgoEmployees();
 		for (const auto& pop: province->getPops())
 		{
 			popCount[pop.getType()] += pop.getSize();
 			popCount["total"] += pop.getSize();
 		}
 	}
-	const auto& rgoWorkers = popCount["farmers"] + popCount["labourers"] + popCount["slaves"] + popCount["serfs"];
-	const auto& rgoUnemployment = 1 - employed / static_cast<double>(rgoWorkers);
 
-	Log(LogLevel::Info) << "\t\tFactories";
+	logResults(popCount, getRgoEmployees(), getFactoryEmployees());
+	throw std::runtime_error("Finished calculating unemployment");
+}
+
+
+int Vic2::World::Factory::getRgoEmployees()
+{
+	Log(LogLevel::Info) << "\t\tProcessing RGOs";
+	int employed = 0;
+	for (auto& [provinceNum, province]: world->provinces)
+	{
+		employed += province->getRgoEmployees();
+	}
+	return employed;
+}
+
+
+int Vic2::World::Factory::getFactoryEmployees()
+{
+	Log(LogLevel::Info) << "\t\tProcessing Factories";
 	int factoryEmployees = 0;
 	for (const auto& country: world->countries | std::views::values)
 	{
@@ -143,6 +156,15 @@ void Vic2::World::Factory::calculateUnemployment()
 			factoryEmployees += state.getFactoryEmployees();
 		}
 	}
+	return factoryEmployees;
+}
+
+
+void Vic2::World::Factory::logResults(std::map<std::string, int> popCount, int rgoEmployees, int factoryEmployees)
+{
+	const auto& rgoWorkers = popCount["farmers"] + popCount["labourers"] + popCount["slaves"] + popCount["serfs"];
+	const auto& rgoUnemployment = 1 - rgoEmployees / static_cast<double>(rgoWorkers);
+
 	const auto& factoryWorkers = popCount["craftsmen"] + popCount["clerks"];
 	const auto& factoryUnemployment = 1 - factoryEmployees / static_cast<double>(factoryWorkers);
 
@@ -155,14 +177,13 @@ void Vic2::World::Factory::calculateUnemployment()
 	out << popCount["farmers"] + popCount["labourers"] << ";";
 	out << popCount["slaves"] << ";";
 	out << popCount["serfs"] << ";";
-	out << rgoWorkers - employed << ";";
+	out << rgoWorkers - rgoEmployees << ";";
 	out << factoryWorkers << ";";
 	out << popCount["craftsmen"] << ";";
 	out << popCount["clerks"] << ";";
 	out << factoryWorkers - factoryEmployees << ";";
 	out << popCount["soldiers"] << ";x\n";
 	out.close();
-	throw std::runtime_error("Finished calculating unemployment");
 }
 
 
