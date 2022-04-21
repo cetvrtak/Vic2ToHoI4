@@ -206,7 +206,9 @@ void::Vic2::World::Factory::processPopsQoL()
 
 void ::Vic2::World::Factory::logPopsQoL(std::shared_ptr<Vic2::Province> province)
 {
-	std::ofstream out("D:/Paradox Interactive/Romania/results/qol.csv", std::ios_base::app);
+	std::string filePath =
+		 "D:/Paradox Interactive/Romania/results/qol/" + std::to_string(province->getNumber()) + ".csv";
+	std::ofstream out(filePath, std::ios_base::app);
 	out << world->getDate().getYear() << ";";
 	out << province->getNumber() << ";";
 	out << province->getOwner() << ";";
