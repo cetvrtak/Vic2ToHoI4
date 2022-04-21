@@ -129,6 +129,7 @@ void Vic2::World::Factory::calculateUnemployment()
 	}
 
 	logResults(popCount, getRgoEmployees(), getFactoryEmployees());
+	processPopsQoL();
 	throw std::runtime_error("Finished calculating unemployment");
 }
 
@@ -183,6 +184,47 @@ void Vic2::World::Factory::logResults(std::map<std::string, int> popCount, int r
 	out << popCount["clerks"] << ";";
 	out << factoryWorkers - factoryEmployees << ";";
 	out << popCount["soldiers"] << ";x\n";
+	out.close();
+}
+
+
+void::Vic2::World::Factory::processPopsQoL()
+{
+	Log(LogLevel::Info) << "\tProcessing Pops QoL";
+	for (auto& [provinceNum, province]: world->provinces)
+	{
+		if (!province->isLandProvince())
+		{
+			continue;
+		}
+
+		logPopsQoL(province);
+	}
+}
+
+
+
+void ::Vic2::World::Factory::logPopsQoL(std::shared_ptr<Vic2::Province> province)
+{
+	std::ofstream out("D:/Paradox Interactive/Romania/results/qol.csv", std::ios_base::app);
+	out << world->getDate().getYear() << ";";
+	out << province->getNumber() << ";";
+	out << province->getOwner() << ";";
+
+	province->processWorkers();
+	const auto& rgo = province->getRgoWorkersData();
+	out << rgo.count << ";";
+	out << rgo.money / rgo.count << ";";
+	out << rgo.lifeNeeds / rgo.count << ";";
+	out << rgo.everydayNeeds / rgo.count << ";";
+	out << rgo.luxuryNeeds / rgo.count << ";";
+
+	const auto& factory = province->getFactoryWorkersData();
+	out << factory.count << ";";
+	out << factory.money / factory.count << ";";
+	out << factory.lifeNeeds / factory.count << ";";
+	out << factory.everydayNeeds / factory.count << ";";
+	out << factory.luxuryNeeds / factory.count << ";x\n";
 	out.close();
 }
 

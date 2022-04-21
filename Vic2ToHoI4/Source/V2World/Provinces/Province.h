@@ -20,6 +20,14 @@ class Province
   public:
 	class Builder;
 	class Factory;
+	struct PopData
+	{
+		int count = 0;
+		double money = 0.0;
+		double lifeNeeds = 0.0;
+		double everydayNeeds = 0.0;
+		double luxuryNeeds = 0.0;
+	};
 	Province() = default;
 
 	[[nodiscard]] int getTotalPopulation() const;
@@ -30,6 +38,8 @@ class Province
 	void setOwner(const std::string& _owner) { owner = _owner; }
 	void addCore(const std::string& core) { cores.insert(core); }
 	void removeCore(const std::string& core) { cores.erase(core); }
+	void processWorkers();
+	void addPopData(const Pop& pop, PopData& workers);
 
 	[[nodiscard]] const auto& getNumber() const { return number; }
 	[[nodiscard]] auto isLandProvince() const { return landProvince_; }
@@ -41,6 +51,8 @@ class Province
 	[[nodiscard]] const auto& getRailLevel() const { return railLevel; }
 	[[nodiscard]] const auto& getFlags() const { return flags; }
 	[[nodiscard]] int getRgoEmployees() const { return rgoEmployees; }
+	[[nodiscard]] const auto& getRgoWorkersData() const { return rgoWorkers; }
+	[[nodiscard]] const auto& getFactoryWorkersData() const { return factoryWorkers; }
 
   private:
 	[[nodiscard]] static int calculateLiteracyWeightedPop(const Pop& thePop);
@@ -55,6 +67,8 @@ class Province
 
 	std::vector<Pop> pops;
 	int rgoEmployees;
+	PopData rgoWorkers;
+	PopData factoryWorkers;
 
 	int navalBaseLevel = 0;
 	int railLevel = 0;

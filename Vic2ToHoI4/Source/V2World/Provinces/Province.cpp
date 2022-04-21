@@ -65,3 +65,29 @@ int Vic2::Province::calculateLiteracyWeightedPop(const Pop& thePop)
 {
 	return static_cast<int>(thePop.getSize() * (thePop.getLiteracy() * literacyWeighting + minimumLiteracyWeighting));
 }
+
+
+void Vic2::Province::processWorkers()
+{
+	for (const auto& pop: pops)
+	{
+		if (pop.getType() == "farmers" || pop.getType() == "labourers")
+		{
+			addPopData(pop, rgoWorkers);
+		}
+		else if (pop.getType() == "craftsmen")
+		{
+			addPopData(pop, factoryWorkers);
+		}
+	}
+}
+
+
+void Vic2::Province::addPopData(const Pop& pop, PopData& workers)
+{
+	workers.count += pop.getSize();
+	workers.money += pop.getMoney();
+	workers.lifeNeeds += pop.getLifeNeeds() * pop.getSize();
+	workers.everydayNeeds += pop.getEverydayNeeds() * pop.getSize();
+	workers.luxuryNeeds += pop.getLuxuryNeeds() * pop.getSize();
+}

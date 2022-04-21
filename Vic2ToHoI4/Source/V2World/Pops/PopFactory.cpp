@@ -16,6 +16,18 @@ Vic2::PopFactory::PopFactory(Issues _theIssues): theIssues(std::move(_theIssues)
 	registerKeyword("mil", [this](std::istream& theStream) {
 		popOptions.militancy = commonItems::singleDouble{theStream}.getDouble();
 	});
+	registerKeyword("money", [this](std::istream& theStream) {
+		popOptions.money = commonItems::singleDouble{theStream}.getDouble();
+	});
+	registerKeyword("life_needs", [this](std::istream& theStream) {
+		popOptions.lifeNeeds = commonItems::singleDouble{theStream}.getDouble();
+	});
+	registerKeyword("everyday_needs", [this](std::istream& theStream) {
+		popOptions.everydayNeeds = commonItems::singleDouble{theStream}.getDouble();
+	});
+	registerKeyword("luxury_needs", [this](std::istream& theStream) {
+		popOptions.luxuryNeeds = commonItems::singleDouble{theStream}.getDouble();
+	});
 	registerKeyword("issues", [this](std::istream& theStream) {
 		for (const auto& [issue, value]: commonItems::assignments{theStream}.getAssignments())
 		{

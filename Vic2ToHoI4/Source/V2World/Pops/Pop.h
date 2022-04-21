@@ -19,6 +19,10 @@ struct PopOptions
 	int size = 0;
 	double literacy = 0.0;
 	double militancy = 0.0;
+	double money = 0.0;
+	double lifeNeeds = 0.0;
+	double everydayNeeds = 0.0;
+	double luxuryNeeds = 0.0;
 	std::map<std::string, float> popIssues;
 };
 
@@ -29,7 +33,8 @@ class Pop
 	Pop() = default;
 	explicit Pop(const PopOptions& options):
 		 type_(options.type), culture_(options.culture), size_(options.size), literacy_(options.literacy),
-		 militancy_(options.militancy), popIssues_(options.popIssues)
+		 militancy_(options.militancy), money(options.money), lifeNeeds(options.lifeNeeds),
+		 everydayNeeds(options.everydayNeeds), luxuryNeeds(options.luxuryNeeds), popIssues_(options.popIssues)
 	{
 	}
 
@@ -38,6 +43,10 @@ class Pop
 	[[nodiscard]] const auto& getSize() const { return size_; }
 	[[nodiscard]] const auto& getLiteracy() const { return literacy_; }
 	[[nodiscard]] const auto& getMilitancy() const { return militancy_; }
+	[[nodiscard]] const auto& getMoney() const { return money; }
+	[[nodiscard]] const auto& getLifeNeeds() const { return lifeNeeds; }
+	[[nodiscard]] const auto& getEverydayNeeds() const { return everydayNeeds; }
+	[[nodiscard]] const auto& getLuxuryNeeds() const { return luxuryNeeds; }
 
 	[[nodiscard]] float getIssueSupport(const std::string& issueName) const;
 
@@ -47,6 +56,10 @@ class Pop
 	int size_ = 0;
 	double literacy_ = 0.0;
 	double militancy_ = 0.0;
+	double money = 0.0;
+	double lifeNeeds = 0.0;
+	double everydayNeeds = 0.0;
+	double luxuryNeeds = 0.0;
 
 	std::map<std::string, float> popIssues_;
 };
