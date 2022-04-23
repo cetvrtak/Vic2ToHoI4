@@ -206,10 +206,14 @@ void::Vic2::World::Factory::processPopsQoL()
 
 void ::Vic2::World::Factory::logPopsQoL(std::shared_ptr<Vic2::Province> province)
 {
-	std::string filePath =
-		 "D:/Paradox Interactive/Romania/results/qol/" + std::to_string(province->getNumber()) + ".csv";
-	std::ofstream out(filePath, std::ios_base::app);
-	out << world->getDate().getYear() << ";";
+	std::ofstream out("D:/Paradox Interactive/Romania/results/qol/" + std::to_string(province->getNumber()) + ".csv", std::ios_base::app);
+	const auto& year = world->getDate().getYear();
+	if (year == 1837)
+	{
+		out << "Year;Province;Owner;RGO Type;RGO Workers;RGO Money/Worker;RGO Life Needs;RGO Everyday Needs;RGO Luxury Needs;";
+		out << "Factory Workers;Factory Money/Worker;Factory Life Needs;Factory Everyday Needs;Factory Luxury Needs;x";
+	}
+	out << year << ";";
 	out << province->getOwner() << ";";
 	out << province->getRgoType() << ";";
 	out << province->getRgoIncome() << ";";
