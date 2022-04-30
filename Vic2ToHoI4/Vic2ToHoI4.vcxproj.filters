@@ -1447,6 +1447,9 @@
     <ClCompile Include="Source\V2World\Provinces\RGO.cpp">
       <Filter>Vic2World\Provinces</Filter>
     </ClCompile>
+    <ClCompile Include="Source\V2World\World\Market.cpp">
+      <Filter>Vic2World\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common_items\Date.h">
@@ -2804,6 +2807,9 @@
     </ClInclude>
     <ClInclude Include="Source\V2World\Provinces\RGO.h">
       <Filter>Vic2World\Provinces</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\V2World\World\Market.h">
+      <Filter>Vic2World\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

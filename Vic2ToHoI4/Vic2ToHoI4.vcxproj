@@ -494,6 +494,7 @@
     <ClCompile Include="Source\V2World\Technology\InventionsFactory.cpp" />
     <ClCompile Include="Source\V2World\Technology\TechnologyFactory.cpp" />
     <ClCompile Include="Source\V2World\Wars\WarFactory.cpp" />
+    <ClCompile Include="Source\V2World\World\Market.cpp" />
     <ClCompile Include="Source\V2World\World\World.cpp" />
     <ClCompile Include="Source\V2World\World\WorldFactory.cpp" />
     <ClCompile Include="Source\Vic2toHOI4Converter.cpp" />
@@ -953,6 +954,7 @@
     <ClInclude Include="Source\V2World\Wars\WarFactory.h" />
     <ClInclude Include="Source\V2World\Wars\WarGoal.h" />
     <ClInclude Include="Source\V2World\Wars\WarGoalFactory.h" />
+    <ClInclude Include="Source\V2World\World\Market.h" />
     <ClInclude Include="Source\V2World\World\World.h" />
     <ClInclude Include="Source\V2World\World\WorldBuilder.h" />
     <ClInclude Include="Source\V2World\World\WorldFactory.h" />

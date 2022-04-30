@@ -4,6 +4,7 @@
 
 
 #include "Maps/MapData.h"
+#include "Market.h"
 #include "V2World/Countries/Country.h"
 #include "V2World/Diplomacy/Diplomacy.h"
 #include "V2World/Localisations/Vic2Localisations.h"
@@ -38,6 +39,7 @@ class World
 	[[nodiscard]] const auto& getLocalisations() const { return *theLocalisations; }
 	[[nodiscard]] const auto& getDate() const { return *theDate; }
 	[[nodiscard]] const auto& getMapData() const { return *mapData_; }
+	[[nodiscard]] const auto& getMarketData() const { return *marketData; }
 
 	[[nodiscard]] std::vector<std::reference_wrapper<const State>> getStates() const;
 
@@ -50,6 +52,7 @@ class World
 	std::unique_ptr<Localisations> theLocalisations;
 	std::unique_ptr<date> theDate;
 	std::unique_ptr<Maps::MapData> mapData_;
+	std::unique_ptr<Market> marketData;
 };
 
 

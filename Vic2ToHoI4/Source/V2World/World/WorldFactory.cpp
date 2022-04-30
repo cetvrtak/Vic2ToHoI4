@@ -1,6 +1,7 @@
 #include "WorldFactory.h"
 #include "CommonRegexes.h"
 #include "Log.h"
+#include "Market.h"
 #include "Mappers/MergeRules/MergeRules.h"
 #include "Mappers/MergeRules/MergeRulesFactory.h"
 #include "ParserHelpers.h"
@@ -67,6 +68,9 @@ Vic2::World::Factory::Factory(const Configuration& theConfiguration):
 	registerKeyword("active_war", [this](std::istream& theStream) {
 		wars.push_back(warFactory.getWar(theStream));
 	});
+	registerKeyword("worldmarket", [this](std::istream& theStream) {
+		world->marketData = std::make_unique<Market>(theStream);
+	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
@@ -130,6 +134,7 @@ void Vic2::World::Factory::calculateUnemployment()
 
 	logResults(popCount, getRgoEmployees(), getFactoryEmployees());
 	processPopsQoL();
+	processMarket();
 	throw std::runtime_error("Finished calculating unemployment");
 }
 
@@ -232,6 +237,44 @@ void ::Vic2::World::Factory::logPopsQoL(std::shared_ptr<Vic2::Province> province
 	out << factory.lifeNeeds / factory.count << ";";
 	out << factory.everydayNeeds / factory.count << ";";
 	out << factory.luxuryNeeds / factory.count << ";x\n";
+	out.close();
+}
+
+
+void Vic2::World::Factory::processMarket()
+{
+	Log(LogLevel::Info) << "\tProcessing market data";
+	logPrices();
+}
+
+
+void Vic2::World::Factory::logPrices()
+{
+	Log(LogLevel::Info) << "\t\tPrices";
+	std::ofstream out("D:/Paradox Interactive/Romania/results/prices.csv", std::ios_base::app);
+	const auto& prices = world->getMarketData().getPriceHistory();
+
+	const auto& year = world->getDate().getYear();
+	if (year == 1837)
+	{
+		out << "Date;";
+		for (const auto& good: prices[0] | std::views::keys)
+		{
+			out << good << ";";
+		}
+		out << "x\n";
+	}
+
+	for (size_t i = prices.size() - 12; i < prices.size(); i++)
+	{
+		int month = i % 12 + 1;
+		out << year << "/" << month << "/1;";
+		for (const auto& price: prices[i] | std::views::values)
+		{
+			out << price << ";";
+		}
+		out << "x\n";
+	}
 	out.close();
 }
 

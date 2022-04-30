@@ -34,6 +34,9 @@ class World::Factory: commonItems::parser
 	int getFactoryEmployees();
 	void logResults(std::map<std::string, int> popCount, int rgoEmployees, int factoryEmployees);
 	void processPopsQoL();
+	void processMarket();
+	void logPrices();
+	void logMarket();
 	void logPopsQoL(std::shared_ptr<Vic2::Province> province);
 	void setLocalisations(Localisations& vic2Localisations);
 	void setGreatPowerStatus();
