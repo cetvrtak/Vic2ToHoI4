@@ -2254,13 +2254,13 @@
 	link = { vic2 = 1804 hoi4 = 8116 } # Bandiagara -> San
 	link = { vic2 = 1802 hoi4 = 12838 } # Jenne -> Niono
 	link = { vic2 = 1800 hoi4 = 4927 } # Segu -> Ségou
-	link = { vic2 = 1794 hoi4 = 12751 } # Bamako -> Bamako
+	link = { vic2 = 1794 vic2 = 1798 hoi4 = 12751 } # Bamako, Bougouni -> Bamako
 	link = { vic2 = 1801 hoi4 = 10812 } # Mourdiah -> Nara
 	link = { vic2 = 1797 hoi4 = 10829 } # Kita -> Kita
 	link = { vic2 = 1796 hoi4 = 10915 } # Nioro -> Nioro du Sahel
 	link = { vic2 = 1795 hoi4 = 2012 } # Bambuhu -> Kayes
 	link = { vic2 = 1799 hoi4 = 12794 } # Sikasso -> Sikasso
-	link = { vic2 = 1798 hoi4 = 5045 } # Bougouni -> Bougouni
+	link = { vic2 = 1900 hoi4 = 5045 } # Odienne -> Bougouni
 	link = { vic2 = 1783 vic2 = 2573 vic2 = 1787 hoi4 = 4948 } # Dakar, Mboul, Diourbel -> Dakar
 	link = { vic2 = 1786 vic2 = 1789 vic2 = 1784 hoi4 = 12710 } # Linguere, Podor, Saint-Louis -> Touba
 	link = { vic2 = 1790 hoi4 = 8015 } # Matam -> Matam
@@ -2271,13 +2271,12 @@
 	link = { vic2 = 1880 hoi4 = 1909 hoi4 = 12802 } # Timbo -> Conakry, Labé
 	link = { vic2 = 1881 hoi4 = 4957 } # Dinguiraye -> Siguiri
 	link = { vic2 = 1882 hoi4 = 8008 } # Kankan -> Kankan
-	link = { vic2 = 1883 hoi4 = 5039 } # Beyla -> Nzérékoré
-	link = { vic2 = 1900 hoi4 = 5070 } # Odienne -> Odienné
-	link = { vic2 = 1898 hoi4 = 8065 } # Kong -> Korhogo
-	link = { vic2 = 1893 vic2 = 1896 hoi4 = 10762 } # Sassandra, Man -> San-Pédro
-	link = { vic2 = 1892 vic2 = 1894 hoi4 = 10803 } # Grand Lahou, Grand Bassam -> land
-	link = { vic2 = 1895 vic2 = 1897 hoi4 = 8122 } # Daloa, Akoupe -> Bouaké
-	link = { vic2 = 1899 hoi4 = 5013 } # Bondouku -> Abengourou
+	link = { vic2 = 1883 vic2 = 1886 vic2 = 1885 hoi4 = 5039 } # Beyla, Bo, Falaba -> Nzérékoré
+	link = { vic2 = 1896 hoi4 = 5070 } # Man -> Odienné
+	link = { vic2 = 1893 hoi4 = 10762 } # Sassandra -> San-Pédro
+	link = { vic2 = 1892 hoi4 = 10803 } # Grand Lahou -> land
+	link = { vic2 = 1895 hoi4 = 8122 hoi4 = 8065 } # Daloa -> Bouaké, Korhogo
+	link = { vic2 = 1899 vic2 = 1897 vic2 = 1898 hoi4 = 5013 } # Bondouku, Akoupe, Kong -> Abengourou
 	link = { vic2 = 1905 vic2 = 1906 hoi4 = 7983 } # Sia, Orodaro -> Bobo-Dioulasso
 	link = { vic2 = 1902 hoi4 = 12851 } # Wahiguya -> Ouahigouya
 	link = { vic2 = 1901 hoi4 = 8071 hoi4 = 10836 } # Wagadugu -> Koudougou, Ouagadougou
@@ -2397,11 +2396,11 @@
 	link = { vic2 = 1785 hoi4 = 4989 hoi4 = 13213 } # Banjul -> Bathurst, Farafenni
 	link = { vic2 = 1877 hoi4 = 12891 } # Bissau -> Bissau
 	link = { vic2 = 1878 hoi4 = 12747 } # Gabu -> Nova Lamego
-	link = { vic2 = 1884 vic2 = 1885 hoi4 = 2038 } # Freetown, Falaba -> Freetown
-	link = { vic2 = 1886 hoi4 = 2094 } # Bo -> Kenema
-	link = { vic2 = 1887 vic2 = 1889 vic2 = 1890 hoi4 = 7959 } # Monrovia, Bopolu, Gbarnga -> Monrovia
-	link = { vic2 = 1888 vic2 = 1891 hoi4 = 8006 } # Harper, Zwedru -> Zwedru
-	link = { vic2 = 1909 hoi4 = 12742 } # Sekondi -> Takoradi
+	link = { vic2 = 1890 hoi4 = 2094 } # Gbarnga -> Kenema
+	link = { vic2 = 1889 hoi4 = 2038 } # Bopolu -> Freetown
+	link = { vic2 = 1891 hoi4 = 7959 } # Zwedru -> Monrovia
+	link = { vic2 = 1888 vic2 = 1887 vic2 = 1884 hoi4 = 8006 } # Harper, Monrovia, Freetown -> Zwedru
+	link = { vic2 = 1909 vic2 = 1894 hoi4 = 12742 } # Sekondi, Grand Bassam -> Takoradi
 	link = { hoi4 = 13136 } # NOTHING -> (Lake)
 	link = { vic2 = 1908 hoi4 = 10862 } # Cape Coast -> Accra
 	link = { vic2 = 1915 vic2 = 1907 hoi4 = 12785 } # Ho, Accra -> Ho
