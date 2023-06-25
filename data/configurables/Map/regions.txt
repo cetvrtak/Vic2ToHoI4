@@ -389,7 +389,7 @@ france = {
 	freed_adjective = "france_adj"
 	level = autonomy_integrated_puppet
 	color = { 51 51 255 }
-	blocked = { europe mena }
+	blocked = { europe }
 	provinces = {
 		# Picardie
 		454 575 3476 3536 6504 6585 9500 9561 11420 11483 11548
@@ -684,7 +684,7 @@ italy = {
 	freed_adjective = "italy_adj"
 	level = autonomy_integrated_puppet
 	color = { 111 189 72 }
-	blocked = { europe mena }
+	blocked = { europe }
 	provinces = {
 		# Piemonte
 		611 770 771 776 3772 3782 6635 6780 6788 9738 9741 11570 11721 11723 11726 11730 11891
@@ -1136,7 +1136,7 @@ arabia = {
 	freed_name = "arabia"
 	freed_adjective = "arabia_adj"
 	level = autonomy_colony
-	blocked = { turkey transcaucasia mena south_asia east_africa }
+	blocked = { turkey transcaucasia mena south_asia east_africa sudan abyssinia }
 	color = { 0 84 0 }
 	provinces = {
 		# Hedjaz
