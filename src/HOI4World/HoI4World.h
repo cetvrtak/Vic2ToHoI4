@@ -226,6 +226,7 @@ class World: commonItems::parser
 
 	std::shared_ptr<Country> getDominion(const std::shared_ptr<Country>& owner,
 		 const std::set<int>& area,
+	 	 const std::set<int>& areaStates,
 		 Mappers::GraphicsMapper& graphicsMapper,
 		 Names& names);
 	std::string getBestRegion(const std::set<int>& area, const std::string& ownerTag);

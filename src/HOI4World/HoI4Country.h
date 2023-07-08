@@ -72,6 +72,7 @@ class Country
 	/// For creating generated dominions
 	explicit Country(const std::shared_ptr<Country> owner,
 		 const std::string& region_,
+	 	 const std::set<int>& areaStates,
 		 const Regions& regions,
 		 Mappers::GraphicsMapper& graphicsMapper,
 		 Names& names);

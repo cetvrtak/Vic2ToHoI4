@@ -137,6 +137,7 @@ HoI4::Country::Country(std::string tag,
 
 HoI4::Country::Country(const std::shared_ptr<Country> owner,
 	 const std::string& region_,
+	 const std::set<int>& areaStates,
 	 const Regions& regions,
 	 Mappers::GraphicsMapper& graphicsMapper,
 	 Names& names):
@@ -149,6 +150,12 @@ HoI4::Country::Country(const std::shared_ptr<Country> owner,
 	 puppetMasterOldTag(owner->getOldTag()), governmentIdeology(owner->getGovernmentIdeology()),
 	 leaderIdeology(owner->getLeaderIdeology()), oldCapital(-1)
 {
+	if (areaStates.size() < 3)
+	{
+		region = "STATE_" + std::to_string(*areaStates.begin());
+		Log(LogLevel::Info) << region;
+	}
+
 	if (const auto& regionName = regions.getRegionName(region); regionName)
 	{
 		if (const auto& ownerAdjective = owner->adjective_; ownerAdjective)
