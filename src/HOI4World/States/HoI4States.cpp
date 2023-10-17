@@ -708,11 +708,12 @@ void HoI4::States::convertResources(const std::map<std::string, std::shared_ptr<
 		}
 
 		std::map<std::string, float> state_resources;
+		const auto manpower_multiplier = getTotalManpower() / 20438756.2 / 100;
 		for (const auto province_number: state.getProvinces())
 		{
 			for (const auto& [resource, amount]: resource_map.getResourcesInProvince(province_number))
 			{
-				state_resources[resource] += static_cast<float>(amount) * resource_multiplier;
+				state_resources[resource] += static_cast<float>(amount) * resource_multiplier * manpower_multiplier;
 			}
 		}
 		for (const auto& [resource, amount]: state_resources)
