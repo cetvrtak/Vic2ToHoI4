@@ -107,15 +107,15 @@ HoI4WarCreator::HoI4WarCreator(HoI4::World* world,
 	double worldStrength = calculateWorldStrength(AILog, theConfiguration);
 
 	std::set<std::shared_ptr<HoI4::Faction>> factionsAtWar;
-	Log(LogLevel::Info) << "\t\tGenerating major wars";
-	generateMajorWars(AILog,
-		 factionsAtWar,
-		 world->getMajorIdeologies(),
-		 world,
-		 theMapData,
-		 provinceDefinitions,
-		 hoi4Localisations,
-		 theConfiguration);
+	// Log(LogLevel::Info) << "\t\tGenerating major wars";
+	// generateMajorWars(AILog,
+	// 	 factionsAtWar,
+	// 	 world->getMajorIdeologies(),
+	// 	 world,
+	// 	 theMapData,
+	// 	 provinceDefinitions,
+	// 	 hoi4Localisations,
+	// 	 theConfiguration);
 	Log(LogLevel::Info) << "\t\tGenerating reconquest wars";
 	generateReconquestWars(AILog, theMapData, provinceDefinitions, hoi4Localisations, theConfiguration);
 

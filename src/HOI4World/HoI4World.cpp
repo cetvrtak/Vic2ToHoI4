@@ -251,9 +251,12 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 		createFactions(theConfiguration);
 	}
 
+	// kept for MapUtils & Reconquest Wars
 	HoI4WarCreator warCreator(this, *theMapData, *provinceDefinitions, *hoi4Localisations, theConfiguration);
 
 	transferPuppetsToDominions();
+
+	createWorldWar();
 
 	addFocusTrees(theConfiguration.getDebug());
 	adjustedBranches = std::make_unique<AdjustedBranches>(AdjustedBranches(countries,
@@ -296,6 +299,22 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	ideological_unit_medals_ = ImportIdeologicalUnitMedals();
 
 	dynamic_ai_peace_ = GenerateDynamicAiPeaces(ideologies->getMajorIdeologies());
+}
+
+void HoI4::World::createWorldWar()
+{
+	Log(LogLevel::Info) << "Creating World War content";
+	// Get the player & nemesis from theConfiguration
+	// Create blocks
+	// 	Other countries choose side || stay neutral
+	// 	Calculate block strenghts && weaknesses
+	// 	Rebalance blocks
+	// 	Build frontline(s)
+	// 	Leaders determine how & where to expand
+	// 	Declare war on other block
+	// Load focuses
+	// Update focuses with block tags
+	// Export focus trees
 }
 
 

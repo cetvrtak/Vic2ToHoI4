@@ -244,6 +244,7 @@ class World: commonItems::parser
 	bool dominionIsReleasable(const Country& dominion);
 
 	void recordUnbuiltCanals(const Vic2::World& sourceWorld);
+	void createWorldWar();
 
 	std::optional<std::string> humanCountry;
 
