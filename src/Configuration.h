@@ -55,6 +55,8 @@ class Configuration
 
 	[[nodiscard]] auto getNextLeaderID() { return leaderID++; }
 
+	[[nodiscard]] const auto& getArchenemy() const { return archenemy; }
+
 	void setForceMultiplier(const float multiplier) { forceMultiplier = multiplier; }
 	void setOutputName(const std::string& name) { outputName = name; }
 
@@ -80,6 +82,8 @@ class Configuration
 
 	// set later
 	unsigned int leaderID = 1000;
+
+	std::string archenemy;
 };
 
 

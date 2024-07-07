@@ -884,3 +884,23 @@ TEST(ConfigurationTests, PercentOfCommandersCanBeSet)
 
 	ASSERT_EQ(0.05F, theConfiguration->getPercentOfCommanders());
 }
+
+TEST(ConfigurationTests, ArchenemyDefaultsToEmpty)
+{
+	std::stringstream input;
+	const commonItems::ConverterVersion converterVersion;
+	const auto theConfiguration = Configuration::Factory().importConfiguration(input, converterVersion);
+
+	ASSERT_TRUE(theConfiguration->getArchenemy().empty());
+}
+
+
+TEST(ConfigurationTests, ArchenemyCanBeSet)
+{
+	std::stringstream input;
+	input << R"(archenemy = "TAG")";
+	const commonItems::ConverterVersion converterVersion;
+	const auto theConfiguration = Configuration::Factory().importConfiguration(input, converterVersion);
+
+	ASSERT_EQ("TAG", theConfiguration->getArchenemy());
+}

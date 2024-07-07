@@ -175,6 +175,9 @@ Configuration::Factory::Factory()
 	registerKeyword("output_name", [this](const std::string& unused, std::istream& theStream) {
 		configuration->customOutputName = commonItems::singleString(theStream).getString();
 	});
+	registerKeyword("archenemy", [this](const std::string& unused, std::istream& theStream) {
+		configuration->archenemy = commonItems::singleString(theStream).getString();
+	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 

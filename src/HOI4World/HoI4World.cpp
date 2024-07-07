@@ -95,8 +95,8 @@ void checkAllProvincesAssignedToRegion(const HoI4::Regions& theRegions,
 HoI4::World::World(const Vic2::World& sourceWorld,
 	 const Mappers::ProvinceMapper& provinceMapper,
 	 const Configuration& theConfiguration):
-	 theDecisions(make_unique<HoI4::decisions>(theConfiguration)),
-	 events(make_unique<HoI4::Events>()), onActions(make_unique<HoI4::OnActions>())
+	 theDecisions(make_unique<HoI4::decisions>(theConfiguration)), events(make_unique<HoI4::Events>()),
+	 onActions(make_unique<HoI4::OnActions>())
 {
 	Log(LogLevel::Progress) << "24%";
 	Log(LogLevel::Info) << "Building HoI4 World";
@@ -256,7 +256,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 
 	transferPuppetsToDominions();
 
-	createWorldWar();
+	createWorldWar(theConfiguration.getArchenemy());
 
 	addFocusTrees(theConfiguration.getDebug());
 	adjustedBranches = std::make_unique<AdjustedBranches>(AdjustedBranches(countries,
@@ -301,10 +301,27 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	dynamic_ai_peace_ = GenerateDynamicAiPeaces(ideologies->getMajorIdeologies());
 }
 
-void HoI4::World::createWorldWar()
+void HoI4::World::createWorldWar(const std::string& archenemyTag)
 {
 	Log(LogLevel::Info) << "Creating World War content";
 	// Get the player & nemesis from theConfiguration
+	if (!humanCountry)
+		return;
+
+	const auto& playerTag = *humanCountry;
+	if (playerTag == archenemyTag)
+	{
+		Log(LogLevel::Warning) << "Archenemy tag (" << archenemyTag
+									  << ") is the player country. Choose a different country to create World War";
+		return;
+	}
+
+	if (const auto& archenemy = countries.find(archenemyTag); archenemy == countries.end())
+	{
+		Log(LogLevel::Warning) << "Archenemy country (" << archenemyTag
+									  << ") does not exist. Aborting World War creation";
+		return;
+	}
 	// Create blocks
 	// 	Other countries choose side || stay neutral
 	// 	Calculate block strenghts && weaknesses
