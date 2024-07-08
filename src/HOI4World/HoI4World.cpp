@@ -325,13 +325,6 @@ void HoI4::World::createWorldWar(const std::string& archenemyTag)
 	}
 
 	HoI4::WorldWar worldWar(playerTag, archenemyTag, countries);
-	// Create blocks
-	// 	Other countries choose side || stay neutral
-	// 	Calculate block strenghts && weaknesses
-	// 	Rebalance blocks
-	// 	Build frontline(s)
-	// 	Leaders determine how & where to expand
-	// 	Declare war on other block
 	// Load focuses
 	// Update focuses with block tags
 	// Export focus trees
