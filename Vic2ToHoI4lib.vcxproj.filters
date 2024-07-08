@@ -100,6 +100,8 @@
     <Filter Include="src\HoI4World\WarCreator">
       <UniqueIdentifier>{b931307b-2f00-4b6a-8507-eebd17ca16ae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\HoI4World\WorldWar">
+    </Filter>
     <Filter Include="src\HoI4World\Countries">
       <UniqueIdentifier>{24fec3ce-7f60-4572-81c0-e9849c8e64a1}</UniqueIdentifier>
     </Filter>
@@ -821,6 +823,9 @@
     </ClCompile>
     <ClCompile Include="src\HOI4World\WarCreator\HoI4WarCreator.cpp">
       <Filter>src\HoI4World\WarCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HOI4World\WorldWar\WorldWar.cpp">
+      <Filter>src\HoI4World\WorldWar</Filter>
     </ClCompile>
     <ClCompile Include="src\HOI4World\Countries\UnionCountry.cpp">
       <Filter>src\HoI4World\Countries</Filter>
@@ -2071,6 +2076,9 @@
     </ClInclude>
     <ClInclude Include="src\HOI4World\WarCreator\HoI4WarCreator.h">
       <Filter>src\HoI4World\WarCreator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HOI4World\WorldWar\WorldWar.h">
+      <Filter>src\HoI4World\WorldWar</Filter>
     </ClInclude>
     <ClInclude Include="src\HOI4World\Countries\Equipment.h">
       <Filter>src\HoI4World\Countries</Filter>

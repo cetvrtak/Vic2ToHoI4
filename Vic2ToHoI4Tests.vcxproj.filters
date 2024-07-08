@@ -750,6 +750,8 @@
     <Filter Include="src\HOI4World\WarCreator">
       <UniqueIdentifier>{ca23be3d-bb18-47de-85b0-f7277db2b955}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\HOI4World\WorldWar">
+    </Filter>
     <Filter Include="src\Mappers">
       <UniqueIdentifier>{6fb33366-5823-4622-b1a0-a6c1c9bb47d3}</UniqueIdentifier>
     </Filter>

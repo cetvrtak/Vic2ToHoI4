@@ -43,6 +43,7 @@
 #include "src/HOI4World/States/HoI4State.h"
 #include "src/HOI4World/UnitMedals/IdeologicalUnitMedals.h"
 #include "src/HOI4World/WarCreator/HoI4WarCreator.h"
+#include "src/HOI4World/WorldWar/WorldWar.h"
 #include "src/Mappers/CasusBelli/CasusBellisFactory.h"
 #include "src/Mappers/Country/CountryMapperFactory.h"
 #include "src/Mappers/CountryName/CountryNameMapperFactory.h"
@@ -322,6 +323,8 @@ void HoI4::World::createWorldWar(const std::string& archenemyTag)
 									  << ") does not exist. Aborting World War creation";
 		return;
 	}
+
+	HoI4::WorldWar worldWar(playerTag, archenemyTag, countries);
 	// Create blocks
 	// 	Other countries choose side || stay neutral
 	// 	Calculate block strenghts && weaknesses
