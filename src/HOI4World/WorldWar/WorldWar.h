@@ -20,10 +20,14 @@ class WorldWar
 		 const std::string& archenemyTag_,
 		 const std::map<std::string, std::shared_ptr<HoI4::Country>>& countries_);
 
+	void createBlocks();
+
   private:
 	std::string playerTag;
 	std::string archenemyTag;
 	std::map<std::string, std::shared_ptr<HoI4::Country>> countries;
+
+	std::map<std::string, std::set<std::string>> blocks;
 };
 
 } // namespace HoI4
