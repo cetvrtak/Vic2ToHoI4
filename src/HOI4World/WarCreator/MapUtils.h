@@ -26,7 +26,10 @@ class MapUtils
 {
   public:
 	explicit MapUtils(const std::map<int, State>& theStates,
-		 const std::map<std::string, std::shared_ptr<Country>>& theCountries);
+		 const std::map<std::string, std::shared_ptr<Country>>& theCountries,
+		 const std::map<int, int>& provinceToStateIdMapping_,
+		 const Maps::MapData& theMapData_,
+		 const Maps::ProvinceDefinitions& provinceDefinitions_);
 
 	[[nodiscard]] std::optional<float> getDistanceBetweenCapitals(const Country& country1, const Country& country2);
 
@@ -47,6 +50,7 @@ class MapUtils
 	[[nodiscard]] std::vector<std::string> getGPsByDistance(const Country& country,
 		 const std::vector<std::shared_ptr<Country>>& greatPowers);
 	[[nodiscard]] const auto& getNeighbors(const std::string& country) const { return neighbors.at(country); }
+	[[nodiscard]] std::set<std::string> GetCapitalAreaNeighbors(const std::shared_ptr<HoI4::Country>& country) const;
 
   private:
 	void establishProvincePositions();
@@ -64,6 +68,12 @@ class MapUtils
 	std::map<int, std::string> provinceToOwnerMap;
 	std::map<std::string, std::map<std::string, float>> distancesBetweenCountries;
 	std::map<std::string, std::set<std::string>> neighbors;
+
+	std::map<int, State> theStates;
+	std::map<std::string, std::shared_ptr<Country>> theCountries;
+	std::map<int, int> provinceToStateIdMapping;
+	Maps::MapData theMapData;
+	Maps::ProvinceDefinitions provinceDefinitions;
 };
 
 } // namespace HoI4

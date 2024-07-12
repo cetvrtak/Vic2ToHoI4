@@ -253,12 +253,16 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	}
 
 	// kept for MapUtils & Reconquest Wars
-	const auto& mapUtils = std::make_shared<HoI4::MapUtils>(getStates(), countries);
+	const auto& mapUtils = std::make_shared<HoI4::MapUtils>(getStates(),
+		 countries,
+		 getProvinceToStateIDMap(),
+		 *theMapData,
+		 *provinceDefinitions);
 	HoI4WarCreator warCreator(this, *theMapData, *provinceDefinitions, *hoi4Localisations, theConfiguration, *mapUtils);
 
 	transferPuppetsToDominions();
 
-	createWorldWar(theConfiguration.getArchenemy());
+	createWorldWar(theConfiguration.getArchenemy(), mapUtils);
 
 	addFocusTrees(theConfiguration.getDebug());
 	adjustedBranches = std::make_unique<AdjustedBranches>(AdjustedBranches(countries,
@@ -303,7 +307,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	dynamic_ai_peace_ = GenerateDynamicAiPeaces(ideologies->getMajorIdeologies());
 }
 
-void HoI4::World::createWorldWar(const std::string& archenemyTag)
+void HoI4::World::createWorldWar(const std::string& archenemyTag, const std::shared_ptr<HoI4::MapUtils>& mapUtils)
 {
 	Log(LogLevel::Info) << "Creating World War content";
 	// Get the player & nemesis from theConfiguration
@@ -325,7 +329,7 @@ void HoI4::World::createWorldWar(const std::string& archenemyTag)
 		return;
 	}
 
-	HoI4::WorldWar worldWar(playerTag, archenemyTag, countries);
+	HoI4::WorldWar worldWar(playerTag, archenemyTag, countries, *mapUtils);
 	// Load focuses
 	// Update focuses with block tags
 	// Export focus trees

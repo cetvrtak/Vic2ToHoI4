@@ -12,8 +12,14 @@ constexpr int halfMapWidth = mapWidth / 2;
 
 
 
-HoI4::MapUtils::MapUtils(const std::map<int, State>& theStates,
-	 const std::map<std::string, std::shared_ptr<Country>>& theCountries)
+HoI4::MapUtils::MapUtils(const std::map<int, State>& theStates_,
+	 const std::map<std::string, std::shared_ptr<Country>>& theCountries_,
+	 const std::map<int, int>& provinceToStateIdMapping_,
+	 const Maps::MapData& theMapData_,
+	 const Maps::ProvinceDefinitions& provinceDefinitions_):
+	 theStates(std::move(theStates_)), theCountries(std::move(theCountries_)),
+	 provinceToStateIdMapping(std::move(provinceToStateIdMapping_)), theMapData(std::move(theMapData_)),
+	 provinceDefinitions(std::move(provinceDefinitions_))
 {
 	Log(LogLevel::Info) << "Determining HoI4 map information";
 	establishProvincePositions();
@@ -352,4 +358,37 @@ std::optional<float> HoI4::MapUtils::getDistanceBetweenCountries(const Country& 
 	}
 
 	return std::sqrt(distanceSquared);
+}
+
+std::set<std::string> HoI4::MapUtils::GetCapitalAreaNeighbors(const std::shared_ptr<HoI4::Country>& country) const
+{
+	std::set<std::string> capitalAreaNeighbors = {};
+
+	const auto& dominionAreas =
+		 country->getDominionAreas(std::make_unique<Maps::MapData>(theMapData), theStates, provinceToStateIdMapping);
+	if (dominionAreas.empty())
+	{
+		capitalAreaNeighbors;
+	}
+	const auto& capitalArea = dominionAreas[0];
+
+	for (const auto& province: capitalArea)
+	{
+		const auto& neighbors = theMapData.GetNeighbors(province);
+		for (const auto& neighbor: neighbors)
+		{
+			if (country->getProvinces().contains(neighbor))
+			{
+				continue;
+			}
+			if (provinceToOwnerMap.find(neighbor) == provinceToOwnerMap.end())
+			{
+				continue;
+			}
+			const auto& owner = provinceToOwnerMap.at(neighbor);
+			capitalAreaNeighbors.insert(owner);
+		}
+	}
+
+	return capitalAreaNeighbors;
 }
