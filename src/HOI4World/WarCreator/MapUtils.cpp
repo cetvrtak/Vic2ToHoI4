@@ -13,12 +13,16 @@ constexpr int halfMapWidth = mapWidth / 2;
 
 
 HoI4::MapUtils::MapUtils(const std::map<int, State>& theStates,
-	 const std::map<std::string, std::shared_ptr<Country>>& theCountries)
+	 const std::map<std::string, std::shared_ptr<Country>>& theCountries,
+	 const std::map<int, int>& provinceToStateIdMapping,
+	 const Maps::MapData& theMapData,
+	 const Maps::ProvinceDefinitions& provinceDefinitions)
 {
 	Log(LogLevel::Info) << "Determining HoI4 map information";
 	establishProvincePositions();
 	determineProvinceOwners(theStates);
 	establishDistancesBetweenCountries(theCountries);
+	determineNeighbors(theCountries, provinceToStateIdMapping, theMapData, provinceDefinitions);
 }
 
 
@@ -352,4 +356,21 @@ std::optional<float> HoI4::MapUtils::getDistanceBetweenCountries(const Country& 
 	}
 
 	return std::sqrt(distanceSquared);
+}
+
+void HoI4::MapUtils::determineNeighbors(const std::map<std::string, std::shared_ptr<Country>>& theCountries,
+	 const std::map<int, int>& provinceToStateIdMapping,
+	 const Maps::MapData& theMapData,
+	 const Maps::ProvinceDefinitions& provinceDefinitions)
+{
+	for (const auto& [tag, country]: theCountries)
+	{
+		for (const auto& [neighborTag, neighbor]: theCountries)
+		{
+			if (!findBorderStates(*country, *neighbor, provinceToStateIdMapping, theMapData, provinceDefinitions).empty())
+			{
+				neighbors[tag].insert(neighborTag);
+			}
+		}
+	}
 }

@@ -253,7 +253,11 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	}
 
 	// kept for MapUtils & Reconquest Wars
-	const auto& mapUtils = std::make_shared<HoI4::MapUtils>(getStates(), countries);
+	const auto& mapUtils = std::make_shared<HoI4::MapUtils>(getStates(),
+		 countries,
+		 getProvinceToStateIDMap(),
+		 *theMapData,
+		 *provinceDefinitions);
 	HoI4WarCreator warCreator(this, *theMapData, *provinceDefinitions, *hoi4Localisations, theConfiguration, *mapUtils);
 
 	transferPuppetsToDominions();

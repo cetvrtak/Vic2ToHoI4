@@ -26,7 +26,15 @@ class MapUtils
 {
   public:
 	explicit MapUtils(const std::map<int, State>& theStates,
-		 const std::map<std::string, std::shared_ptr<Country>>& theCountries);
+		 const std::map<std::string, std::shared_ptr<Country>>& theCountries,
+		 const std::map<int, int>& provinceToStateIdMapping,
+		 const Maps::MapData& theMapData,
+		 const Maps::ProvinceDefinitions& provinceDefinitions);
+
+	void determineNeighbors(const std::map<std::string, std::shared_ptr<Country>>& theCountries,
+		 const std::map<int, int>& provinceToStateIdMapping,
+		 const Maps::MapData& theMapData,
+		 const Maps::ProvinceDefinitions& provinceDefinitions);
 
 	[[nodiscard]] std::optional<float> getDistanceBetweenCapitals(const Country& country1, const Country& country2);
 
