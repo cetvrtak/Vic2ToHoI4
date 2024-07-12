@@ -38,7 +38,8 @@ class HoI4WarCreator
 		 const Maps::MapData& theMapData,
 		 const Maps::ProvinceDefinitions& provinceDefinitions,
 		 HoI4::Localisation& hoi4Localisations,
-		 const Configuration& theConfiguration);
+		 const Configuration& theConfiguration,
+		 const HoI4::MapUtils& mapUtils);
 
 	[[nodiscard]] const auto& getMapUtils() const { return mapUtils; }
 
