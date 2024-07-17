@@ -244,7 +244,7 @@ class World: commonItems::parser
 	bool dominionIsReleasable(const Country& dominion);
 
 	void recordUnbuiltCanals(const Vic2::World& sourceWorld);
-	void createWorldWar(const std::string& archenemyTag);
+	void createWorldWar(const std::string& archenemyTag, const std::shared_ptr<HoI4::MapUtils>& mapUtils);
 
 	std::optional<std::string> humanCountry;
 
