@@ -54,7 +54,7 @@ class MapUtils
 	[[nodiscard]] std::set<std::string> getFarCountries(const std::string& country, float range) const;
 	[[nodiscard]] std::vector<std::string> getGPsByDistance(const Country& country,
 		 const std::vector<std::shared_ptr<Country>>& greatPowers);
-	[[nodiscard]] const auto& getNeighbors(const std::string& country) const { return neighbors.at(country); }
+	[[nodiscard]] std::set<std::string> getNeighbors(const std::string& country) const;
 
   private:
 	void establishProvincePositions();

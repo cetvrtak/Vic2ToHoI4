@@ -374,3 +374,13 @@ void HoI4::MapUtils::determineNeighbors(const std::map<std::string, std::shared_
 		}
 	}
 }
+
+std::set<std::string> HoI4::MapUtils::getNeighbors(const std::string& country) const
+{
+	if (neighbors.contains(country))
+	{
+		return neighbors.at(country);
+	}
+
+	return {};
+}
