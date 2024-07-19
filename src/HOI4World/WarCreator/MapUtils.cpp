@@ -362,15 +362,24 @@ std::optional<float> HoI4::MapUtils::getDistanceBetweenCountries(const Country& 
 
 std::set<std::string> HoI4::MapUtils::GetCapitalAreaNeighbors(const std::shared_ptr<HoI4::Country>& country) const
 {
+	Log(LogLevel::Debug) << "Getting capital area neighbors for " << country->getTag();
 	std::set<std::string> capitalAreaNeighbors = {};
 
-	const auto& dominionAreas =
-		 country->getDominionAreas(std::make_unique<Maps::MapData>(theMapData), theStates, provinceToStateIdMapping);
-	if (dominionAreas.empty())
+	const auto& capitalProvince = country->getCapitalProvince();
+	if (!capitalProvince)
 	{
-		capitalAreaNeighbors;
+		return capitalAreaNeighbors;
 	}
-	const auto& capitalArea = dominionAreas[0];
+	std::set<int> capitalArea;
+	country->addProvincesToArea(*capitalProvince,
+		 capitalArea,
+		 std::make_unique<Maps::MapData>(theMapData),
+		 theStates,
+		 provinceToStateIdMapping);
+	if (capitalArea.empty())
+	{
+		return capitalAreaNeighbors;
+	}
 
 	for (const auto& province: capitalArea)
 	{
@@ -386,6 +395,11 @@ std::set<std::string> HoI4::MapUtils::GetCapitalAreaNeighbors(const std::shared_
 				continue;
 			}
 			const auto& owner = provinceToOwnerMap.at(neighbor);
+			if (capitalAreaNeighbors.contains(owner))
+			{
+				continue;
+			}
+			Log(LogLevel::Debug) << " -> " << owner;
 			capitalAreaNeighbors.insert(owner);
 		}
 	}
