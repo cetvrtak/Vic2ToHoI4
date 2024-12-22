@@ -330,6 +330,7 @@ void HoI4::World::createWorldWar(const std::string& archenemyTag, const std::sha
 	}
 
 	HoI4::WorldWar worldWar(playerTag, archenemyTag, countries, *mapUtils);
+	Log(LogLevel::Debug) << "Creating World War object";
 	// Load focuses
 	// Update focuses with block tags
 	// Export focus trees

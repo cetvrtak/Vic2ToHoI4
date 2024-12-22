@@ -12,6 +12,8 @@ HoI4::WorldWar::WorldWar(const std::string& playerTag_,
 	 mapUtils(std::move(mapUtils_))
 {
 	CreateBlocks();
+	Log(LogLevel::Debug) << "WorldWar blocks size: " << blocks.size();
+
 	// 	Calculate block strenghts && weaknesses
 	// 	Rebalance blocks
 	// 	Build front(s)
@@ -135,9 +137,11 @@ void HoI4::WorldWar::CreateFront()
 			 [leader](const std::pair<std::string, std::set<std::string>>& block) {
 				 return block.first != leader;
 			 })->first;
+		Log(LogLevel::Debug) << "Blocks: " << leader << " | " << oppositeBlock;
 
 		for (const auto& member: members)
 		{
+			Log(LogLevel::Debug) << "\t" << member;
 			const auto& path = FindShortestPathToTarget(member, oppositeBlock);
 			for (auto itr = path.begin(); itr != path.end(); ++itr)
 			{
@@ -145,6 +149,7 @@ void HoI4::WorldWar::CreateFront()
 				const auto& neighbor = *std::next(itr);
 				if (GetBlock(neighbor) != GetBlock(tag))
 				{
+					Log(LogLevel::Debug) << "\t\tAdding: " << tag << " -> " << neighbor;
 					AddToFront(tag);
 					break;
 				}
@@ -176,19 +181,23 @@ std::vector<std::string> HoI4::WorldWar::FindShortestPathToTarget(const std::str
 		{
 			continue;
 		}
+		Log(LogLevel::Debug) << "Popping new path from: " << currentTag << " (" << *referenceBlock << ")";
 
 		std::shared_ptr<HoI4::Country> currentCountry = countries.at(currentTag);
 		const auto& neighbors = mapUtils.GetCapitalAreaNeighbors(currentCountry);
 
 		for (const std::string& neighborTag: neighbors)
 		{
+			Log(LogLevel::Debug) << "Checking neighbor: " << neighborTag;
 			if (visited.find(neighborTag) != visited.end())
 			{
+				Log(LogLevel::Debug) << "\tAlready visited -> skipping";
 				continue;
 			}
 
 			if (countries.find(neighborTag) == countries.end())
 			{
+				Log(LogLevel::Debug) << "\tNo such country -> skipping";
 				continue;
 			}
 
@@ -207,10 +216,12 @@ std::vector<std::string> HoI4::WorldWar::FindShortestPathToTarget(const std::str
 			if (*neighborBlock == referenceBlock)
 			{
 				std::vector<std::string> newPath = currentPath;
+				Log(LogLevel::Debug) << " -> Adding new path with: " << neighborTag;
 				newPath.push_back(neighborTag);
 
 				if (neighborTag == target)
 				{
+					Log(LogLevel::Debug) << "Found archenemy. Returning path";
 					return newPath;
 				}
 
