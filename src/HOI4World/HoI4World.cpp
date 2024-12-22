@@ -95,8 +95,8 @@ void checkAllProvincesAssignedToRegion(const HoI4::Regions& theRegions,
 HoI4::World::World(const Vic2::World& sourceWorld,
 	 const Mappers::ProvinceMapper& provinceMapper,
 	 const Configuration& theConfiguration):
-	 theDecisions(make_unique<HoI4::decisions>(theConfiguration)),
-	 events(make_unique<HoI4::Events>()), onActions(make_unique<HoI4::OnActions>())
+	 theDecisions(make_unique<HoI4::decisions>(theConfiguration)), events(make_unique<HoI4::Events>()),
+	 onActions(make_unique<HoI4::OnActions>())
 {
 	Log(LogLevel::Progress) << "24%";
 	Log(LogLevel::Info) << "Building HoI4 World";
@@ -299,6 +299,8 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	ideological_unit_medals_ = ImportIdeologicalUnitMedals();
 
 	dynamic_ai_peace_ = GenerateDynamicAiPeaces(ideologies->getMajorIdeologies());
+
+	exportCountryStats();
 }
 
 void HoI4::World::createWorldWar()
@@ -317,6 +319,64 @@ void HoI4::World::createWorldWar()
 	// Export focus trees
 }
 
+void HoI4::World::exportCountryStats()
+{
+	Log(LogLevel::Debug) << "Exporting Country Stats";
+	std::ofstream csvFile("country_stats.csv");
+	if (!csvFile.is_open())
+	{
+		std::cerr << "Failed to open the file." << std::endl;
+		return;
+	}
+
+	csvFile << "Tag,Manpower,Core,Non-core,Recruited\n";
+
+	Log(LogLevel::Debug) << "\tExporting available manpower";
+	const auto& theStates = states->getStates();
+	for (const auto& [tag, country]: countries)
+	{
+		csvFile << tag << ",";
+
+		int coreManpower = 0;
+		int nonCoreManpower = 0;
+		for (const auto& stateId: country->getStates())
+		{
+			if (const auto& state = theStates.at(stateId); state.getCores().contains(tag))
+			{
+				coreManpower += state.getManpower();
+			}
+			else
+			{
+				nonCoreManpower += state.getManpower();
+			}
+		}
+		csvFile << coreManpower + nonCoreManpower << "," << coreManpower << "," << nonCoreManpower;
+
+		std::map<std::string, HoI4::DivisionType> divisionTypes;
+		divisionTypes.emplace("Armored Division", HoI4::DivisionType(6900, 12, 300, 105, 360));
+		divisionTypes.emplace("Mechanized Division", HoI4::DivisionType(9000, 12, 600, 210, 180));
+		divisionTypes.emplace("Motorized Division", HoI4::DivisionType(11100, 12, 900, 315, 0));
+		divisionTypes.emplace("Assault Division", HoI4::DivisionType(11000, 108, 900, 0, 60));
+		divisionTypes.emplace("Assault Brigade", HoI4::DivisionType(4000, 36, 300, 0, 60));
+		divisionTypes.emplace("Infantry Division", HoI4::DivisionType(10500, 108, 900, 0, 0));
+		divisionTypes.emplace("Infantry Brigade", HoI4::DivisionType(3500, 36, 300, 0, 0));
+		divisionTypes.emplace("Light Infantry Division", HoI4::DivisionType(9000, 0, 900, 0, 0));
+		divisionTypes.emplace("Light Infantry Brigade", HoI4::DivisionType(3000, 0, 300, 0, 0));
+		divisionTypes.emplace("Cavalry Division", HoI4::DivisionType(9000, 0, 1080, 0, 0));
+		divisionTypes.emplace("Cavalry Brigade", HoI4::DivisionType(3000, 0, 360, 0, 0));
+
+		int manpower = 0;
+		for (const auto& division: country->getArmy().getDivisions())
+		{
+			manpower += divisionTypes.at(division.getType()).manpower;
+		}
+		csvFile << "," << manpower;
+
+		csvFile << "\n";
+	}
+
+	csvFile.close();
+}
 
 shared_ptr<HoI4::Country> HoI4::World::findCountry(const string& countryTag) const
 {

@@ -21,9 +21,12 @@ class DivisionType
 		 const double _experience,
 		 double _startEquipment,
 		 std::map<std::string, int> _regiments):
-		 name(std::move(_name)),
-		 type(std::move(_type)), location(_location), experience(_experience), startEquipment(_startEquipment),
-		 regiments(_regiments)
+		 name(std::move(_name)), type(std::move(_type)), location(_location), experience(_experience),
+		 startEquipment(_startEquipment), regiments(_regiments)
+	{
+	}
+	DivisionType(int manpower, int artillery, int infantry, int truck, int tank):
+		 manpower(std::move(manpower)), artillery(std::move(artillery)), infantry(std::move(infantry)), truck(std::move(truck)), tank(std::move(tank))
 	{
 	}
 
@@ -31,6 +34,12 @@ class DivisionType
 
 	[[nodiscard]] const auto& getType() const { return type; }
 	[[nodiscard]] const auto& getRegiments() const { return regiments; }
+
+	int manpower;
+	int infantry;
+	int artillery;
+	int truck;
+	int tank;
 
   private:
 	std::string name;

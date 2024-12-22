@@ -48,6 +48,7 @@ class Army
 	[[nodiscard]] const auto& getDivisionTypesAndAmounts() const { return divisionTypesAndAmounts; }
 	[[nodiscard]] const std::vector<Equipment>& GetLeftoverEquipment() const { return leftover_equipment_; }
 	[[nodiscard]] const auto& getDivisionLocations() const { return divisionLocations; }
+	[[nodiscard]] const auto& getDivisions() const { return divisions; }
 
   private:
 	static std::optional<int> getLocation(std::optional<int> vic2Location,
