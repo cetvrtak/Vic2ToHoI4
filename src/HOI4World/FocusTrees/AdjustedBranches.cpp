@@ -121,6 +121,9 @@ void HoI4::AdjustedBranches::addPathOfMarxismLeninismBranch(
 {
 	for (auto [tag, country]: countries)
 	{
+		if (tag != "SOV")
+			continue;
+		
 		if (country->isGreatPower() && country->getGovernmentIdeology() == "communism")
 		{
 			const auto& theBranch = std::make_shared<AdjustedBranch>("SOV_the_path_of_marxism_leninism");
