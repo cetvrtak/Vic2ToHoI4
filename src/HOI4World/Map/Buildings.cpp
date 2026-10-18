@@ -103,6 +103,14 @@ void HoI4::Buildings::processLine(const std::string& line, Maps::MapData& theMap
 		{
 			importDefaultBuilding(matches, defaultRocketSites, theMapData);
 		}
+		else if (matches[1] == "landmark_spawn")
+		{
+			importDefaultBuilding(matches, defaultLandmarks, theMapData);
+		}
+		else
+		{
+			Log(LogLevel::Debug) << "No matching building entry for " << matches[1];
+		}
 	}
 }
 
@@ -150,6 +158,7 @@ void HoI4::Buildings::placeBuildings(const States& theStates,
 	placeSupplyNodes(provinceToStateIDMap, theMapData, theConfiguration);
 	placeFloatingHarbors(provinceToStateIDMap, actualCoastalProvinces, theMapData, theConfiguration);
 	placeRocketSites(theStates, theMapData);
+	placeLandmarks(theStates, theMapData);
 }
 
 
@@ -852,6 +861,24 @@ void HoI4::Buildings::placeRocketSites(const States& theStates, const Maps::MapD
 											  << " did not have any points. "
 												  "Rocket site not set for state "
 											  << state.first << ".";
+			}
+		}
+	}
+}
+
+
+void HoI4::Buildings::placeLandmarks(const States& theStates, const Maps::MapData& theMapData)
+{
+	for (const auto& state: theStates.getStates())
+	{
+		for (auto theProvince: state.second.getProvinces())
+		{
+			auto possibleLandmark = defaultLandmarks.find(std::make_pair(theProvince, 0));
+			if (possibleLandmark != defaultLandmarks.end())
+			{
+				auto position = possibleLandmark->second;
+				buildings.insert(std::make_pair(state.first, Building(state.first, "landmark_spawn", position, 0)));
+				break;
 			}
 		}
 	}

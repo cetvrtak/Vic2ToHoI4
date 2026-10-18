@@ -94,6 +94,8 @@ class Buildings
 		 const Maps::MapData& theMapData,
 		 const Configuration& theConfiguration);
 
+	void placeLandmarks(const States& theStates, const Maps::MapData& theMapData);
+
 	std::multimap<int, Building> buildings;
 
 	defaultPositions defaultArmsFactories;
@@ -109,6 +111,7 @@ class Buildings
 	defaultPositions defaultSupplyNodes;
 	defaultPositions defaultFloatingHarbors;
 	defaultPositions defaultRocketSites;
+	defaultPositions defaultLandmarks;
 };
 
 } // namespace HoI4
