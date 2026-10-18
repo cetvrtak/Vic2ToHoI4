@@ -51,55 +51,55 @@ void HoI4::Buildings::processLine(const std::string& line, Maps::MapData& theMap
 
 	if (matches.size() == 7)
 	{
-		if (matches[2] == "arms_factory")
+		if (matches[1] == "arms_factory")
 		{
 			importDefaultBuilding(matches, defaultArmsFactories, theMapData);
 		}
-		else if (matches[2] == "industrial_complex")
+		else if (matches[1] == "industrial_complex")
 		{
 			importDefaultBuilding(matches, defaultIndustrialComplexes, theMapData);
 		}
-		else if (matches[2] == "air_base")
+		else if (matches[1] == "air_base")
 		{
 			importDefaultBuilding(matches, defaultAirBases, theMapData);
 		}
-		else if (matches[2] == "naval_base_spawn")
+		else if (matches[1] == "naval_base_spawn")
 		{
 			importDefaultBuilding(matches, defaultNavalBases, theMapData);
 		}
-		else if (matches[2] == "bunker")
+		else if (matches[1] == "bunker")
 		{
 			importDefaultBuilding(matches, defaultBunkers, theMapData);
 		}
-		else if (matches[2] == "coastal_bunker")
+		else if (matches[1] == "coastal_bunker")
 		{
 			importDefaultBuilding(matches, defaultCoastalBunkers, theMapData);
 		}
-		else if (matches[2] == "dockyard")
+		else if (matches[1] == "dockyard")
 		{
 			importDefaultBuilding(matches, defaultDockyards, theMapData);
 		}
-		else if (matches[2] == "anti_air_building")
+		else if (matches[1] == "anti_air_building")
 		{
 			importDefaultBuilding(matches, defaultAntiAirs, theMapData);
 		}
-		else if (matches[2] == "synthetic_refinery")
+		else if (matches[1] == "synthetic_refinery")
 		{
 			importDefaultBuilding(matches, defaultSyntheticRefineries, theMapData);
 		}
-		else if (matches[2] == "nuclear_reactor_spawn")
+		else if (matches[1] == "nuclear_reactor_spawn")
 		{
 			importDefaultBuilding(matches, defaultNuclearReactors, theMapData);
 		}
-		else if (matches[2] == "supply_node")
+		else if (matches[1] == "supply_node")
 		{
 			importDefaultBuilding(matches, defaultSupplyNodes, theMapData);
 		}
-		else if (matches[2] == "floating_harbor")
+		else if (matches[1] == "floating_harbor")
 		{
 			importDefaultBuilding(matches, defaultFloatingHarbors, theMapData);
 		}
-		else if (matches[2] == "rocket_site_spawn")
+		else if (matches[1] == "rocket_site_spawn")
 		{
 			importDefaultBuilding(matches, defaultRocketSites, theMapData);
 		}
@@ -112,12 +112,12 @@ void HoI4::Buildings::importDefaultBuilding(const std::vector<std::string>& matc
 	 Maps::MapData& theMapData) const
 {
 	BuildingPosition position;
-	position.xCoordinate = stof(matches[3]);
-	position.yCoordinate = stof(matches[4]);
-	position.zCoordinate = stof(matches[5]);
-	position.rotation = stof(matches[6]);
+	position.xCoordinate = stof(matches[2]);
+	position.yCoordinate = stof(matches[3]);
+	position.zCoordinate = stof(matches[4]);
+	position.rotation = stof(matches[5]);
 
-	auto connectingSeaProvince = stoi(matches[7]);
+	auto connectingSeaProvince = stoi(matches[6]);
 
 	if (auto province = theMapData.GetProvinceNumber(
 			  {static_cast<int>(position.xCoordinate), static_cast<int>(position.zCoordinate)});
