@@ -17,6 +17,12 @@ HoI4::StateHistory::StateHistory(std::istream& theStream)
 		milFactories = theBuildings.getMilFactories();
 		dockyards = theBuildings.getDockyards();
 	});
+	registerKeyword("victory_points", [this](std::istream& theStream) {
+		const auto& vps = commonItems::getDoubles(theStream);
+		int province = static_cast<int>(vps[0]);
+		int vp = static_cast<int>(vps[1]);
+		victoryPoints[province] = vp;
+	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 
 	parseStream(theStream);

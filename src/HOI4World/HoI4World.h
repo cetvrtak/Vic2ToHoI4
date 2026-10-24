@@ -199,6 +199,8 @@ class World: commonItems::parser
 		 const Configuration& theConfiguration);
 	void calculateIndustryInCountries();
 	void reportIndustryLevels() const;
+	void determineDefaultVictoryPoints(const std::map<int, HoI4::DefaultState>& defaultStates);
+	int getDefaultTotalVictoryPoints() const;
 
 	void setTrainMultipliers();
 
@@ -341,6 +343,7 @@ class World: commonItems::parser
 	std::map<std::string, std::string> ideological_unit_medals_;
 
 	std::vector<std::string> dynamic_ai_peace_;
+	std::map<int, int> defaultVictoryPoints;
 };
 
 } // namespace HoI4
