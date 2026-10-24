@@ -1143,15 +1143,16 @@ void HoI4::Localisation::addStateLocalisations(const States& states,
 	Log(LogLevel::Info) << "\tAdding state localisations";
 	for (const auto& state: states.getStates())
 	{
-		if (auto VPPositionInHoI4 = state.second.getVPLocation(); VPPositionInHoI4)
+		for (const auto& VPPositionInHoI4: state.second.getVictoryPoints() | std::views::keys)
 		{
-			if (auto VPProvinceMapping = theProvinceMapper.getHoI4ToVic2ProvinceMapping(*VPPositionInHoI4);
+			if (auto VPProvinceMapping = theProvinceMapper.getHoI4ToVic2ProvinceMapping(VPPositionInHoI4);
 				 !VPProvinceMapping.empty())
 			{
 				for (const auto& [language, name]:
 					 vic2Localisations.getTextInEachLanguage("PROV" + std::to_string(VPProvinceMapping[0])))
 				{
-					addVPLocalisationForLanguage(state.second, language, name);
+					getExistingVPLocalisation(language).insert(
+						 std::make_pair("VICTORY_POINTS_" + std::to_string(VPPositionInHoI4), name));
 				}
 			}
 		}

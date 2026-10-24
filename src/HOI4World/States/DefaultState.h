@@ -22,6 +22,7 @@ class DefaultState: commonItems::parser
 	int getCivFactories() const { return civFactories; }
 	int getMilFactories() const { return milFactories; }
 	int getDockyards() const { return dockyards; }
+	std::map<int, int> getVictoryPoints() const { return victoryPoints; }
 	[[nodiscard]] const std::map<std::string, double>& GetResources() const { return resources_; }
 
   private:
@@ -31,6 +32,7 @@ class DefaultState: commonItems::parser
 	int civFactories = 0;
 	int milFactories = 0;
 	int dockyards = 0;
+	std::map<int, int> victoryPoints;
 	std::map<std::string, double> resources_;
 };
 

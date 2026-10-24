@@ -54,6 +54,18 @@ int Vic2::State::determineEmployedWorkersScore(const workerStruct& workers)
 }
 
 
+int Vic2::State::getInitialWorkers() const
+{
+	int provinceWorkers = 0;
+	for (const auto& province: provinces)
+	{
+		provinceWorkers += province->getNumWorkers();
+	}
+
+	return provinceWorkers;
+}
+
+
 void Vic2::State::eatState(const State& state, const StateDefinitions& stateDefinitions)
 {
 	provinceNumbers.insert(state.provinceNumbers.begin(), state.provinceNumbers.end());

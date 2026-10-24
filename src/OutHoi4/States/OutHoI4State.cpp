@@ -60,9 +60,12 @@ void HoI4::outputHoI4State(std::ostream& output, const State& theState, const bo
 			}
 			else
 			{
-				output << "\t\tvictory_points = {\n";
-				output << "\t\t\t" << *theState.getVPLocation() << " " << theState.getVpValue() << " \n";
-				output << "\t\t}\n";
+				for (const auto& [location, value]: theState.getVictoryPoints())
+				{
+					output << "\t\tvictory_points = {\n";
+					output << "\t\t\t" << location << " " << value << " \n";
+					output << "\t\t}\n";
+				}
 			}
 		}
 	}

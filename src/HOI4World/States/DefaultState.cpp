@@ -24,6 +24,7 @@ HoI4::DefaultState::DefaultState(std::istream& theStream)
 		milFactories = theHistory.getMilFactories();
 		dockyards = theHistory.getDockyards();
 		ownerTag = theHistory.getOwner();
+		victoryPoints = theHistory.getVictoryPoints();
 	});
 	registerKeyword("resources", [this](std::istream& the_stream) {
 		for (const auto& [resource, amount]: commonItems::assignments(the_stream).getAssignments())

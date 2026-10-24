@@ -75,6 +75,8 @@ class States: commonItems::parser
 	[[nodiscard]] std::map<int, State>& getModifiableStates() { return states; }
 
 	[[nodiscard]] std::set<int> getNavalBaseLocations() const;
+	[[nodiscard]] int getConvertedVps() const;
+	[[nodiscard]] const std::map<int, int>& getDefaultVps() const { return defaultVictoryPoints; }
 
 	void convertAirBases(const std::map<std::string, std::shared_ptr<Country>>& countries,
 		 const std::vector<std::shared_ptr<Country>>& greatPowers);
@@ -86,6 +88,7 @@ class States: commonItems::parser
 	void finishInfrastructureConversion();
 	void convertCapitalVPs(const std::map<std::string, std::shared_ptr<Country>>& countries,
 		 const std::vector<std::shared_ptr<Country>>& greatPowers);
+	void distributeVPs();
 	void addCapitalsToStates(const std::map<std::string, std::shared_ptr<Country>>& countries);
 	void giveProvinceControlToCountry(int provinceNum,
 		 const std::string& country,
@@ -166,6 +169,7 @@ class States: commonItems::parser
 	void addCapitalAirBases(const std::map<std::string, std::shared_ptr<Country>>& countries);
 	void addGreatPowerAirBases(const std::vector<std::shared_ptr<Country>>& greatPowers);
 
+	void determineDefaultVictoryPoints();
 	void addGreatPowerVPs(const std::vector<std::shared_ptr<Country>>& greatPowers);
 	void addCapitalVictoryPoints(const std::map<std::string, std::shared_ptr<Country>>& countries);
 
@@ -177,6 +181,8 @@ class States: commonItems::parser
 	std::map<int, State> states;
 	std::map<int, int> provinceToStateIDMap;
 	int nextStateID = 1;
+
+	std::map<int, int> defaultVictoryPoints;
 
 	std::map<std::string, std::set<int>> languageCategories;
 };
