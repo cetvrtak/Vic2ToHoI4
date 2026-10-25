@@ -52,8 +52,9 @@ class State
 	void markHadImpassablePart() { hadImpassablePart = true; }
 	void addResource(const std::string& resource, double amount) { resources[resource] += amount; }
 	void addAirBase(int newAirBase);
+	void addVictoryPoint(int province, int value = 0);
 	void addVictoryPointValue(int additionalValue) { victoryPointValue += additionalValue; }
-	void setVPValue(int value) { victoryPointValue = value; }
+	void setVPValue(int value) { victoryPoints[*victoryPointPosition] = value; }
 	void setVPLocation(int province) { victoryPointPosition = province; }
 	void setOwnerAveragePopPerProvince(int ownerAvrgPopPerProv_) { ownerAvrgPopPerProvince = ownerAvrgPopPerProv_; }
 	void setAveragePopPerProvince(int avrgPopPerProv_) { avrgPopPerProvince = avrgPopPerProv_; }
@@ -95,7 +96,9 @@ class State
 	const std::map<std::string, double>& getResources() const { return resources; }
 	std::optional<int> getVPLocation() const { return victoryPointPosition; }
 	int getVpValue() const { return victoryPointValue; }
+	[[nodiscard]] const auto& getVictoryPoints() const { return victoryPoints; }
 	const std::set<int>& getDebugVPs() const { return debugVictoryPoints; }
+	double calculateVictoryPoints();
 	const std::set<int>& getSecondaryDebugVPs() const { return secondaryDebugVictoryPoints; }
 	[[nodiscard]] bool IsCapitalState() const { return capitalState; }
 
@@ -167,6 +170,7 @@ class State
 
 	std::map<std::string, double> resources;
 
+	std::map<int, int> victoryPoints;
 	std::optional<int> victoryPointPosition;
 	int victoryPointValue = 0;
 	std::set<int> debugVictoryPoints;

@@ -832,6 +832,61 @@ void HoI4::States::convertCapitalVPs(const std::map<std::string, std::shared_ptr
 }
 
 
+void HoI4::States::distributeVPs(const std::map<int, int>& defaultVictoryPoints)
+{
+	Log(LogLevel::Info) << "Distributing victory points";
+	for (auto& state: states | std::views::values)
+	{
+		const auto& stateValue = state.calculateVictoryPoints();
+
+		if (stateValue == 0)
+		{
+			continue;
+		}
+
+		int defaultStateValue = 0;
+		for (const auto& province: state.getProvinces())
+		{
+			if (defaultVictoryPoints.contains(province))
+			{
+				defaultStateValue += defaultVictoryPoints.at(province);
+			}
+		}
+
+		for (const auto& province: state.getProvinces())
+		{
+			if (!defaultVictoryPoints.contains(province))
+			{
+				continue;
+			}
+
+			const auto& defaultProvinceValue = defaultVictoryPoints.at(province);
+			const auto& provinceValue = static_cast<int>(stateValue * defaultProvinceValue / defaultStateValue);
+
+			if (provinceValue > 0)
+			{
+				state.addVictoryPoint(province, provinceValue);
+			}
+		}
+	}
+}
+
+
+int HoI4::States::getConvertedVps() const
+{
+	int assignedVps = 0;
+	for (const auto& state: states | std::views::values)
+	{
+		for (const auto& vp: state.getVictoryPoints() | std::views::values)
+		{
+			assignedVps += vp;
+		}
+	}
+
+	return assignedVps;
+}
+
+
 void HoI4::States::addCapitalsToStates(const std::map<std::string, std::shared_ptr<Country>>& countries)
 {
 	Log(LogLevel::Info) << "\tAdding capitals to states";

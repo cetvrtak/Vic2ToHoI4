@@ -355,7 +355,10 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	addLeaders(characterFactory);
 	convertIdeologySupport();
 	Log(LogLevel::Progress) << "72%";
+	states->distributeVPs(defaultVictoryPoints);
 	states->convertCapitalVPs(countries, greatPowers);
+	Log(LogLevel::Debug) << "Total converted victory points: " << states->getConvertedVps();
+
 	states->convertAirBases(countries, greatPowers);
 	states->addLandmarks(landmarksMapper);
 	factionNameMapper = Mappers::FactionNameMapper::Factory().importFactionNameMapper();
