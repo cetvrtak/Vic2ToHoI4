@@ -832,9 +832,24 @@ void HoI4::States::convertCapitalVPs(const std::map<std::string, std::shared_ptr
 }
 
 
-void HoI4::States::distributeVPs(const std::map<int, int>& defaultVictoryPoints)
+void HoI4::States::determineDefaultVictoryPoints()
+{
+	for (const auto& state: defaultStates_ | std::views::values)
+	{
+		for (const auto& [province, vp]: state.getVictoryPoints())
+		{
+			defaultVictoryPoints[province] = vp;
+		}
+	}
+}
+
+
+void HoI4::States::distributeVPs()
 {
 	Log(LogLevel::Info) << "Distributing victory points";
+
+	determineDefaultVictoryPoints();
+
 	for (auto& state: states | std::views::values)
 	{
 		const auto& stateValue = state.calculateVictoryPoints();
