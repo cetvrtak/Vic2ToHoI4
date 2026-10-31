@@ -200,7 +200,6 @@ class World: commonItems::parser
 	void calculateIndustryInCountries();
 	void reportIndustryLevels() const;
 	void determineDefaultVictoryPoints(const std::map<int, HoI4::DefaultState>& defaultStates);
-	int getDefaultTotalVictoryPoints() const;
 
 	void setTrainMultipliers();
 

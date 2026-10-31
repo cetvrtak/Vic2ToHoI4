@@ -226,7 +226,6 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	strategicRegions = StrategicRegions::Factory().ImportStrategicRegions(theConfiguration);
 	const auto defaultStates = DefaultStatesImporter().ImportDefaultStates(theConfiguration.getHoI4Path());
 	determineDefaultVictoryPoints(defaultStates);
-	int defaultTotalVictoryPoints = getDefaultTotalVictoryPoints();
 	const ImpassableProvinces impassableProvinces(defaultStates);
 	states = std::make_unique<States>(sourceWorld,
 		 *countryMap,
@@ -1280,19 +1279,6 @@ void HoI4::World::determineDefaultVictoryPoints(const std::map<int, HoI4::Defaul
 			defaultVictoryPoints[province] = vp;
 		}
 	}
-}
-
-
-int HoI4::World::getDefaultTotalVictoryPoints() const
-{
-	int total = 0;
-	for (const auto& vp: defaultVictoryPoints)
-	{
-		total += vp.second;
-	}
-
-	Log(LogLevel::Debug) << "Total default victory points: " << total;
-	return total;
 }
 
 
