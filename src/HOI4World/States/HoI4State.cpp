@@ -242,15 +242,35 @@ void HoI4::State::setControlledProvince(int provinceNum, const std::string& coun
 }
 
 
-bool HoI4::State::assignVPFromVic2Province(int Vic2ProvinceNumber, const Mappers::ProvinceMapper& theProvinceMapper)
+bool HoI4::State::assignVPFromVic2Province(int Vic2ProvinceNumber,
+	 const Mappers::ProvinceMapper& theProvinceMapper,
+	 const std::map<int, int>& defaultVictoryPoints)
 {
+	std::optional<int> firstInState;
+
 	for (auto province: theProvinceMapper.getVic2ToHoI4ProvinceMapping(Vic2ProvinceNumber))
 	{
-		if (isProvinceInState(province))
+		if (!isProvinceInState(province))
+		{
+			continue;
+		}
+
+		if (!firstInState)
+		{
+			firstInState = province;
+		}
+
+		if (defaultVictoryPoints.contains(province))
 		{
 			assignVP(province);
 			return true;
 		}
+	}
+
+	if (firstInState)
+	{
+		assignVP(*firstInState);
+		return true;
 	}
 
 	return false;
@@ -310,6 +330,7 @@ int HoI4::State::getManpower() const
 
 
 void HoI4::State::tryToCreateVP(const Vic2::State& sourceState,
+	 const std::map<int, int>& defaultVictoryPoints,
 	 const Mappers::ProvinceMapper& theProvinceMapper,
 	 const Configuration& theConfiguration)
 {
@@ -318,7 +339,7 @@ void HoI4::State::tryToCreateVP(const Vic2::State& sourceState,
 	auto vic2CapitalProvince = sourceState.getCapitalProvince();
 	if (vic2CapitalProvince)
 	{
-		VPCreated = assignVPFromVic2Province(*vic2CapitalProvince, theProvinceMapper);
+		VPCreated = assignVPFromVic2Province(*vic2CapitalProvince, theProvinceMapper, defaultVictoryPoints);
 	}
 
 	if (!VPCreated)
@@ -330,7 +351,7 @@ void HoI4::State::tryToCreateVP(const Vic2::State& sourceState,
 		auto vic2UpperClassProvince = sourceState.getUpperClassLocation();
 		if (vic2UpperClassProvince)
 		{
-			VPCreated = assignVPFromVic2Province(*vic2UpperClassProvince, theProvinceMapper);
+			VPCreated = assignVPFromVic2Province(*vic2UpperClassProvince, theProvinceMapper, defaultVictoryPoints);
 		}
 	}
 
@@ -338,7 +359,7 @@ void HoI4::State::tryToCreateVP(const Vic2::State& sourceState,
 	{
 		for (const auto& province: sourceState.getProvincesOrderedByPopulation())
 		{
-			VPCreated = assignVPFromVic2Province(province, theProvinceMapper);
+			VPCreated = assignVPFromVic2Province(province, theProvinceMapper, defaultVictoryPoints);
 			if (VPCreated)
 			{
 				break;
