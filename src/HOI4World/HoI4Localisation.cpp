@@ -1145,6 +1145,11 @@ void HoI4::Localisation::addStateLocalisations(const States& states,
 	{
 		if (auto VPPositionInHoI4 = state.second.getVPLocation(); VPPositionInHoI4)
 		{
+			if (states.getDefaultVps().contains(*VPPositionInHoI4))
+			{
+				continue;
+			}
+
 			if (auto VPProvinceMapping = theProvinceMapper.getHoI4ToVic2ProvinceMapping(*VPPositionInHoI4);
 				 !VPProvinceMapping.empty())
 			{
