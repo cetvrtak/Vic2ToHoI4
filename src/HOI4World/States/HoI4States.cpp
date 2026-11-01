@@ -50,6 +50,7 @@ HoI4::States::States(const Vic2::World& sourceWorld,
 	Log(LogLevel::Info) << "\tConverting states";
 
 	determineOwnersAndCores(countryMap, sourceWorld, provinceDefinitions, provinceMapper);
+	determineDefaultVictoryPoints();
 	createStates(sourceWorld.getCountries(),
 		 sourceWorld.getProvinces(),
 		 theProvinces,
@@ -405,7 +406,7 @@ void HoI4::States::createMatchingHoI4State(const Vic2::State& vic2State,
 			}
 			addProvincesAndCoresToNewState(newState, sourceCountries, passableProvinces, provinceMapper, vic2Provinces);
 			newState.convertControlledProvinces(vic2State.getForeignControlledProvinces(), provinceMapper, countryMapper);
-			newState.tryToCreateVP(vic2State, provinceMapper, theConfiguration);
+			newState.tryToCreateVP(vic2State, defaultVictoryPoints, provinceMapper, theConfiguration);
 			newState.addManpower(vic2State.getProvinces(), provinceMapper, theConfiguration);
 			newState.convertNavalBases(vic2State.getNavalBases(), theCoastalProvinces, provinceMapper);
 			states.insert(std::make_pair(nextStateID, newState));
@@ -433,7 +434,7 @@ void HoI4::States::createMatchingHoI4State(const Vic2::State& vic2State,
 				 provinceMapper,
 				 vic2Provinces);
 			newState.makeImpassable();
-			newState.tryToCreateVP(vic2State, provinceMapper, theConfiguration);
+			newState.tryToCreateVP(vic2State, defaultVictoryPoints, provinceMapper, theConfiguration);
 			newState.addManpower(vic2State.getProvinces(), provinceMapper, theConfiguration);
 			newState.convertNavalBases(vic2State.getNavalBases(), theCoastalProvinces, provinceMapper);
 			states.insert(std::make_pair(nextStateID, newState));
@@ -847,9 +848,6 @@ void HoI4::States::determineDefaultVictoryPoints()
 void HoI4::States::distributeVPs()
 {
 	Log(LogLevel::Info) << "Distributing victory points";
-
-	determineDefaultVictoryPoints();
-
 	for (auto& state: states | std::views::values)
 	{
 		const auto& stateValue = state.calculateVictoryPoints();

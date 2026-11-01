@@ -534,14 +534,53 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapital)
 	const auto sourceState = *Vic2::State::Builder().setCapitalProvince(12).build();
 	HoI4::State theState(sourceState, 42, "TAG");
 	theState.addProvince(12);
+	std::map<int, int> defaultVictoryPoints = {{12, 1}};
 
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(12, {12}).Build(),
 		 theConfiguration);
 
 	EXPECT_EQ(theState.getVPLocation(), 12);
+}
+
+
+TEST(HoI4World_States_StateTests, VictoryPointPositionPrefersDefaultVictoryPointProvince)
+{
+	const auto sourceState = *Vic2::State::Builder().setCapitalProvince(12).build();
+	HoI4::State theState(sourceState, 42, "TAG");
+	theState.addProvince(22);
+	theState.addProvince(23);
+
+	const std::map<int, int> defaultVictoryPoints = {{23, 1}};
+	const Configuration theConfiguration;
+
+	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
+		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(12, {22, 23}).Build(),
+		 theConfiguration);
+
+	EXPECT_EQ(theState.getVPLocation(), 23);
+}
+
+
+TEST(HoI4World_States_StateTests, VictoryPointPositionFallsBackToFirstProvinceInState)
+{
+	const auto sourceState = *Vic2::State::Builder().setCapitalProvince(12).build();
+	HoI4::State theState(sourceState, 42, "TAG");
+	theState.addProvince(22);
+	theState.addProvince(23);
+
+	const Configuration theConfiguration;
+
+	theState.tryToCreateVP(sourceState,
+		 {},
+		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(12, {22, 23}).Build(),
+		 theConfiguration);
+
+	EXPECT_EQ(theState.getVPLocation(), 22);
 }
 
 
@@ -569,9 +608,12 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDe
 	theState.addProvince(12);
 	theState.addProvince(24);
 
+	std::map<int, int> defaultVictoryPoints = {{12, 1}, {24, 1}};
+
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
@@ -603,9 +645,12 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDe
 	theState.addProvince(12);
 	theState.addProvince(24);
 
+	std::map<int, int> defaultVictoryPoints = {{12, 1}, {24, 1}};
+
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
@@ -637,9 +682,12 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromStateCapitalDe
 	theState.addProvince(12);
 	theState.addProvince(24);
 
+	std::map<int, int> defaultVictoryPoints = {{12, 1}, {24, 1}};
+
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
@@ -671,9 +719,12 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionCanBeSetFromMostPopulousPr
 	theState.addProvince(12);
 	theState.addProvince(24);
 
+	std::map<int, int> defaultVictoryPoints = {{12, 1}, {24, 1}};
+
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(24, {24}).Build(),
 		 theConfiguration);
 
@@ -693,7 +744,7 @@ TEST(HoI4World_States_StateTests, VictoryPointPositionLoggedIfNotSet)
 	const auto coutBuffer = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
-	theState.tryToCreateVP(sourceState, *Mappers::ProvinceMapper::Builder().Build(), theConfiguration);
+	theState.tryToCreateVP(sourceState, {}, *Mappers::ProvinceMapper::Builder().Build(), theConfiguration);
 
 	std::cout.rdbuf(coutBuffer);
 
@@ -709,9 +760,12 @@ TEST(HoI4World_States_StateTests, DebugVPsCanBeAdded)
 	HoI4::State theState(sourceState, 42, "TAG");
 	theState.addProvince(12);
 
+	std::map<int, int> defaultVictoryPoints = {{12, 1}};
+
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(12, {12}).Build(),
 		 theConfiguration);
 
@@ -728,6 +782,7 @@ TEST(HoI4World_States_StateTests, SecondaryDebugVPsCanBeAdded)
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 {},
 		 *Mappers::ProvinceMapper::Builder().addVic2ToHoI4ProvinceMap(12, {12, 13}).Build(),
 		 theConfiguration);
 
@@ -745,9 +800,13 @@ TEST(HoI4World_States_StateTests, DebugVpsAreOutput)
 	theState.addProvince(24);
 	theState.addProvince(25);
 
+
+	std::map<int, int> defaultVictoryPoints = {{12, 1}, {13, 1}, {24, 1}, {25, 1}};
+
 	const Configuration theConfiguration;
 
 	theState.tryToCreateVP(sourceState,
+		 defaultVictoryPoints,
 		 *Mappers::ProvinceMapper::Builder()
 			  .addVic2ToHoI4ProvinceMap(12, {12, 13})
 			  .addVic2ToHoI4ProvinceMap(24, {24, 25})
