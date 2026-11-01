@@ -76,6 +76,7 @@ class States: commonItems::parser
 
 	[[nodiscard]] std::set<int> getNavalBaseLocations() const;
 	[[nodiscard]] int getConvertedVps() const;
+	[[nodiscard]] const std::map<int, int>& getDefaultVps() const { return defaultVictoryPoints; }
 
 	void convertAirBases(const std::map<std::string, std::shared_ptr<Country>>& countries,
 		 const std::vector<std::shared_ptr<Country>>& greatPowers);
