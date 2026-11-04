@@ -44,6 +44,7 @@ class State
 	[[nodiscard]] std::vector<int> getProvincesOrderedByPopulation() const;
 	[[nodiscard]] std::vector<std::pair<int, std::string>> getForeignControlledProvinces() const;
 	[[nodiscard]] std::map<int, int> getNavalBases() const; // location, level
+	[[nodiscard]] int getInitialWorkers() const;
 
 	[[nodiscard]] std::string getOwner() const { return owner; }
 	[[nodiscard]] std::string getStateID() const { return stateID; }

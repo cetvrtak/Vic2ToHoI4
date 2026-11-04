@@ -225,6 +225,8 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	theCoastalProvinces.init(*theMapData, theProvinces);
 	strategicRegions = StrategicRegions::Factory().ImportStrategicRegions(theConfiguration);
 	const auto defaultStates = DefaultStatesImporter().ImportDefaultStates(theConfiguration.getHoI4Path());
+	determineDefaultVictoryPoints(defaultStates);
+	int defaultTotalVictoryPoints = getDefaultTotalVictoryPoints();
 	const ImpassableProvinces impassableProvinces(defaultStates);
 	states = std::make_unique<States>(sourceWorld,
 		 *countryMap,
@@ -353,7 +355,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	addLeaders(characterFactory);
 	convertIdeologySupport();
 	Log(LogLevel::Progress) << "72%";
-	states->distributeVPs();
+	setVictoryPoints(sourceWorld, provinceMapper, defaultTotalVictoryPoints, getIndustrialWorkersPerCountry());
 	states->convertCapitalVPs(countries, greatPowers);
 	Log(LogLevel::Debug) << "Total converted victory points: " << states->getConvertedVps();
 
@@ -1269,6 +1271,31 @@ void HoI4::World::reportIndustryLevels() const
 }
 
 
+int HoI4::World::getDefaultTotalVictoryPoints() const
+{
+	int total = 0;
+	for (const auto& vp: defaultVictoryPoints)
+	{
+		total += vp.second;
+	}
+
+	Log(LogLevel::Debug) << "Total default victory points: " << total;
+	return total;
+}
+
+
+void HoI4::World::determineDefaultVictoryPoints(const std::map<int, HoI4::DefaultState>& defaultStates)
+{
+	for (const auto& state: defaultStates | std::views::values)
+	{
+		for (const auto& [province, vp]: state.getVictoryPoints())
+		{
+			defaultVictoryPoints[province] = vp;
+		}
+	}
+}
+
+
 void HoI4::World::setTrainMultipliers()
 {
 	const std::vector multipliers{5.0F, 4.0F, 3.0F, 2.0F, 2.0F, 1.5F};
@@ -1843,5 +1870,59 @@ void HoI4::World::recordUnbuiltCanals(const Vic2::World& sourceWorld)
 	if (!suezCanalBuilt)
 	{
 		greatestCountry->addUnbuiltCanal("SUEZ_CANAL_UNBUILT");
+	}
+}
+
+
+void HoI4::World::setVictoryPoints(const Vic2::World& sourceWorld,
+	 const Mappers::ProvinceMapper& provinceMapper,
+	 int totalVictoryPoints,
+	 const std::map<std::string, double>& industrialWorldWorkers)
+{
+	const auto& provinceToStateIDMap = getProvinceToStateIDMap();
+	double workersPerVp = getTotalWorldWorkers(industrialWorldWorkers) / totalVictoryPoints;
+
+	for (const auto& srcState: sourceWorld.getStates())
+	{
+		const auto& employedStateWorkers = srcState.get().getEmployedWorkers();
+		if (employedStateWorkers == 0)
+		{
+			continue;
+		}
+		const auto& initialStateWorkers = srcState.get().getInitialWorkers();
+		double employedWorkersRatio = static_cast<double>(employedStateWorkers) / initialStateWorkers;
+
+		for (const auto& srcProvince: srcState.get().getProvinces())
+		{
+			int provinceId = srcProvince->getNumber();
+			const auto& mapping = provinceMapper.getVic2ToHoI4ProvinceMapping(provinceId);
+			if (mapping.empty())
+			{
+				continue;
+			}
+			int vpLocation = mapping[0];
+			if (!provinceToStateIDMap.contains(vpLocation))
+			{
+				continue;
+			}
+
+			const auto& employedWorkers = srcProvince->getNumWorkers() * employedWorkersRatio;
+			const auto& vpValue = static_cast<int>(employedWorkers / workersPerVp);
+			if (vpValue <= 0)
+			{
+				continue;
+			}
+
+			const auto& hoi4StateID = provinceToStateIDMap.at(vpLocation);
+
+			auto& hoi4States = states->getModifiableStates();
+			if (!hoi4States.contains(hoi4StateID))
+			{
+				continue;
+			}
+
+			auto& hoi4State = hoi4States.at(hoi4StateID);
+			hoi4State.addVictoryPoint(vpLocation, vpValue);
+		}
 	}
 }
