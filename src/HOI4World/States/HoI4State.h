@@ -106,7 +106,6 @@ class State
 	[[nodiscard]] int getManpower() const;
 
 	void tryToCreateVP(const Vic2::State& sourceState,
-		 const std::map<int, int>& defaultVictoryPoints,
 		 const Mappers::ProvinceMapper& theProvinceMapper,
 		 const Configuration& theConfiguration);
 	void addManpower(const std::vector<std::shared_ptr<Vic2::Province>>& sourceProvinces,
@@ -135,9 +134,7 @@ class State
 		 const CoastalProvinces& theCoastalProvinces,
 		 const Mappers::ProvinceMapper& theProvinceMapper);
 
-	bool assignVPFromVic2Province(int Vic2ProvinceNumber,
-		 const Mappers::ProvinceMapper& theProvinceMapper,
-		 const std::map<int, int>& defaultVictoryPoints);
+	bool assignVPFromVic2Province(int Vic2ProvinceNumber, const Mappers::ProvinceMapper& theProvinceMapper);
 	void assignVP(int location);
 	bool isProvinceInState(int provinceNum) const;
 	void addDebugVPs(const Vic2::State& sourceState, const Mappers::ProvinceMapper& theProvinceMapper);
