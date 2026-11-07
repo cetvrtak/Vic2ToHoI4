@@ -77,7 +77,7 @@ void HoI4::outputLocalisation(const Localisation& localisation, const std::files
 	outputLocalisations(localisationPath, "countries_l_", localisation.getCountryLocalisations());
 	outputLocalisations(localisationPath, "focus_mod_l_", localisation.getNewFocuses());
 	outputStateLocalisations(localisationPath, localisation.getStateLocalisations());
-	outputLocalisations(localisationPath, "converted_victory_points_l_", localisation.getVPLocalisations());
+	outputLocalisations(localisationPath, "victory_points_l_", localisation.getVPLocalisations());
 	outputLocalisations(localisationPath, "converted_ideas_l_", localisation.getIdeaLocalisations());
 	outputLocalisations(localisationPath, "converted_events_l_", localisation.getNewEventLocalisations());
 	outputLocalisations(localisationPath, "parties3_l_", localisation.getPoliticalPartyLocalisations());
