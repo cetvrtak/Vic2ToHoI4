@@ -52,7 +52,7 @@ class State
 	void markHadImpassablePart() { hadImpassablePart = true; }
 	void addResource(const std::string& resource, double amount) { resources[resource] += amount; }
 	void addAirBase(int newAirBase);
-	void addVictoryPoint(int province, int value = 0);
+	void addVictoryPoint(int province, int value) { victoryPoints[province] = value; }
 	void addVictoryPointValue(int additionalValue) { victoryPointValue += additionalValue; }
 	void setVPValue(int value) { victoryPoints[*victoryPointPosition] = value; }
 	void setVPLocation(int province) { victoryPointPosition = province; }

@@ -268,19 +268,6 @@ void HoI4::State::assignVP(int location)
 }
 
 
-void HoI4::State::addVictoryPoint(int location, int value)
-{
-	if (victoryPoints.contains(location))
-	{
-		victoryPoints[location] += value;
-	}
-	else
-	{
-		victoryPoints[location] = value;
-	}
-}
-
-
 std::optional<int> HoI4::State::getMainNavalLocation() const
 {
 	std::optional<int> mainLocation;
