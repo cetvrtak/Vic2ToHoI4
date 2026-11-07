@@ -265,6 +265,7 @@ class World: commonItems::parser
 		 const Mappers::ProvinceMapper& provinceMapper,
 		 int totalVictoryPoints,
 		 const std::map<std::string, double>& industrialWorkersPerCountry);
+	int formatVP(double value) const;
 
 	std::optional<std::string> humanCountry;
 

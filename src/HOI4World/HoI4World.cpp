@@ -1907,8 +1907,9 @@ void HoI4::World::setVictoryPoints(const Vic2::World& sourceWorld,
 			}
 
 			const auto& employedWorkers = srcProvince->getNumWorkers() * employedWorkersRatio;
-			const auto& vpValue = static_cast<int>(employedWorkers / workersPerVp);
-			if (vpValue <= 0)
+			const auto& vpValue = employedWorkers / workersPerVp;
+			int vpValueFormatted = formatVP(vpValue);
+			if (vpValueFormatted <= 0)
 			{
 				continue;
 			}
@@ -1922,7 +1923,28 @@ void HoI4::World::setVictoryPoints(const Vic2::World& sourceWorld,
 			}
 
 			auto& hoi4State = hoi4States.at(hoi4StateID);
-			hoi4State.addVictoryPoint(vpLocation, vpValue);
+			hoi4State.addVictoryPoint(vpLocation, vpValueFormatted);
 		}
 	}
+}
+
+
+int HoI4::World::formatVP(double value) const
+{
+	int formatted = 0;
+
+	if (value < 10)
+	{
+		formatted = value;
+	}
+	else if (value < 30)
+	{
+		formatted = 5 * std::round(value / 5);
+	}
+	else
+	{
+		formatted = 10 * std::round(value / 10);
+	}
+
+	return static_cast<int>(formatted);
 }
