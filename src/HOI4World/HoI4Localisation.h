@@ -170,7 +170,6 @@ class Localisation
 		 const Vic2::Localisations& vic2Localisations,
 		 const ArticleRules& articleRules);
 
-	void addVPLocalisationForLanguage(const State& state, const std::string& language, const std::string& name);
 	std::map<stateNumber, std::string>& getExistingStateLocalisation(const std::string& language);
 	keyToLocalisationMap& getExistingVPLocalisation(const std::string& language);
 	void addLanguageToStateLocalisations(const std::string& language);

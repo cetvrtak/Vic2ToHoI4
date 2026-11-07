@@ -285,7 +285,6 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 		 *states);
 	supplyNodes_ = determineSupplyNodes(states->getStates(), railways_->GetRailwayEndpoints());
 	intelligenceAgencies = IntelligenceAgencies::Factory::createIntelligenceAgencies(countries, *names);
-	hoi4Localisations->addStateLocalisations(*states, vic2Localisations, provinceMapper, theConfiguration);
 	Log(LogLevel::Progress) << "48%";
 	convertIndustry(theConfiguration);
 	convertInfrastructure();
@@ -358,6 +357,7 @@ HoI4::World::World(const Vic2::World& sourceWorld,
 	setVictoryPoints(sourceWorld, provinceMapper, defaultTotalVictoryPoints, getIndustrialWorkersPerCountry());
 	states->convertCapitalVPs(countries, greatPowers);
 	Log(LogLevel::Debug) << "Total converted victory points: " << states->getConvertedVps();
+	hoi4Localisations->addStateLocalisations(*states, vic2Localisations, provinceMapper, theConfiguration);
 
 	states->convertAirBases(countries, greatPowers);
 	states->addLandmarks(landmarksMapper);

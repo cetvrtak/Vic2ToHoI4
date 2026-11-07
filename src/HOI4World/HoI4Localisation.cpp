@@ -1151,7 +1151,8 @@ void HoI4::Localisation::addStateLocalisations(const States& states,
 				for (const auto& [language, name]:
 					 vic2Localisations.getTextInEachLanguage("PROV" + std::to_string(VPProvinceMapping[0])))
 				{
-					addVPLocalisationForLanguage(state.second, language, name);
+					getExistingVPLocalisation(language).insert(
+						 std::make_pair("VICTORY_POINTS_" + std::to_string(VPPositionInHoI4), name));
 				}
 			}
 		}
@@ -1197,18 +1198,6 @@ void HoI4::Localisation::addDebugLocalisations(const std::pair<const int, State>
 					 make_pair("VICTORY_POINTS_" + std::to_string(VPPositionInHoI4), "_" + name));
 			}
 		}
-	}
-}
-
-
-void HoI4::Localisation::addVPLocalisationForLanguage(const State& state,
-	 const std::string& language,
-	 const std::string& name)
-{
-	if (state.getVPLocation())
-	{
-		getExistingVPLocalisation(language).insert(
-			 std::make_pair("VICTORY_POINTS_" + std::to_string(*state.getVPLocation()), name));
 	}
 }
 
