@@ -1196,7 +1196,7 @@
 	link = { vic2 = 1687 hoi4 = 12087 hoi4 = 10113 } # Tetouan -> Tetuán, Alcazarquivir
 	link = { vic2 = 1688 hoi4 = 7215 hoi4 = 4199 hoi4 = 12100 } # Ajdir -> Alhucemas, Targuist, Melilla
 	link = { vic2 = 1695 hoi4 = 12857 } # Ifni -> Sidi Ifní
-	link = { vic2 = 1773 vic2 = 1696 hoi4 = 8111 hoi4 = 4920 hoi4 = 8038 hoi4 = 7979 } # MANY-TO-MANY: Aaiun, Tarfaya -> Tan-Tan, Zag, El Aaiún, Esmara
+	link = { vic2 = 1773 vic2 = 1696 hoi4 = 8038 hoi4 = 8111 hoi4 = 4920 hoi4 = 7979 } # MANY-TO-MANY: Aaiun, Tarfaya -> El Aaiún, Tan-Tan, Zag, Esmara
 	link = { vic2 = 1774 hoi4 = 10875 hoi4 = 5012 } # Dakhla -> Villa Cisneros, Cabo Bojador
 	link = { vic2 = 2135 hoi4 = 3118 } # Madeira -> Funchal
 	link = { vic2 = 1876 hoi4 = 13014 } # Cape Verde -> Praia
@@ -1291,7 +1291,7 @@
 	link = { vic2 = 442 hoi4 = 6657 hoi4 = 9597 hoi4 = 11582 hoi4 = 11565 } # La Rochelle -> La Rochelle, Saintes, Ruffec, Libourne
 	link = { vic2 = 445 hoi4 = 620 hoi4 = 6618 hoi4 = 625 } # Limoges -> Limoges, Eymoutiers, Saint-Junien
 	link = { vic2 = 448 hoi4 = 590 hoi4 = 6789 hoi4 = 769 hoi4 = 9732 hoi4 = 9748 hoi4 = 9593 } # Clermont-Ferrand -> Clermont-Ferrand, Riom-ès-Montagnes, Issoire, Le Puy, Thiers, Saint-Georges-de- Mons
-	link = { vic2 = 452 hoi4 = 3594 hoi4 = 3770 hoi4 = 6786 hoi4 = 11593 } # St Etienne -> Vichy, Montbrisson, Saint-Étienne, Roanne
+	link = { vic2 = 452 hoi4 = 6786 hoi4 = 3594 hoi4 = 3770 hoi4 = 11593 } # St Etienne -> Saint-Étienne, Vichy, Montbrisson, Roanne
 	link = { vic2 = 451 hoi4 = 6613 hoi4 = 9590 hoi4 = 6639 } # Lyon -> Lyon, Ambérieu-en-Bugey, Bellegarde-sur- Valserine
 	link = { vic2 = 466 hoi4 = 6784 } # Chambery -> Chambéry
 	link = { vic2 = 465 hoi4 = 11573 hoi4 = 778 hoi4 = 9603 hoi4 = 6609 hoi4 = 9745 } # Annency -> Annecy, Cluses, Thonon-les-Bains, Albertville, Bourg-Saint-Maurice
@@ -1493,7 +1493,7 @@
 	link = { vic2 = 634 hoi4 = 3484 hoi4 = 541 hoi4 = 11522 } # Trencin -> Trencín, Trnava, Nitra
 	link = { vic2 = 636 hoi4 = 3537 hoi4 = 11539 hoi4 = 11554 hoi4 = 581 hoi4 = 555 } # Banska Bystrica -> Banská Bystrica, Žilina, Dolný Kubín, Liptovský Mikuláš, Brezno
 	link = { vic2 = 638 hoi4 = 3581 hoi4 = 3550 hoi4 = 6586 hoi4 = 6604 } # Roznava -> Prešov, Poprad, Michalovce, Humenné
-	link = { vic2 = 950 hoi4 = 3548 hoi4 = 11691 hoi4 = 11536 hoi4 = 9563 hoi4 = 6571 } # Uzgorord -> Mukacevo, Užhorod, Vel'ké Berezné, Sval'ava, Chust
+	link = { vic2 = 950 hoi4 = 11691 hoi4 = 3548 hoi4 = 11536 hoi4 = 9563 hoi4 = 6571 } # Uzgorord -> Užhorod, Mukacevo, Vel'ké Berezné, Sval'ava, Chust
 	link = { vic2 = 623 hoi4 = 686 } # Sopron -> Sopron
 	link = { vic2 = 639 hoi4 = 11627 hoi4 = 3670 } # Zalaegerszeg -> Szombathely, Nagykanizsa
 	link = { vic2 = 642 hoi4 = 6720 hoi4 = 9676 hoi4 = 11663 } # Gyor -> Gyor, Tatabánya, Esztergom
@@ -1540,7 +1540,7 @@
 	link = { vic2 = 2538 hoi4 = 619 hoi4 = 3623 hoi4 = 9621 hoi4 = 3617 } # Novi Sad -> Novi Sad, Subotica, Senta, Becej
 	link = { vic2 = 792 hoi4 = 3614 hoi4 = 11787 hoi4 = 6643 hoi4 = 614 } # Pancevo -> Pancevo, Zrenjanin, Kikinda, Vršac
 	link = { vic2 = 795 hoi4 = 9602 hoi4 = 6634 hoi4 = 630 hoi4 = 9756 } # Bor -> Paracin, Požarevac, Majdanpek, Zajecar
-	link = { vic2 = 798 hoi4 = 6953 hoi4 = 11887 hoi4 = 6970 hoi4 = 3939 } # Nis -> Kraljevo, Niš, Knic, Ivanjica
+	link = { vic2 = 798 hoi4 = 11887 hoi4 = 6953 hoi4 = 6970 hoi4 = 3939 } # Nis -> Niš, Kraljevo, Knic, Ivanjica
 	link = { vic2 = 799 hoi4 = 11857 hoi4 = 9906 hoi4 = 11868 hoi4 = 11832 } # Leskovac -> Leskovac, Kruševac, Pirot, Vranje
 	link = { vic2 = 802 hoi4 = 9874 hoi4 = 6940 hoi4 = 9890 } # Pristina -> Priština, Mitrovica, Prokuplje
 	link = { vic2 = 803 hoi4 = 9849 } # Prizren -> Prizren
@@ -1553,7 +1553,7 @@
 	link = { vic2 = 852 hoi4 = 11767 hoi4 = 3884 } # Vlore -> Vlorë, Fier
 	link = { vic2 = 853 hoi4 = 914 hoi4 = 3448 hoi4 = 6900 } # Gjirokaster -> Sarandë, Berat, Pogradec
 	link = { vic2 = 826 hoi4 = 10203 } # Corfu -> Kérkyra
-	link = { vic2 = 824 hoi4 = 9805 hoi4 = 3914 } # Janina -> Igoumenítsa, Ioánnina
+	link = { vic2 = 824 hoi4 = 3914 hoi4 = 9805 } # Janina -> Ioánnina, Igoumenítsa
 	link = { vic2 = 825 hoi4 = 9916 } # Arta -> Árta
 	link = { vic2 = 819 hoi4 = 9837 hoi4 = 841 hoi4 = 13234 hoi4 = 13235 } # Florina -> Flórina, Kastoriá, Gjirokastër, Korçë
 	link = { vic2 = 820 hoi4 = 966 hoi4 = 3980 } # Grevena -> Véroia, Kozáni
@@ -1800,7 +1800,7 @@
 	link = { vic2 = 969 hoi4 = 3757 hoi4 = 754 hoi4 = 9576 hoi4 = 741 hoi4 = 11703 hoi4 = 9714 hoi4 = 9698 hoi4 = 3575 } # Pervomaisk -> Balta, land, Kodyma, Rozdil'na, Berezivka, Shyriaieve, Petrivka, Velyka Vradiivka
 	link = { vic2 = 968 hoi4 = 11670 hoi4 = 3738 } # Odessa -> Odesa, Kobleve
 	link = { vic2 = 970 hoi4 = 11683 hoi4 = 3755 hoi4 = 11715 } # Nikolaev -> Mykolaiv, Kherson, Beryslav
-	link = { vic2 = 971 hoi4 = 9573 hoi4 = 574 hoi4 = 11546 hoi4 = 3403 hoi4 = 6451 hoi4 = 6478 hoi4 = 11561 } # Krivoy Rog -> Novyi Buh, Bashtanka, Yuzhnoukrainsk, Bobrynets', Zhovti Vody, Kozel'shchyna, Krivyi Rih
+	link = { vic2 = 971 hoi4 = 11561 hoi4 = 9573 hoi4 = 574 hoi4 = 11546 hoi4 = 3403 hoi4 = 6451 hoi4 = 6478 } # Krivoy Rog -> Krivyi Rih, Novyi Buh, Bashtanka, Yuzhnoukrainsk, Bobrynets', Zhovti Vody, Kozel'shchyna
 	link = { vic2 = 961 hoi4 = 488 hoi4 = 458 hoi4 = 11438 hoi4 = 3494 hoi4 = 11454 hoi4 = 3468 hoi4 = 3452 hoi4 = 409 hoi4 = 434 hoi4 = 6597 } # Cherkassy -> Cherkasy, Smila, Korsun'-Shevchenkivs'kyi, Karahlyk, Kaniv, Kremenchuk, Oleksandriya, Kirovo, Vatutine, Pervomajs'k
 	link = { vic2 = 958 hoi4 = 525 hoi4 = 3543 hoi4 = 504 hoi4 = 11557 hoi4 = 489 } # Kiev -> Kyiv, Irpin', land, Brovary, Khotyanivka
 	link = { vic2 = 962 hoi4 = 3568 hoi4 = 3542 hoi4 = 6589 hoi4 = 546 hoi4 = 9506 hoi4 = 3480 hoi4 = 6532 hoi4 = 6458 hoi4 = 582 hoi4 = 9543 hoi4 = 11489 hoi4 = 6508 hoi4 = 9477 hoi4 = 6565 hoi4 = 522 hoi4 = 11553 hoi4 = 9566 hoi4 = 3225 hoi4 = 238 } # Chernigov -> Chernihiv, Sosnytsya, Semenivka, land, Koryukivka, Mena, Kozelets', Nosivka, Yahotyn, Pereyaslav, Nizhyn, Bakhmach, Konotop, Hlukhiv, Bilopilliya, Svesa, Shostka, Seredyna-Buda, Novhorod-Sivers'kyi
@@ -1880,7 +1880,7 @@
 	link = { vic2 = 1041 hoi4 = 3726 hoi4 = 742 hoi4 = 6760 hoi4 = 6758 hoi4 = 9720 hoi4 = 745 hoi4 = 3746 hoi4 = 759 hoi4 = 6794 hoi4 = 9739 hoi4 = 11724 hoi4 = 6765 hoi4 = 3777 hoi4 = 9581 hoi4 = 11416 hoi4 = 9442 hoi4 = 3475 hoi4 = 11447 hoi4 = 498 hoi4 = 3439 hoi4 = 481 hoi4 = 3413 hoi4 = 9426 hoi4 = 11566 hoi4 = 3774 hoi4 = 9594 hoi4 = 6791 hoi4 = 3597 hoi4 = 6463 } # Elitsa -> land, Ulan-Tug, Ulan-Khol, Lagan', Utta, land, Chonin-Sala, Yashkul', Verkhniy Yashkul', Priyutnoye, Elista, Krestovaya, Remontnoye, Valuyevka, Zavetnoye, Poperechnyy, Malyye Derbety, Oktyabr'sky, Svetlyy Yar, Bolshoy Tsaryn, Sadovoye, Ketchener-Shebenery, Tsagan-Nur, Leninskiy, land, land, Bergin, Yusta, land
 	link = { vic2 = 1046 hoi4 = 3478 hoi4 = 449 hoi4 = 3464 hoi4 = 6490 hoi4 = 3417 hoi4 = 3443 hoi4 = 6468 hoi4 = 9415 hoi4 = 9459 hoi4 = 6503 hoi4 = 11400 hoi4 = 9474 hoi4 = 3505 hoi4 = 3489 hoi4 = 509 hoi4 = 484 } # Chirskaya -> Konstantinovsk, Khrestsy, Tsimlyansk, Dubovskoye, Proletarskaya, Zimovniki, Khutorskoy, Cherkesskiy, Kotel'nikovo, Nizhniy Chir, Andreyevskaya, Kalach, Oblivskaya, Morozovsk, Tatsinskaya, Belaya Kalitva
 	link = { vic2 = 1036 hoi4 = 9753 hoi4 = 757 hoi4 = 11736 hoi4 = 9735 hoi4 = 11706 hoi4 = 9592 hoi4 = 6620 hoi4 = 618 hoi4 = 3435 hoi4 = 11429 hoi4 = 11579 hoi4 = 9440 hoi4 = 9455 } # Astrakhan -> Astrakhan', Kamyzyak, Volodarskiy, Nizhnevolzhskoye, Bertyul', Krasnyy Yar, Kharabali, land, land, Sasykoli, Yenotayevsk, Nikol'skoye, Bolkhuny
-	link = { vic2 = 1045 hoi4 = 6566 hoi4 = 6544 hoi4 = 500 hoi4 = 11459 hoi4 = 9488 hoi4 = 11476 hoi4 = 3519 hoi4 = 3540 hoi4 = 9565 hoi4 = 3431 hoi4 = 9464 hoi4 = 6528 hoi4 = 9529 hoi4 = 11555 hoi4 = 9540 hoi4 = 9516 hoi4 = 533 hoi4 = 11527 hoi4 = 11501 } # Migolinskaya -> Meshkovskaya, Selivanovskaya, Martynovka, Litvinovka, Tarasovskiy, Kashary, Millerovo, Chertkovo, Alekseyevo-Lozovskoye, Shumilinskaya, Kruglovka, Nekhayevskaya, Novokhopyorskiy, Ust'Buzulukskaya, Bazki, Milyutinskaya, Chernyshyovskaya, Archedinskaya, Bokovskaya
+	link = { vic2 = 1045 hoi4 = 9516 hoi4 = 6566 hoi4 = 6544 hoi4 = 500 hoi4 = 11459 hoi4 = 9488 hoi4 = 11476 hoi4 = 3519 hoi4 = 3540 hoi4 = 9565 hoi4 = 3431 hoi4 = 9464 hoi4 = 6528 hoi4 = 9529 hoi4 = 11555 hoi4 = 9540 hoi4 = 533 hoi4 = 11527 hoi4 = 11501 } # Migolinskaya -> Milyutinskaya, Meshkovskaya, Selivanovskaya, Martynovka, Litvinovka, Tarasovskiy, Kashary, Millerovo, Chertkovo, Alekseyevo-Lozovskoye, Shumilinskaya, Kruglovka, Nekhayevskaya, Novokhopyorskiy, Ust'Buzulukskaya, Bazki, Chernyshyovskaya, Archedinskaya, Bokovskaya
 	link = { vic2 = 1039 hoi4 = 3529 hoi4 = 11485 hoi4 = 544 hoi4 = 3539 hoi4 = 11408 hoi4 = 11512 hoi4 = 9502 hoi4 = 487 hoi4 = 11451 hoi4 = 6454 hoi4 = 579 hoi4 = 9436 hoi4 = 3582 hoi4 = 9504 hoi4 = 6527 hoi4 = 3555 hoi4 = 6602 hoi4 = 6506 hoi4 = 11423 hoi4 = 518 } # Tsaritsyn -> Stalingrad, Sekachi, Preobrazhenskaya, Yelan', Balashov, Novonikolayevskiy, Uryupinsk, Novoanninskiy, Alekseyevskaya, Kumylzhenskaya, Mikhaylovka, Malodel'skaya, Frolovo, Kachalino, Novyy Rogachik, Dubovka, Gornyy Balykley, Kamyshin, Kotovo, Rudnya
 	link = { vic2 = 1040 hoi4 = 3503 hoi4 = 520 hoi4 = 3487 hoi4 = 3461 hoi4 = 6486 hoi4 = 6516 hoi4 = 6541 hoi4 = 11484 hoi4 = 6575 hoi4 = 9530 hoi4 = 11474 } # Zarevka -> land, Tsarev, Solodniki, Chyornyy Yar, Verkhniy Baskunchak, Akhtuba, El'ton, Bykovo, Nikolayevsk, land, Krasnaya Sloboda
 	link = { vic2 = 1025 hoi4 = 11351 hoi4 = 396 hoi4 = 11381 hoi4 = 6369 hoi4 = 9312 hoi4 = 11323 hoi4 = 9367 hoi4 = 9394 hoi4 = 6428 hoi4 = 3566 hoi4 = 6587 hoi4 = 9422 hoi4 = 471 hoi4 = 11436 hoi4 = 313 hoi4 = 340 hoi4 = 11296 hoi4 = 9245 hoi4 = 11227 hoi4 = 11258 hoi4 = 3302 hoi4 = 9376 hoi4 = 330 hoi4 = 3387 hoi4 = 3322 hoi4 = 6284 hoi4 = 11363 hoi4 = 3257 hoi4 = 6343 hoi4 = 232 hoi4 = 275 hoi4 = 3389 hoi4 = 367 hoi4 = 3332 } # Tambov -> Tambov, Otyassy, Dmitriyevka, Lipetsk, Mordovo, Volchki, Michurinsk, Chaplygin, Ternovka, Borisoglebsk, Povorino, Muchkapskiy, Uvarovo, Zherdevka, Inzhavino, Rasskazovo, Znamenka, Novobogoyavlenskiye Vyselky, Sosnovka, Sarai, Shatsk, Putyatino, Pitelino, Kasimov, Yermish, Kadom, Usady, Sasovo, Yavas, Morshansk, Algasovo, Gavrilovka 2-ya, Bondari, Kirsanov
@@ -1931,7 +1931,7 @@
 	link = { vic2 = 2684 hoi4 = 8461 hoi4 = 4669 } # Aksarka -> land, Labytnangi
 	link = { vic2 = 2682 hoi4 = 1664 hoi4 = 3169 hoi4 = 1684 hoi4 = 9142 } # Nadym -> Gorki, Muzhi, Salekhard, land
 	link = { vic2 = 1065 hoi4 = 10592 hoi4 = 4715 hoi4 = 10620 hoi4 = 7768 hoi4 = 7867 hoi4 = 1812 hoi4 = 1659 } # Surgut -> Nizhnesortymskiy, Verkhnekazymskiy, Kodinskoye, Beloyarskiy, Nyalinskoye, Khanty-Mansiysk, Lugovskoy
-	link = { vic2 = 1062 hoi4 = 7895 hoi4 = 7796 hoi4 = 4746 hoi4 = 4774 hoi4 = 1744 hoi4 = 12700 hoi4 = 4846 hoi4 = 12630 hoi4 = 7733 hoi4 = 10604 hoi4 = 4710 } # Berezov -> Agirish, Nyagan', land, Beryozovo, Khulimsunt, land, Supra, Talinka, Sogom, Mezhdurechenskiy, Uray
+	link = { vic2 = 1062 hoi4 = 4774 hoi4 = 7895 hoi4 = 7796 hoi4 = 4746 hoi4 = 1744 hoi4 = 12700 hoi4 = 4846 hoi4 = 12630 hoi4 = 7733 hoi4 = 10604 hoi4 = 4710 } # Berezov -> Beryozovo, Agirish, Nyagan', land, Khulimsunt, land, Supra, Talinka, Sogom, Mezhdurechenskiy, Uray
 	link = { vic2 = 2685 hoi4 = 10648 hoi4 = 11307 hoi4 = 7228 hoi4 = 10716 hoi4 = 10216 hoi4 = 12659 hoi4 = 1771 hoi4 = 1841 hoi4 = 10720 hoi4 = 1704 hoi4 = 1808 } # Njagan -> Severoural'sk, Kushva, Nizhniy Tagil, Krasnoturyinsk, Nizhnyaya Tura, Tur'inskiye Rudniki, Ivdel', land, Gari, Serov, Alapayevsk
 	link = { vic2 = 2614 hoi4 = 1750 hoi4 = 7778 hoi4 = 12696 hoi4 = 4813 hoi4 = 10189 hoi4 = 1543 hoi4 = 9553 hoi4 = 12102 } # Panajevsk -> Irbit, Makhnyovo, Turinsk, Tavda, Talitsa, Sukhoy Log, Asbest, Kamyshlov
 	link = { vic2 = 1066 hoi4 = 12390 hoi4 = 7833 hoi4 = 4659 hoi4 = 1880 hoi4 = 6787 hoi4 = 10659 } # Tobolsk -> land, Dem'yanskoye, Tobol'sk, Uvat, land, land
@@ -2073,7 +2073,7 @@
 	link = { vic2 = 920 hoi4 = 4088 } # Gaza -> Gaza
 	link = { vic2 = 921 hoi4 = 11970 hoi4 = 1015 hoi4 = 7176 } # Beersheba -> Beersheba, land, Hebron
 	link = { vic2 = 909 hoi4 = 7170 } # Jerash -> Irbid
-	link = { vic2 = 910 hoi4 = 1544 hoi4 = 4440 hoi4 = 7001 } # Ruwayshid -> Azraq Shamali, Rwaished, Zarqa
+	link = { vic2 = 910 hoi4 = 4440 hoi4 = 1544 hoi4 = 7001 } # Ruwayshid -> Rwaished, Azraq Shamali, Zarqa
 	link = { vic2 = 908 hoi4 = 7151 hoi4 = 10089 hoi4 = 4574 } # Amman -> Amman, Kerak, land
 	link = { vic2 = 922 hoi4 = 4115 hoi4 = 4017 } # Aqaba -> Aqaba, Ma'an
 	link = { vic2 = 911 hoi4 = 4591 hoi4 = 11976 hoi4 = 4603 hoi4 = 4562 } # Maan -> land, Jafr, land, land
@@ -2090,7 +2090,7 @@
 	link = { vic2 = 2586 hoi4 = 4932 hoi4 = 8118 hoi4 = 12740 } # Al-Ahsa -> land, Al-Kharkhir, land
 	link = { vic2 = 1159 hoi4 = 8004 hoi4 = 8060 } # Halaban -> 'Afif, land
 	link = { vic2 = 1157 hoi4 = 12727 hoi4 = 12870 hoi4 = 12813 hoi4 = 7995 } # Riyadh -> Ar-Riyadh, Al-Quway'iyah, Ad-Dawadmi, Rimah
-	link = { vic2 = 1164 hoi4 = 5024 hoi4 = 10791 } # Hufuf -> Khurays, Al-Hufuf
+	link = { vic2 = 1164 hoi4 = 10791 hoi4 = 5024 } # Hufuf -> Al-Hufuf, Khurays
 	link = { vic2 = 1165 vic2 = 1162 hoi4 = 8051 } # Doha, Bahrain -> Doha
 	link = { vic2 = 1167 hoi4 = 7960 hoi4 = 2048 hoi4 = 8108 } # Abu Dhabi -> Abu Dhabi, Liwa, Ar-Ruwais
 	link = { vic2 = 1168 hoi4 = 10904 } # Dubai -> Dubai
@@ -2110,7 +2110,7 @@
 	link = { vic2 = 1681 hoi4 = 10013 } # Wazzan -> Taounate
 	link = { vic2 = 1685 hoi4 = 10070 hoi4 = 1194 } # Rabat -> Rabat, Souk El Arbaa
 	link = { vic2 = 1682 hoi4 = 7100 hoi4 = 4084 hoi4 = 1079 } # Meknes -> Meknès, Khénifra, Khémisset
-	link = { vic2 = 1680 hoi4 = 12042 hoi4 = 11987 } # Fez -> Azrou, Fès
+	link = { vic2 = 1680 hoi4 = 11987 hoi4 = 12042 } # Fez -> Fès, Azrou
 	link = { vic2 = 1683 hoi4 = 4097 hoi4 = 7173 } # Taza -> Taza, Missour
 	link = { vic2 = 1684 hoi4 = 989 hoi4 = 1111 hoi4 = 7116 } # Wujda -> Oujda, Taourirt, Aïn Beni Mathar
 	link = { vic2 = 1697 hoi4 = 4154 hoi4 = 7958 } # Figuig -> Talsint, Bouafra
@@ -2192,7 +2192,7 @@
 	link = { vic2 = 1899 hoi4 = 5013 } # Bondouku -> Abengourou
 	link = { vic2 = 1905 vic2 = 1906 hoi4 = 7983 } # Bobo Dioulasso, Orodaro -> Bobo-Dioulasso
 	link = { vic2 = 1902 hoi4 = 12851 } # Wahiguya -> Ouahigouya
-	link = { vic2 = 1901 hoi4 = 8071 hoi4 = 10836 } # Wagadugu -> Koudougou, Ouagadougou
+	link = { vic2 = 1901 hoi4 = 10836 hoi4 = 8071 } # Wagadugu -> Ouagadougou, Koudougou
 	link = { vic2 = 1904 hoi4 = 2001 } # Fada Ngourma -> Fada N'Gourma
 	link = { vic2 = 1903 hoi4 = 7950 } # Dori -> Dori
 	link = { vic2 = 1809 hoi4 = 12707 } # Say -> Téra
@@ -2298,7 +2298,7 @@
 	link = { vic2 = 1841 hoi4 = 1960 hoi4 = 8052 hoi4 = 10739 } # Fasher -> Nyala, El Duein, land
 	link = { vic2 = 1839 hoi4 = 10827 } # Nuhud -> Dalang
 	link = { vic2 = 1840 hoi4 = 12744 hoi4 = 10851 } # Kaduqli -> Malakal, Renk
-	link = { vic2 = 1843 hoi4 = 10764 hoi4 = 10857 hoi4 = 4033 } # Waw -> Yambio, Buram, Wau
+	link = { vic2 = 1843 hoi4 = 4033 hoi4 = 10764 hoi4 = 10857 } # Waw -> Wau, Yambio, Buram
 	link = { vic2 = 1845 hoi4 = 1953 } # Yambio -> Maridi
 	link = { vic2 = 1844 hoi4 = 10908 hoi4 = 10877 } # Bor -> Rumbek, Wernyol
 	link = { vic2 = 1832 hoi4 = 12800 } # Fashoda -> Melut
@@ -2546,7 +2546,7 @@
 	link = { vic2 = 1147 hoi4 = 5029 hoi4 = 1957 hoi4 = 1888 hoi4 = 10806 hoi4 = 2000 } # Mashhad -> Mashhad, Nishabur, Torbat-e Heydarieh, Khaf, Sarakhs
 	link = { vic2 = 1150 hoi4 = 1521 hoi4 = 7573 hoi4 = 10351 } # Bojnurd -> Bojnurd, Sabzevar, Ashkhaneh
 	link = { vic2 = 1116 hoi4 = 7602 } # Gorgan -> Gorgan
-	link = { vic2 = 1204 hoi4 = 10510 hoi4 = 12359 hoi4 = 12333 hoi4 = 7491 } # Ashkabad -> Bäherden, land, Asgabat, Tejen
+	link = { vic2 = 1204 hoi4 = 12333 hoi4 = 10510 hoi4 = 12359 hoi4 = 7491 } # Ashkabad -> Asgabat, Bäherden, land, Tejen
 	link = { vic2 = 1212 hoi4 = 4893 hoi4 = 12871 hoi4 = 10476 hoi4 = 8053 } # Herat -> Herat, Ghoiran, Qal'ah-ye Now, Sabzawar
 	link = { vic2 = 1214 hoi4 = 2017 hoi4 = 2101 hoi4 = 1948 hoi4 = 2062 } # Farrah -> Farah, Zaranj, Lashkargah, Tojg
 	link = { vic2 = 1215 hoi4 = 4949 hoi4 = 5020 } # Kandahar -> Bahramcha, land
@@ -2675,7 +2675,7 @@
 	link = { vic2 = 1340 hoi4 = 1170 hoi4 = 12363 hoi4 = 7562 hoi4 = 2061 hoi4 = 4210 hoi4 = 1566 hoi4 = 7400 } # Lashio -> Lashio, Muse, Kyaukme, Tangyan, Laukkaing, Panglong, Namphan
 	link = { vic2 = 1338 hoi4 = 4585 hoi4 = 7603 hoi4 = 4175 hoi4 = 7974 hoi4 = 7909 hoi4 = 7647 hoi4 = 12317 hoi4 = 4654 hoi4 = 1607 } # Taunggyi -> Taunggyi, Mongnai, Monghsat, Tachileik, Kengtung, Mongton, Loikaw, Pekon, Hsihseng
 	link = { vic2 = 1335 hoi4 = 4626 hoi4 = 12449 } # Kyaukse -> Tatkon, Meiktila
-	link = { vic2 = 1336 hoi4 = 4019 hoi4 = 7034 hoi4 = 4202 hoi4 = 4059 } # Magwe -> Minbu, Magway, Nyaung-U, Minhla
+	link = { vic2 = 1336 hoi4 = 7034 hoi4 = 4019 hoi4 = 4202 hoi4 = 4059 } # Magwe -> Magway, Minbu, Nyaung-U, Minhla
 	link = { vic2 = 1337 hoi4 = 10344 hoi4 = 1650 hoi4 = 1333 } # Prome -> Prome, Allanmyo, Thayet
 	link = { vic2 = 1333 hoi4 = 12256 hoi4 = 7441 } # Toungoo -> Toungoo, Papun
 	link = { vic2 = 1332 hoi4 = 12127 hoi4 = 10154 hoi4 = 10283 hoi4 = 1417 hoi4 = 4293 hoi4 = 4336 } # Pegu -> Pegu, Taikkyi, Paungde, Nyaunglebin, Shwegyin, Thaton
@@ -2930,16 +2930,16 @@
 	link = { vic2 = 1361 hoi4 = 4539 hoi4 = 1520 hoi4 = 4260 hoi4 = 10326 hoi4 = 10195 } # Savannakhet -> Savannakhet, Thakhek, Boualapha, Khamkeut, Seponh
 	link = { vic2 = 1375 hoi4 = 4379 } # Hue -> Hué
 	link = { vic2 = 1362 hoi4 = 12210 hoi4 = 1374 hoi4 = 10238 hoi4 = 7426 hoi4 = 4554 hoi4 = 1577 } # Satavan -> Saravane, Sanasomboune, Nong, Kaleum, Sekong, Attapeu
-	link = { vic2 = 1363 hoi4 = 1592 hoi4 = 1563 } # Pakche -> Champassak, Paksé
+	link = { vic2 = 1363 hoi4 = 1563 hoi4 = 1592 } # Pakche -> Paksé, Champassak
 	link = { vic2 = 1377 hoi4 = 10309 hoi4 = 7229 hoi4 = 10137 hoi4 = 4255 } # Tourane -> Tourane, Kham Duc, Tam Ky, Quang Ngai
 	link = { vic2 = 1379 hoi4 = 4334 hoi4 = 1300 hoi4 = 4405 } # Quinhon -> Qui Nhon, Hoai Nhon, Tuy Hoa
 	link = { vic2 = 1378 hoi4 = 1400 hoi4 = 4363 hoi4 = 1248 hoi4 = 1328 hoi4 = 10180 hoi4 = 7380 hoi4 = 1605 hoi4 = 12109 hoi4 = 10162 } # Pleiku -> Pleiku, Kon Tum, Plei Can, An Khe, land, Ayun Pa, Buon Ma Thuot, Buon Ho, Ninh Hoa
-	link = { vic2 = 1381 hoi4 = 10232 hoi4 = 12204 hoi4 = 1285 hoi4 = 7271 hoi4 = 12176 hoi4 = 7347 hoi4 = 7238 } # Dongquai -> Phan Thiet, Phan Rang, Nha Trang, Da Lat, Lien Nghia, Bao Loc, Dong Xoai
+	link = { vic2 = 1381 hoi4 = 7238 hoi4 = 10232 hoi4 = 12204 hoi4 = 1285 hoi4 = 7271 hoi4 = 12176 hoi4 = 7347 } # Dongquai -> Dong Xoai, Phan Thiet, Phan Rang, Nha Trang, Da Lat, Lien Nghia, Bao Loc
 	link = { vic2 = 1380 hoi4 = 4401 hoi4 = 12232 } # Saigon -> Saïgon, Vung Tau
 	link = { vic2 = 1383 hoi4 = 1423 hoi4 = 7331 hoi4 = 4341 hoi4 = 7303 } # Vinhlong -> Vinh Long, Soc Trang, Ca Mau, Tra Vinh
 	link = { vic2 = 1382 hoi4 = 4223 hoi4 = 4284 hoi4 = 12133 hoi4 = 12288 hoi4 = 1396 hoi4 = 10261 } # Hatien -> Long Xuyen, Rach Gia, Can Tho, Svay Rieng, My Tho, Tay Ninh
 	link = { vic2 = 1367 hoi4 = 10317 hoi4 = 7404 hoi4 = 4359 hoi4 = 7432 } # Kampot -> Kampot, Sre Ambel, Koh Kong, Sihanoukville
-	link = { vic2 = 1364 hoi4 = 7319 hoi4 = 12191 hoi4 = 1324 hoi4 = 4639 hoi4 = 12260 hoi4 = 7376 hoi4 = 10289 hoi4 = 4330 } # Oudong -> Kampong Chhnang, Pursat, Kampong Thom, Kampong Cham, Prey Veng, Phnom Penh, Kampong Speu, Suong
+	link = { vic2 = 1364 hoi4 = 4330 hoi4 = 7319 hoi4 = 12191 hoi4 = 1324 hoi4 = 4639 hoi4 = 12260 hoi4 = 7376 hoi4 = 10289 } # Oudong -> Suong, Kampong Chhnang, Pursat, Kampong Thom, Kampong Cham, Prey Veng, Phnom Penh, Kampong Speu
 	link = { vic2 = 1368 hoi4 = 12167 hoi4 = 7645 hoi4 = 10453 hoi4 = 4596 hoi4 = 1620 hoi4 = 12150 hoi4 = 10204 hoi4 = 12447 hoi4 = 12475 } # Stongtreng -> Stung Treng, Kratié, Pathoomphone, Banlung, Kaoh Nheaek, Saen Monourom, Memot, Preah Vihear, Roneam
 	link = { vic2 = 1366 hoi4 = 10177 hoi4 = 4251 hoi4 = 4302 hoi4 = 10467 hoi4 = 10134 hoi4 = 1353 hoi4 = 12460 } # Battambang -> Battambang, Poipet, Siem Reap, Samraong, Pailin, Samlout, Anlong Veng
 	link = { vic2 = 1359 hoi4 = 12431 hoi4 = 1548 hoi4 = 12417 hoi4 = 7601 } # Sisaket -> Sisaket, Ubon Ratchathani, Det Udom, Kantharalak
@@ -2995,7 +2995,7 @@
 	link = { vic2 = 1402 hoi4 = 12113 } # Tanjungpinang -> Batam
 	link = { vic2 = 1410 hoi4 = 12138 hoi4 = 7440 hoi4 = 12415 hoi4 = 10194 hoi4 = 7308 } # Bencoolen -> Bengkoelen, Lubuklinggau, Surulangun, Bandar Ratu, Pagar Alam
 	link = { vic2 = 1399 hoi4 = 12268 hoi4 = 1401 hoi4 = 1246 hoi4 = 12296 hoi4 = 4276 hoi4 = 1274 hoi4 = 10322 hoi4 = 10150 hoi4 = 10294 hoi4 = 4381 } # Palembang -> Palembang, Sungai Batang, Tulung Selapan Ilir, Pampangan, Menggala, Baturaja, Prabumulih, Talang Ubi, Pamenang, Balai Agung
-	link = { vic2 = 1404 hoi4 = 4211 hoi4 = 7396 hoi4 = 7384 } # Palakpinang -> Tanjung Pandan, Teladan, Pangkal Pinang
+	link = { vic2 = 1404 hoi4 = 7384 hoi4 = 4211 hoi4 = 7396 } # Palakpinang -> Pangkal Pinang, Tanjung Pandan, Teladan
 	link = { vic2 = 1403 hoi4 = 4320 hoi4 = 1313 hoi4 = 12209 hoi4 = 4361 hoi4 = 1342 hoi4 = 12165 } # Lampung -> Kota Agung, Kotabumi, Krui, Tanjung Karang, Bakauheni, Terbanggibesar
 	link = { vic2 = 1413 hoi4 = 7381 hoi4 = 10279 hoi4 = 12249 } # Batavia -> Batavia, Serang, Karawang
 	link = { vic2 = 1414 hoi4 = 4406 hoi4 = 10307 hoi4 = 1398 hoi4 = 1425 hoi4 = 4621 hoi4 = 7421 } # Bogor -> Bogor, Soekaboemi, Labuhan, Cianjoer, Tasikmalaja, Bandoeng
