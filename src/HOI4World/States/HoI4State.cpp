@@ -359,21 +359,6 @@ void HoI4::State::addDebugVPs(const Vic2::State& sourceState, const Mappers::Pro
 }
 
 
-double HoI4::State::calculateVictoryPoints()
-{
-	const auto z = [](double value, double mean, double stddev) {
-		return (value - mean) / stddev;
-	};
-
-	// Means and standard deviations based on 1,081 states in v1.19
-	const double score = 5.735 + 3.009 * z(civFactories, 0.988, 1.856) + 2.227 * z(milFactories, 0.451, 1.474) +
-								1.919 * z(dockyards, 0.214, 1.086) + 1.269 * z(infrastructure, 2.047, 1.033) +
-								0.825 * z(manpower, 1919568.0, 3900833.0);
-
-	return std::max(0.0, std::round(score));
-}
-
-
 void HoI4::State::addManpower(const std::vector<std::shared_ptr<Vic2::Province>>& sourceProvinces,
 	 const Mappers::ProvinceMapper& theProvinceMapper,
 	 const Configuration& theConfiguration)

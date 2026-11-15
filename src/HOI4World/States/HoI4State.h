@@ -98,7 +98,6 @@ class State
 	int getVpValue() const { return victoryPointValue; }
 	[[nodiscard]] const auto& getVictoryPoints() const { return victoryPoints; }
 	const std::set<int>& getDebugVPs() const { return debugVictoryPoints; }
-	double calculateVictoryPoints();
 	const std::set<int>& getSecondaryDebugVPs() const { return secondaryDebugVictoryPoints; }
 	[[nodiscard]] bool IsCapitalState() const { return capitalState; }
 
